@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Data
@@ -12,15 +14,14 @@ import java.util.List;
 @NoArgsConstructor
 public class UserInfoDTO {
     private String username;
-    private String email;
     private String birthdate;
     private List<String> roles;
 
     public static UserInfoDTO of(MemberDTO dto) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         return new UserInfoDTO(
                 dto.getUserId(),
-                dto.getEmail(),
-                dto.getBirthdate().toString(),
+                formatter.format(dto.getBirthdate()),
                 dto.getAuthList().stream()
                         .map(AuthDTO::getAuth)
                         .toList()
