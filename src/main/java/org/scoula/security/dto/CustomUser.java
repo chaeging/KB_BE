@@ -1,4 +1,4 @@
-package org.scoula.security.account.domain;
+package org.scoula.security.dto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -10,15 +10,15 @@ import java.util.Collection;
 @Getter
 @Setter
 public class CustomUser extends User {
-    private MemberVO member;
+    private MemberDTO member;
 
     // 실질적인사용자데이터
     public CustomUser(String username, String password, Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);
     }
 
-    public CustomUser(MemberVO vo) {
-        super(vo.getUsername(), vo.getPassword(), vo.getAuthList());
-        this.member = vo;
+    public CustomUser(MemberDTO dto) {
+        super(dto.getUserId(), dto.getPassword(), dto.getAuthList());
+        this.member = dto;
     }
 }
