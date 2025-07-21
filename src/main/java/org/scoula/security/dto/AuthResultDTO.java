@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuthResultDTO{
-    String token;
+    String accesstoken;
+    String refreshToken;
     UserInfoDTO user;
 }

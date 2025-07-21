@@ -2,8 +2,10 @@ package org.scoula.security.handler;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.scoula.security.account.mapper.UserDetailsMapper;
 import org.scoula.security.dto.CustomUser;
 import org.scoula.security.dto.AuthResultDTO;
+import org.scoula.security.dto.RefreshTokenDTO;
 import org.scoula.security.dto.UserInfoDTO;
 import org.scoula.security.util.JsonResponse;
 import org.scoula.security.util.JwtProcessor;
@@ -21,11 +23,16 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     private final JwtProcessor jwtProcessor;
+    private final UserDetailsMapper mapper;
 
     private AuthResultDTO makeAuthResult(CustomUser user) {
         String username = user.getUsername();
-        String token = jwtProcessor.generateAccessToken(username);
-        return new AuthResultDTO(token, UserInfoDTO.of(user.getMember()));
+        String accesstoken = jwtProcessor.generateAccessToken(username);
+        String refreshtoken = jwtProcessor.generateRefreshToken(username);
+        RefreshTokenDTO refreshTokenDTO = new RefreshTokenDTO(username, refreshtoken);
+        mapper.updateRefreshToken(refreshTokenDTO);
+        log.info(" Refresh Token DB 저장 완료: {}", refreshtoken);
+        return new AuthResultDTO(accesstoken,refreshtoken, UserInfoDTO.of(user.getMember()));
     }
 
     @Override
@@ -36,5 +43,6 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         //인증성공결과를JSON으로직접응답
         AuthResultDTO result=makeAuthResult(user);
         JsonResponse.send(response,result);
+        log.info(" 로그인 성공 - AccessToken, RefreshToken 발급 및 응답 완료");
     }
 }

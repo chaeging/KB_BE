@@ -56,4 +56,8 @@ public class UserDetailsMapperTest {
         mapper.clearRefreshToken("admin");
         log.info("refresh token clear success");
     }
+
+    @Test
+    void testUpdateRefreshToken() {
+    }
 }
