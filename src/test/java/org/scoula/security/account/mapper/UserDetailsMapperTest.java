@@ -42,9 +42,18 @@ public class UserDetailsMapperTest {
 
     @Test
     void getRefreshToken() {
+        String refreshToken=mapper.getRefreshToken("admin");
+        log.info("refresh token : " + refreshToken);
+        if(refreshToken==null) {
+            log.info("refresh token is null");
+        }else {
+            log.info("refresh token is not null");
+        }
     }
 
     @Test
     void clearRefreshToken() {
+        mapper.clearRefreshToken("admin");
+        log.info("refresh token clear success");
     }
 }
