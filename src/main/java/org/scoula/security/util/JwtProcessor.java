@@ -3,7 +3,6 @@ package org.scoula.security.util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
@@ -13,23 +12,34 @@ import java.util.Date;
 
 @Component
 public class JwtProcessor {
-    static private final long TOKEN_VALID_MILISECOND=1000L*60*5; //5분
+    private static final long ACCESS_TOKEN_VALID_MILLISECOND = 1000L * 60 * 5; // 5분
+    private static final long REFRESH_TOKEN_VALID_MILLISECOND = 1000L * 60 * 60 * 24 * 7; // 7일
 
     private String secretKey = "충분히 긴 임의의(랜덤한) 비밀키 문자열 배정";
     private Key key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
     //private Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
-    //JWT 생성
-    public String generateToken(String subject) {
+    //JWT Access 토큰 생성
+    public String generateAccessToken(String subject) {
         return Jwts.builder()
                 .setSubject(subject)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(new Date().getTime()+TOKEN_VALID_MILISECOND))
+                .setExpiration(new Date(new Date().getTime()+ACCESS_TOKEN_VALID_MILLISECOND))
                 .signWith(key)
                 .compact();
     }
 
-    // JWT Subject(username) 추출- 해석불가인경우예외발생
+    //RefreshToken 설치
+    public String generateRefreshToken(String subject) {
+        return Jwts.builder()
+                .setSubject(subject)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + REFRESH_TOKEN_VALID_MILLISECOND))
+                .signWith(key)
+                .compact();
+    }
+
+
     //JWT(JSON Web Token)에서 사용자 이름(username)을 추출하는 기능을 수행합니다.
     public String getUsername(String token) {
         return Jwts.parserBuilder()
@@ -49,6 +59,17 @@ public class JwtProcessor {
                 .parseClaimsJws(token);
         return true;
     }
+
+    public boolean isTokenExpired(String token) {
+        Date expiration = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getExpiration();
+        return expiration.before(new Date());
+    }
+
 
 
 }
