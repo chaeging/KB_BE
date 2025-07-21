@@ -2,7 +2,7 @@ package org.scoula.security.handler;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.scoula.security.account.domain.CustomUser;
+import org.scoula.security.dto.CustomUser;
 import org.scoula.security.dto.AuthResultDTO;
 import org.scoula.security.dto.UserInfoDTO;
 import org.scoula.security.util.JsonResponse;

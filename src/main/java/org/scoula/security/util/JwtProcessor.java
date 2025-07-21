@@ -31,7 +31,6 @@ public class JwtProcessor {
 
     // JWT Subject(username) 추출- 해석불가인경우예외발생
     //JWT(JSON Web Token)에서 사용자 이름(username)을 추출하는 기능을 수행합니다.
-    // 예외ExpiredJwtException, UnsupportedJwtException, MalformedJwtException, SignatureException,IllegalArgumentException
     public String getUsername(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key) // 서명 검증을 위한 키 설정
