@@ -22,7 +22,8 @@ public class AccountController {
         return codefApiService.autoConnectAndFetchChungyakAccounts(
                 requestDto.getId(),
                 requestDto.getPassword(),
-                requestDto.getOrganization()
+                requestDto.getOrganization(),
+                requestDto.getBankName()
         );
     }
 

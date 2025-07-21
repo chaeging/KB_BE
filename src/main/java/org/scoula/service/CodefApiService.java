@@ -31,7 +31,7 @@ public class CodefApiService {
     //private static final String CLIENT_SECRET = "293b6562-a80c-4360-9184-a7229233084b";
     //private static final String PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApm7RFqlurGGqgoze4OJyZawg03Jj9kk/mhhiBYPP7w7g3oPUxQ4/Xdu4o0PE/N39nqULxTf89DCRAoCtWApnEc45MoIOKgGreZjHoDgPNxbQw335Ivb3Fuw9F/B3sdG8P+36Qf/aTLBWdVBAsDspWV5V68e8uA0Hi+gg+7lhVIkF1JGfLi0r/9Jm0EN/Rj/8ik+zi+UejpHI9zdyKRI0E9MxhoI6e7HM3YJ93rMGqAVDim+gzVgZAUbsUnW4cGGXX5QiFAChqq/07E3WJDjU1hmyC5z7RE6zrZKFVcOS0Jx1sMjy146eS3k2xUrlBsNekCcx0uy6S/oY1XJWh1s3sQIDAQAB";
 
-    public List<ChungyakAccountDTO> autoConnectAndFetchChungyakAccounts(String id, String password, String organization) throws Exception {
+    public List<ChungyakAccountDTO> autoConnectAndFetchChungyakAccounts(String id, String password, String organization, String bankName) throws Exception {
 
         String accessToken = getAccessToken();
         System.out.println(accessToken);
@@ -45,7 +45,7 @@ public class CodefApiService {
 
         String accountListJson = requestAccountList(accessToken, connectedId, organization);
 
-        return filterChungyakAccounts(accountListJson);
+        return filterChungyakAccounts(accountListJson,bankName);
     }
 
 
@@ -154,7 +154,7 @@ public class CodefApiService {
         return decodedResponse;
     }
 
-    private List<ChungyakAccountDTO> filterChungyakAccounts(String json) {
+    private List<ChungyakAccountDTO> filterChungyakAccounts(String json, String bankName) {
         List<ChungyakAccountDTO> resultList = new ArrayList<>();
 
         Gson gson = new Gson();
@@ -174,8 +174,10 @@ public class CodefApiService {
                         String display = account.has("resAccountDisplay") ? account.get("resAccountDisplay").getAsString() : "";
                         String balance = account.has("resAccountBalance") ? account.get("resAccountBalance").getAsString() : "";
                         String startDate = account.has("resAccountStartDate") ? account.get("resAccountStartDate").getAsString() : "";
+                        String resAccount = account.has("resAccount") ? account.get("resAccount").getAsString() : "";
+                        String resAccountName = account.has("resAccountName") ? account.get("resAccountName").getAsString() : "";
 
-                        ChungyakAccountDTO dto = new ChungyakAccountDTO(display, balance, startDate);
+                        ChungyakAccountDTO dto = new ChungyakAccountDTO(display, balance, startDate, resAccount, resAccountName,bankName);
                         resultList.add(dto);
                     }
                 }
@@ -184,5 +186,6 @@ public class CodefApiService {
 
         return resultList;
     }
+
 
 }

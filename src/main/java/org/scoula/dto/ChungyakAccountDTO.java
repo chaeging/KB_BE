@@ -11,4 +11,7 @@ public class ChungyakAccountDTO {
     private String accountDisplay;
     private String accountBalance;
     private String accountStartDate;
+    private String resAccount;
+    private String resAccountName;
+    private String bankName;
 }

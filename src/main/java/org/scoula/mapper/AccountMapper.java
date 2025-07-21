@@ -1,0 +1,13 @@
+package org.scoula.mapper;
+
+import org.apache.ibatis.annotations.Mapper;
+import org.scoula.dto.ChungyakAccountDTO;
+import org.apache.ibatis.annotations.Param;
+
+@Mapper
+public interface AccountMapper {
+
+    void insertChungyakAccount(@Param("dto") ChungyakAccountDTO dto,
+                               @Param("userIdx") int userIdx,
+                               @Param("isPayment") boolean isPayment);
+}

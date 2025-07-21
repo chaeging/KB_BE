@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.scoula.mapper.AccountMapper">
+
+    <insert id="insertChungyakAccount" parameterType="org.scoula.dto.ChungyakAccountDTO">
+        INSERT INTO account (
+            res_account,
+            res_account_display,
+            res_account_balance,
+            res_account_start_date,
+            res_account_name,
+            bank_name,
+            user_idx,
+            is_payment
+        )
+        VALUES (
+                   #{resAccount},
+                   #{accountDisplay},
+                   #{accountBalance},
+                   #{accountStartDate},
+                   #{resAccountName},
+                   #{bankName},
+                   #{userIdx},
+                   #{isPayment}
+               )
+    </insert>
+
+</mapper>
