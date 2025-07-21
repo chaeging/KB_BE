@@ -60,6 +60,7 @@ public class JwtProcessor {
         return true;
     }
 
+    //토큰 유효기간 확인
     public boolean isTokenExpired(String token) {
         Date expiration = Jwts.parserBuilder()
                 .setSigningKey(key)
