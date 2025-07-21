@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserInfoDTO {
-    private String username;
+    private String user_id;
     private String birthdate;
     private List<String> roles;
 
