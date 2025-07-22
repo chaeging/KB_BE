@@ -91,9 +91,9 @@ class JwtProcessorTest {
 
         String shortAccessToken = shortLivedProcessor.generateAccessToken(username);
         // 바로 만료 안 됨
-        assertFalse(shortLivedProcessor.isTokenExpired(shortAccessToken), "토큰이 아직 만료되지 않아야 함");
+        assertFalse(shortLivedProcessor.validateToken(shortAccessToken), "토큰이 아직 만료되지 않아야 함");
         // 2초 대기 후 만료 체크
         Thread.sleep(2000); // 2초 대기
-        assertTrue(shortLivedProcessor.isTokenExpired(shortAccessToken), "토큰이 만료되어야 함");
+        assertTrue(shortLivedProcessor.validateToken(shortAccessToken), "토큰이 만료되어야 함");
     }
 }
