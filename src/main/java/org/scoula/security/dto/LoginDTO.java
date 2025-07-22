@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 @AllArgsConstructor
 @Data
 public class LoginDTO {
-    private String username;
+    private String user_id;
     private String password;
 
     public static LoginDTO of(HttpServletRequest request) {

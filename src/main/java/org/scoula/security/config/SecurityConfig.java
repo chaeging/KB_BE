@@ -94,6 +94,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/security/all").permitAll() //모두허용
                 .antMatchers("/api/security/member").access("hasRole('ROLE_MEMBER')") //ROLE_MEMBER이상접근허용
                 .antMatchers("/api/security/admin").access("hasRole('ROLE_ADMIN')") //ROLE_ADMIN이상접근허용
+                .antMatchers("/api/v1/subscriptions/**").permitAll() //청약api확인하는거허용
                 .anyRequest().authenticated(); //나머지는로그인된경우모두허용
 
 
