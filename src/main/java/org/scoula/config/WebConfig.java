@@ -21,20 +21,20 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
         //요청한 URL에 매핑된 컨트롤러가 없으면 → 404.html 같은 기본 에러 페이지 반환
         registration.setInitParameter("throwExceptionIfNoHandlerFound", "true");
 
-        //파일 업로드 처리 설정
-        MultipartConfigElement multipartConfig =
-                new MultipartConfigElement(
-                        LOCATION,  // 업로드 처리 디렉토리경로
-                        MAX_FILE_SIZE, // 업로드 가능한 파일 하나의 최대크기
-                        MAX_REQUEST_SIZE, //업로드 가능한 전체 최대크기(여러파일업로드하는경우)
-                        FILE_SIZE_THRESHOLD // 메모리 파일의 최대크기(이보다작으면실제메모리에서만작업)
-                );
-        registration.setMultipartConfig(multipartConfig);
+//        //파일 업로드 처리 설정
+//        MultipartConfigElement multipartConfig =
+//                new MultipartConfigElement(
+//                        LOCATION,  // 업로드 처리 디렉토리경로
+//                        MAX_FILE_SIZE, // 업로드 가능한 파일 하나의 최대크기
+//                        MAX_REQUEST_SIZE, //업로드 가능한 전체 최대크기(여러파일업로드하는경우)
+//                        FILE_SIZE_THRESHOLD // 메모리 파일의 최대크기(이보다작으면실제메모리에서만작업)
+//                );
+//        registration.setMultipartConfig(multipartConfig);
     }
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class<?>[]{RootConfig.class, SecurityConfig.class, MailConfig.class};
+        return new Class<?>[]{RootConfig.class, SecurityConfig.class,MailConfig.class};
     }
 
     @Override

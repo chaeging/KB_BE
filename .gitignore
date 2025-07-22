@@ -40,4 +40,6 @@ bin/
 
 ### Mac OS ###
 .DS_Store
-./src/resources/org/scoula/application.properties
+
+**/application.properties
+**/email.properties

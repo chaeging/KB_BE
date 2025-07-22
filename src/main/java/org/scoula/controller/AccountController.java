@@ -1,6 +1,7 @@
 // ✅ AccountController.java
 package org.scoula.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.scoula.dto.AccountConnectDTO;
 import org.scoula.dto.ChungyakAccountDTO;
@@ -14,26 +15,18 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1/account")
+@RequiredArgsConstructor
 @Log4j2
 public class AccountController {
-
-    @Autowired
-    private CodefApiService codefApiService;
-
-    @Autowired
-    private JwtProcessor jwtProcessor;
-
-    @Autowired
-    private UserMapper userMapper;
+    private final CodefApiService codefApiService;
+    private final JwtProcessor jwtProcessor;
+    private final UserMapper userMapper;
 
     @PostMapping("/connect")
-    public List<ChungyakAccountDTO> autoConnectAndFetchAccounts(
-            @RequestHeader("Authorization") String token,
-            @RequestBody AccountConnectDTO requestDto
+    public List<ChungyakAccountDTO> autoConnectAndFetchAccounts(@RequestHeader("Authorization") String token, @RequestBody AccountConnectDTO requestDto
     ) throws Exception {
         String userId = jwtProcessor.getUsername(token.replace("Bearer ", ""));
         int userIdx = userMapper.findUserIdxByUserId(userId);
-
         return codefApiService.autoConnectAndFetchChungyakAccounts(
                 requestDto.getId(),
                 requestDto.getPassword(),
