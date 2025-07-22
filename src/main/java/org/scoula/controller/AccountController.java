@@ -1,12 +1,12 @@
 package org.scoula.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.scoula.dto.AccountConnectDTO;
 import org.scoula.dto.ChungyakAccountDTO;
 import org.scoula.service.CodefApiService;
 import org.scoula.security.util.JwtProcessor;
 import org.scoula.mapper.UserMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,16 +14,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1/account")
 @Log4j2
+@RequiredArgsConstructor
 public class AccountController {
 
-    @Autowired
-    private CodefApiService codefApiService;
-
-    @Autowired
-    private JwtProcessor jwtProcessor;
-
-    @Autowired
-    private UserMapper userMapper;
+    private final CodefApiService codefApiService;
+    private final JwtProcessor jwtProcessor;
+    private final UserMapper userMapper;
 
     @PostMapping("/connect")
     public List<ChungyakAccountDTO> autoConnectAndFetchAccounts(
