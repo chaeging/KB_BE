@@ -31,26 +31,7 @@ public class CodefApiService {
     private static final String CLIENT_ID = "1a7ca0c1-62f9-4276-a287-573c79c6ac0d";
     private static final String CLIENT_SECRET = "353eb61f-4017-4480-af85-784b0bc5be06";
     private static final String PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnsO8QhkAzifN1nQgvfVyyLv8Hptsr/dmCK7MS2091rriNTzl1Q0fYHBHuBClfh3DNVYICgx3saDiYJ06EoAg4wDcZ1QMID/ehdOr6A5AvCqzt8SSWDkd6pkW0nW58BQxgO0/blvP9nooUzYcmyxDohDeHBmCtdMxbzhzMSsQEkPG8IKqFH//fTTgtp6SLmEPkqKC+rayMCgxoCl+GI+DVSr/Bj/iHyFv/t/bEqZXwbg/PVeFagjthyy43uVQ5F2IYwgp8z3N7W4yhTJxuT5h9+eiMo0PzG0M64aPBA4nY0tyZ48FRjXIfinYtJiTNW0M0nsASaVYcqhUTF4OLKXJXwIDAQAB";
-    //private static final String CLIENT_ID = "b46daa0e-a37e-410f-a24c-ce6d6a731f3e";
-    //private static final String CLIENT_SECRET = "293b6562-a80c-4360-9184-a7229233084b";
-    //private static final String PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApm7RFqlurGGqgoze4OJyZawg03Jj9kk/mhhiBYPP7w7g3oPUxQ4/Xdu4o0PE/N39nqULxTf89DCRAoCtWApnEc45MoIOKgGreZjHoDgPNxbQw335Ivb3Fuw9F/B3sdG8P+36Qf/aTLBWdVBAsDspWV5V68e8uA0Hi+gg+7lhVIkF1JGfLi0r/9Jm0EN/Rj/8ik+zi+UejpHI9zdyKRI0E9MxhoI6e7HM3YJ93rMGqAVDim+gzVgZAUbsUnW4cGGXX5QiFAChqq/07E3WJDjU1hmyC5z7RE6zrZKFVcOS0Jx1sMjy146eS3k2xUrlBsNekCcx0uy6S/oY1XJWh1s3sQIDAQAB";
 
-//    public List<ChungyakAccountDTO> autoConnectAndFetchChungyakAccounts(String id, String password, String organization, String bankName) throws Exception {
-//
-//        String accessToken = getAccessToken();
-//        System.out.println(accessToken);
-//
-//        String encryptedPassword = rsaEncryptor.encryptPassword(PUBLIC_KEY, password);
-//        String connectedId = createConnectedId(accessToken, id, encryptedPassword, organization);
-//
-//        if (connectedId == null) {
-//            return Collections.emptyList();
-//        }
-//
-//        String accountListJson = requestAccountList(accessToken, connectedId, organization);
-//
-//        return filterChungyakAccounts(accountListJson,bankName);
-//    }
 public List<ChungyakAccountDTO> autoConnectAndFetchChungyakAccounts(
         String id, String password, String organization, String bankName, int userIdx) throws Exception {
 
