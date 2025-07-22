@@ -1,4 +1,3 @@
-// ✅ AccountController.java
 package org.scoula.controller;
 
 import lombok.extern.log4j.Log4j2;
