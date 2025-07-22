@@ -5,7 +5,7 @@
 
 <mapper namespace="org.scoula.mapper.AccountMapper">
 
-    <insert id="insertChungyakAccount" parameterType="org.scoula.dto.ChungyakAccountDTO">
+    <insert id="insertChungyakAccount">
         INSERT INTO account (
             res_account,
             res_account_display,
@@ -17,15 +17,28 @@
             is_payment
         )
         VALUES (
-                   #{resAccount},
-                   #{accountDisplay},
-                   #{accountBalance},
-                   #{accountStartDate},
-                   #{resAccountName},
-                   #{bankName},
+                   #{dto.resAccount},
+                   #{dto.accountDisplay},
+                   #{dto.accountBalance},
+                   #{dto.accountStartDate},
+                   #{dto.resAccountName},
+                   #{dto.bankName},
                    #{userIdx},
                    #{isPayment}
                )
     </insert>
+
+    <select id="findAccountsByUserIdx" resultType="org.scoula.dto.ChungyakAccountDTO">
+        SELECT
+            res_account AS resAccount,
+            res_account_display AS accountDisplay,
+            res_account_balance AS accountBalance,
+            res_account_start_date AS accountStartDate,
+            res_account_name AS resAccountName,
+            bank_name AS bankName
+        FROM account
+        WHERE user_idx = #{userIdx}
+
+    </select>
 
 </mapper>
