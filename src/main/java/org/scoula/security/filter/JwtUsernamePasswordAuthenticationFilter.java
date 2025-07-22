@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 public class JwtUsernamePasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     public JwtUsernamePasswordAuthenticationFilter(AuthenticationManager authenticationManager, LoginSuccessHandler loginSuccessHandler, LoginFailureHandler loginFailureHandler) {
         super(authenticationManager);
-        setFilterProcessesUrl("/api/auth/login");
+        setFilterProcessesUrl("/v1/auth/login");
         setAuthenticationSuccessHandler(loginSuccessHandler);
         setAuthenticationFailureHandler(loginFailureHandler);
     }
@@ -33,7 +33,7 @@ public class JwtUsernamePasswordAuthenticationFilter extends UsernamePasswordAut
         LoginDTO login= LoginDTO.of(request);
 
         //인증토큰(UsernamePasswordAuthenticationToken)구성
-        UsernamePasswordAuthenticationToken authenticationToken= new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword());
+        UsernamePasswordAuthenticationToken authenticationToken= new UsernamePasswordAuthenticationToken(login.getUser_id(), login.getPassword());
 
         //AuthenticationManager에게인증요청
         return getAuthenticationManager().authenticate(authenticationToken);
