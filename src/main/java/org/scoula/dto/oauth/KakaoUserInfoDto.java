@@ -7,8 +7,8 @@ import lombok.Data;
 @AllArgsConstructor
 public class KakaoUserInfoDto {
     private Long kakaoId;
-    private String nickname;
     private String email;
+    private String nickname;
     private String profileImageUrl;
     private String token;
 }

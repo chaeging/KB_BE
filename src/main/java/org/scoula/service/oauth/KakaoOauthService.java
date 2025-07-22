@@ -1,20 +1,21 @@
-package org.scoula.service.outh;
+package org.scoula.service.oauth;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.scoula.domain.User;
 import org.scoula.dto.oauth.KakaoUserInfoDto;
+import org.scoula.mapper.UserMapper;
 import org.scoula.security.util.JwtProcessor;
 import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.Optional;
 //import org.scoula.domain.user.User;
 
 @Slf4j
@@ -24,6 +25,7 @@ public class KakaoOauthService {
     private final JwtProcessor jwtProcessor;
     private final RestTemplate restTemplate = new RestTemplate();   // Spring에서 제공하는 HTTP 통신용 클라이언트 클래스, Rest API 서버와 GET, POST, PUT DELETE 등 요청을 주고 받을때 사용
     private final ObjectMapper objectMapper = new ObjectMapper();   // Java 객체 ↔ JSON 문자열 변환을 담당
+    private final UserMapper userMapper;
 
     @Value("${kakao.rest_key}")
     private String REST_API_KEY;
@@ -31,18 +33,18 @@ public class KakaoOauthService {
     @Value("${kakao.redirect_url}")
     private String REDIRECT_URL;
 
-//    public KakaoUserInfoDto processKakaoLogin(String code) {
-//        String accessToken = this.getAccessToken(code);
-//        KakaoUserInfoDto userInfo = this.getUserInfo(accessToken);
-//
-//        User user = this.processKakaoUser(userInfo);
-//
-//        // JWT 발급 (JwtProcessor 사용)
-//        String jwtToken = jwtProcessor.generateToken(user.getUsername());
-//        userInfo.setToken(jwtToken);
-//
-//        return userInfo;
-//    }
+    public KakaoUserInfoDto processKakaoLogin(String code) {
+        String accessToken = this.getAccessToken(code);
+        KakaoUserInfoDto userInfo = this.getUserInfo(accessToken);
+
+        User user = this.processKakaoUser(userInfo);
+
+        // JWT 발급 (JwtProcessor 사용)
+        String jwtToken = jwtProcessor.generateAccessToken(user.getUserId());
+        userInfo.setToken(jwtToken);
+
+        return userInfo;
+    }
 
 
     public String getAccessToken(String authorizationCode) {
@@ -85,5 +87,58 @@ public class KakaoOauthService {
             log.error("카카오 토큰 요청 실패", e);
             throw new RuntimeException("카카오 토큰 요청 실패");
         }
+    }
+
+    public KakaoUserInfoDto getUserInfo(String accessToken) {
+        String userUrl = "https://kapi.kakao.com/v2/user/me";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        headers.set("Authorization", "Bearer " + accessToken);
+
+        HttpEntity<String> request = new HttpEntity<>(headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                userUrl,
+                HttpMethod.POST,
+                request,
+                String.class
+        );
+
+        log.info("카카오 토큰 요청에 대한 전체 응답: {}", response.getBody());
+
+        try {
+            JsonNode root = objectMapper.readTree(response.getBody());
+            Long kakaoId = root.get("id").asLong();
+
+            JsonNode kakaoAccount = root.get("kakao_account");
+            String email = kakaoAccount.get("email").asText(null);
+
+            JsonNode profile = kakaoAccount.get("profile");
+            String nickname = profile.get("nickname").asText(null);
+            String profileImageUrl = profile.get("profile_image_url").asText(null);
+
+            return new KakaoUserInfoDto(kakaoId, email, nickname, profileImageUrl, null);
+        } catch (Exception e) {
+            log.error("카카오 사용자 정보 요청 실패", e);
+            throw new RuntimeException("카카오 사용자 정보 요청 실패");
+        }
+    }
+
+    // MyBatis로 사용자 DB 처리
+    public User processKakaoUser(KakaoUserInfoDto userInfo) {
+        User existingUser = userMapper.findById(userInfo.getEmail());
+
+        if (existingUser != null) {
+            return existingUser;
+        }
+
+        User kakaoUser = new User();
+        kakaoUser.setUserId(userInfo.getEmail());
+        kakaoUser.setUserName(userInfo.getNickname());
+        kakaoUser.setPassword(null);
+
+        userMapper.insertUser(kakaoUser);
+        return kakaoUser;
     }
 }
