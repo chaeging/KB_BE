@@ -2,6 +2,7 @@ package org.scoula.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.scoula.security.dto.MemberDTO;
 import org.scoula.service.EmailService;
 import org.scoula.service.EmailVerificationService;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,7 @@ import java.util.Map;
 @RequestMapping("/v1/signup")
 @RequiredArgsConstructor
 @Log4j2
-public class EmailController {
+public class SignUpController {
     private final EmailService emailService;
     private final EmailVerificationService emailVerification;
 
@@ -46,5 +47,10 @@ public class EmailController {
             return ResponseEntity.badRequest().body(Map.of("message", "이메일 인증 실패"));
         }
     }
+//    @PostMapping("")
+//    public ResponseEntity<?> signUp(@RequestBody MemberDTO memberDTO) {
+//
+//    }
+
 
 }
