@@ -75,7 +75,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     //접근 제한 무시 경로 설정
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/assets/**", "/*", "/api/member/**");
+        web.ignoring().antMatchers("/assets/**", "/*", "/v1/auth/refresh");
     }
 
     // 문자셋필터
@@ -91,6 +91,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()//경로별접근권한설정
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
+                .antMatchers("/api/account/**").permitAll()
                 .antMatchers("/api/security/all").permitAll() //모두허용
                 .antMatchers("/api/security/member").access("hasRole('ROLE_MEMBER')") //ROLE_MEMBER이상접근허용
                 .antMatchers("/api/security/admin").access("hasRole('ROLE_ADMIN')") //ROLE_ADMIN이상접근허용
