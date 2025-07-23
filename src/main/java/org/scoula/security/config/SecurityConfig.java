@@ -91,10 +91,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()//경로별접근권한설정
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
-                .antMatchers("/api/account/**").permitAll()
-                .antMatchers("/api/security/all").permitAll() //모두허용
-                .antMatchers("/api/security/member").access("hasRole('ROLE_MEMBER')") //ROLE_MEMBER이상접근허용
-                .antMatchers("/api/security/admin").access("hasRole('ROLE_ADMIN')") //ROLE_ADMIN이상접근허용
+                .antMatchers("/v1/account/**").permitAll()
+                .antMatchers("/v1/signup/**").permitAll()
+//                .antMatchers("/api/security/all").permitAll() //모두허용
+//                .antMatchers("/api/security/member").access("hasRole('ROLE_MEMBER')") //ROLE_MEMBER이상접근허용
+//                .antMatchers("/api/security/admin").access("hasRole('ROLE_ADMIN')") //ROLE_ADMIN이상접근허용
                 .anyRequest().authenticated(); //나머지는로그인된경우모두허용
 
 
