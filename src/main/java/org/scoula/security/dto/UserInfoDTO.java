@@ -22,8 +22,9 @@ public class UserInfoDTO {
     public static UserInfoDTO of(MemberDTO dto) {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         return new UserInfoDTO(
+
                 dto.getUserId(),
-                dto.getUser_name(),
+                dto.getUserName(),
                 dto.getAddress(),
                 formatter.format(dto.getBirthdate()),
                 dto.getAuthList().stream()
