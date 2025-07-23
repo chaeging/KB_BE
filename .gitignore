@@ -45,4 +45,4 @@ bin/
 **/email.properties
 
 .idea/dataSources/
-.idea/workspace.xm
+.idea/workspace.xml
