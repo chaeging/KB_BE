@@ -9,8 +9,9 @@
 
     <!-- 회원 정보 매핑 -->
     <resultMap id="memberMap" type="MemberDTO">
-        <id property="userId" column="user_id"/>
-        <result property="user_name" column="user_name"/>
+        <id property="usersIdx" column="users_idx"/>
+        <result property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
         <result property="password" column="password"/>
         <result property="address" column="address"/>
         <result property="jwtRefreshToken" column="jwt_refresh_token"/>
@@ -20,6 +21,7 @@
 
     <select id="get" resultMap="memberMap">
         SELECT
+            u.users_idx,
             u.user_id,
             u.user_name,
             u.password,
