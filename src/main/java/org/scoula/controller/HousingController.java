@@ -8,6 +8,8 @@ import org.scoula.service.HousingApiService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.function.Supplier;
+
 @RestController
 @RequestMapping("/api/v1/subscriptions")
 @RequiredArgsConstructor
@@ -15,6 +17,16 @@ public class HousingController {
 
     private final HousingApiService housingApiService;
     private final ObjectMapper objectMapper;
+
+
+    //공통 예외 처리
+    private ResponseEntity<?> handleServiceCall(Supplier<JsonNode> serviceCall, String failMessage) {
+        try {
+            return ResponseEntity.ok(serviceCall.get());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(failMessage + ": " + e.getMessage());
+        }
+    }
 
     // 통합 호출 API
     @GetMapping
@@ -36,60 +48,36 @@ public class HousingController {
     // 1 APT 분양정보 상세조회
     @GetMapping("/apt")
     public ResponseEntity<?> getAptDetail() {
-        try {
-            return ResponseEntity.ok(housingApiService.getAptDetail());
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("APT 상세조회 실패: " + e.getMessage());
-        }
+        return handleServiceCall(housingApiService::getAptDetail, "APT 상세조회 실패");
     }
 
     // 2 오피스텔/도시형/민간임대/생활숙박시설 분양정보 상세조회
     @GetMapping("/officetel")
     public ResponseEntity<?> getOfficetelDetail() {
-        try {
-            return ResponseEntity.ok(housingApiService.getOfficetelDetail());
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("오피스텔 상세조회 실패: " + e.getMessage());
-        }
+        return handleServiceCall(housingApiService::getOfficetelDetail, "오피스텔 상세조회 실패");
     }
 
     // 3 APT 잔여세대 분양정보 상세조회
     @GetMapping("/remndr")
     public ResponseEntity<?> getRemndrDetail() {
-        try {
-            return ResponseEntity.ok(housingApiService.getRemndrDetail());
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("잔여세대 상세조회 실패: " + e.getMessage());
-        }
+        return handleServiceCall(housingApiService::getRemndrDetail, "잔여세대 상세조회 실패");
     }
 
     // 4 APT 분양정보 주택형별 상세조회
     @GetMapping("/apt-type")
     public ResponseEntity<?> getAptByHouseType() {
-        try {
-            return ResponseEntity.ok(housingApiService.getAptByHouseType());
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("APT 주택형별 상세조회 실패: " + e.getMessage());
-        }
+        return handleServiceCall(housingApiService::getAptByHouseType, "APT 주택형별 상세조회 실패");
     }
 
     // 5 오피스텔/도시형/민간임대/생활숙박시설 주택형별 상세조회
     @GetMapping("/officetel-type")
     public ResponseEntity<?> getOfficetelByHouseType() {
-        try {
-            return ResponseEntity.ok(housingApiService.getOfficetelByHouseType());
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("오피스텔 주택형별 상세조회 실패: " + e.getMessage());
-        }
+        return handleServiceCall(housingApiService::getOfficetelByHouseType, "오피스텔 주택형별 상세조회 실패");
     }
 
     // 6 APT 잔여세대 주택형별 상세조회
     @GetMapping("/remndr-type")
     public ResponseEntity<?> getRemndrByHouseType() {
-        try {
-            return ResponseEntity.ok(housingApiService.getRemndrByHouseType());
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("잔여세대 주택형별 상세조회 실패: " + e.getMessage());
-        }
+        return handleServiceCall(housingApiService::getRemndrByHouseType, "잔여세대 주택형별 상세조회 실패");
     }
 }

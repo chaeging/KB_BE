@@ -4,10 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -16,7 +13,7 @@ import org.springframework.web.client.RestTemplate;
 public class HousingApiService {
 
     @Value("${external.api.serviceKey}")
-    private String serviceKey;  // serviceKey (인코딩키 or 디코딩키) → query param
+    private String serviceKey;  // 인코딩키
 
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
@@ -49,22 +46,20 @@ public class HousingApiService {
 
     private JsonNode callApi(String endpoint) {
         try {
-            // ✅ 요청 URL 만들기
-            String url = BASE_URL + endpoint
-                    + "?page=1&perPage=10&type=json"
-                    + "&serviceKey=" + serviceKey;
+            // ✅ 요청 URL 구성
+            String url = BASE_URL + endpoint +
+                    "?page=1&perPage=10&type=json" +
+                    "&serviceKey=" + serviceKey;
 
-            // ✅ 요청 정보 로그 출력
-            System.out.println("=== [API 요청 정보] ===");
-            System.out.println("요청 URL: " + url);
-
-            System.out.println("=====================");
-
-
+            // ✅ 요청 헤더 구성 (User-Agent 필수 아님)
             HttpHeaders headers = new HttpHeaders();
-            headers.set("User-Agent", "PostmanRuntime/7.44.1");  // 브라우저 흉내
+            headers.set("Accept", "application/json");
 
             HttpEntity<String> entity = new HttpEntity<>(headers);
+
+            System.out.println("=== [API 요청] ===");
+            System.out.println("요청 URL: " + url);
+            System.out.println("=================");
 
             ResponseEntity<String> response = restTemplate.exchange(
                     url,
@@ -73,17 +68,24 @@ public class HousingApiService {
                     String.class
             );
 
-            // ✅ JSON 파싱 후 리턴
-            return objectMapper.readTree(response.getBody());
+            // ✅ 응답 확인
+            if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
+                System.out.println("✅ 응답 성공: " + response.getStatusCode());
+                return objectMapper.readTree(response.getBody());
+            } else {
+                System.err.println("❌ 응답 실패: " + response.getStatusCode());
+                throw new RuntimeException("API 응답 오류: " + response.getStatusCode());
+            }
 
         } catch (Exception e) {
+            System.err.println("❌ 예외 발생: " + e.getMessage());
             e.printStackTrace();
             throw new RuntimeException("API 호출 실패: " + endpoint + " - " + e.getMessage(), e);
         }
     }
 
-    // 테스트용 setter (Spring 없이 main에서 쓸 때)
-    public void setServiceKey(String serviceKey) {
-        this.serviceKey = serviceKey;
-    }
+//    // 테스트용 setter
+//    public void setServiceKey(String serviceKey) {
+//        this.serviceKey = serviceKey;
+//    }
 }
