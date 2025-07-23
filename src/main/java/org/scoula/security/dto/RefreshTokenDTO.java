@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthResultDTO{
-    String accesstoken;
-    String refreshToken;
-    UserInfoDTO user;
+public class RefreshTokenDTO {
+    private String user_id;           // 사용자 ID
+    private String jwt_refresh_token; // 리프레시 토큰
 }

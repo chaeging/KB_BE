@@ -2,26 +2,54 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.scoula.security.account.mapper.UserDetailsMapper">
 
-    <resultMap id="authMap" type="AuthVO">
-        <result property="username" column="username" />
-        <result property="auth" column="auth" />
+    <!-- 권한 정보 매핑 -->
+    <resultMap id="authMap" type="AuthDTO">
+        <result property="auth" column="auth"/>
     </resultMap>
 
-    <resultMap id="memberMap" type="MemberVO">
-        <id property="username" column="username"/>
-        <result property="username" column="username"/>
+    <!-- 회원 정보 매핑 -->
+    <resultMap id="memberMap" type="MemberDTO">
+        <id property="usersIdx" column="users_idx"/>
+        <result property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
         <result property="password" column="password"/>
-        <result property="email" column="email"/>
-        <result property="regDate" column="reg_date"/>
-        <result property="updateDate" column="update_date" />
-        <collection property="authList" resultMap="authMap" />
+        <result property="address" column="address"/>
+        <result property="jwtRefreshToken" column="jwt_refresh_token"/>
+        <result property="birthdate" column="birthdate"/>
+        <collection property="authList" resultMap="authMap"/>
     </resultMap>
 
     <select id="get" resultMap="memberMap">
-        select m.username, password, email, reg_date, update_date, auth
-        from
-            tbl_member m left outer join tbl_member_auth a
-        on m.username =a.username
-        where m.username = #{username}
+        SELECT
+            u.users_idx,
+            u.user_id,
+            u.user_name,
+            u.password,
+            u.birthdate,
+            a.auth
+        FROM users u
+                 LEFT OUTER JOIN users_auth a
+                                 ON u.users_idx = a.user_idx
+        WHERE u.user_id = #{user_id};
+
     </select>
+
+    <update id="updateRefreshToken">
+        UPDATE users
+        SET jwt_refresh_token = #{jwt_refresh_token}
+        WHERE user_id = #{user_id}
+    </update>
+
+    <select id="getRefreshToken" resultType="java.lang.String">
+        SELECT jwt_refresh_token
+        FROM users
+        WHERE user_id = #{user_id}
+    </select>
+
+    <update id="clearRefreshToken">
+        UPDATE users
+        SET jwt_refresh_token = NULL
+        WHERE user_id = #{user_id}
+    </update>
+
 </mapper>

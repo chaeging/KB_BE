@@ -40,3 +40,9 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+**/application.properties
+**/email.properties
+
+.idea/dataSources/
+.idea/workspace.xml
