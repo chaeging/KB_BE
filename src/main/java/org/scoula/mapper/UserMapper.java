@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.scoula.domain.User;
+import org.scoula.security.dto.AuthDTO;
 
 import java.util.List;
 
@@ -20,4 +21,5 @@ public interface UserMapper {
     User findByUsername(@Param("username") String username);
     int countUserByIdx(@Param("usersIdx") Long usersIdx);  //  users_auth 테이블에 해당 유저 정보가 저장되어있는지 확인
     void insertUserAuth(@Param("usersIdx") Long usersIdx);
+    void insertAuth(AuthDTO authDTO);
 }

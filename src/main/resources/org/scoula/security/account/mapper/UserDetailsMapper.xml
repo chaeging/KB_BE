@@ -24,6 +24,7 @@
             u.user_name,
             u.password,
             u.birthdate,
+            u.address,
             a.auth
         FROM users u
                  LEFT OUTER JOIN users_auth a

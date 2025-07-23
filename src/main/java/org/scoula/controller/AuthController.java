@@ -29,15 +29,13 @@ public class AuthController {
             //  1. access 토큰 꺼내기
             String accessToken = null;
             if (bearerToken != null && bearerToken.startsWith(BEARER_PREFIX)) {
-                accessToken = bearerToken.substring(BEARER_PREFIX.length());
-            } else {
-                return ResponseEntity.status(400).body(Map.of("error", "Authorization 헤더가 유효하지 않습니다"));
-            }
+                accessToken = bearerToken.substring(BEARER_PREFIX.length());}
+            else {
+                return ResponseEntity.status(400).body(Map.of("error", "Authorization 헤더가 유효하지 않습니다"));}
 
             // 2. 유효성 검사하기
             if (!jwtProcessor.validateToken(accessToken)) {
-                return ResponseEntity.status(401).body(Map.of("error", "유효하지 않은 Access Token"));
-            }
+                return ResponseEntity.status(401).body(Map.of("error", "유효하지 않은 Access Token"));}
 
             // 3. Refresh Token 삭제
             String username = jwtProcessor.getUsername(accessToken);
@@ -58,11 +56,9 @@ public class AuthController {
         String refresh_token = body.get("refreshToken");
 
         try{
-
             // 1. refresh token 유효성 검사 (만기여부)
             if (!jwtProcessor.validateToken(refresh_token)) {
-                return ResponseEntity.status(401).body(Map.of("error", "유효하지 않은 Refresh Token 입니다"));
-            }
+                return ResponseEntity.status(401).body(Map.of("error", "유효하지 않은 Refresh Token 입니다"));}
 
             //2.userid 가 필요
             String user_id = jwtProcessor.getUsername(refresh_token);
@@ -71,8 +67,7 @@ public class AuthController {
             String savedRefreshToken = userDetailsMapper.getRefreshToken(user_id);
             //비교해보자
             if(savedRefreshToken == null || !savedRefreshToken.equals(refresh_token)) {
-                return ResponseEntity.status(401).body(Map.of("error", "유효하지 않은 Refresh Token 입니다"));
-            }
+                return ResponseEntity.status(401).body(Map.of("error", "유효하지 않은 Refresh Token 입니다"));}
 
             //4.일치하면 새로운 access toekn 과 refresh token 발금(rotate방식)
             String newAccessToken = jwtProcessor.generateAccessToken(user_id);
