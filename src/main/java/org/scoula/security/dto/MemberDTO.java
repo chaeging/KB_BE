@@ -11,6 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MemberDTO {
+    private int userIdx;
     private String userId;             // users.user_id
     private String user_name;           // users.user_name
     private String password;           // users.password

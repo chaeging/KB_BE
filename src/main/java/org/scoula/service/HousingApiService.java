@@ -9,13 +9,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
+import java.net.URI;
 
 @Service
 @RequiredArgsConstructor
 public class HousingApiService {
 
     @Value("${external.api.serviceKey}")
-    private String serviceKey;
+    private String serviceKey;  // 인코딩 키
 
     private final ObjectMapper objectMapper;
     private final RestTemplate restTemplate = new RestTemplate();
@@ -25,7 +26,7 @@ public class HousingApiService {
     @PostConstruct
     public void init() {
         System.out.println("=== PostConstruct 실행됨 ===");
-        System.out.println("serviceKey 값: " + serviceKey);
+        System.out.println("serviceKey 값 확인: " + serviceKey);
     }
 
     public JsonNode getAptDetail() {
@@ -51,23 +52,38 @@ public class HousingApiService {
     public JsonNode getRemndrByHouseType() {
         return callApi("/getRemndrLttotPblancMdl");
     }
+
     private JsonNode callApi(String endpoint) {
         try {
-            String url = BASE_URL + endpoint +
+            // URI 객체로 직접 전달 -> 인코딩 이슈 회피
+            String fullUrl = BASE_URL + endpoint +
                     "?page=1&perPage=10&type=json" +
                     "&serviceKey=" + serviceKey;
+            URI uri = new URI(fullUrl);  // 여기서 인코딩하지 않음
 
-            System.out.println("=== API 요청 URL ===");
-            System.out.println(url);
-            System.out.println("===================");
+            System.out.println("=== [API 요청] ===");
+            System.out.println("요청 URI: " + uri);
+            System.out.println("=================");
 
-            // ✅ RestTemplate 간단 호출
-            String result = restTemplate.getForObject(url, String.class);
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Accept", "application/json");
 
-            System.out.println("✅ 응답 본문:");
-            System.out.println(result);
+            HttpEntity<String> entity = new HttpEntity<>(headers);
 
-            return objectMapper.readTree(result);
+            ResponseEntity<String> response = restTemplate.exchange(
+                    uri,
+                    HttpMethod.GET,
+                    entity,
+                    String.class
+            );
+
+            if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
+                System.out.println("✅ 응답 성공: " + response.getStatusCode());
+                return objectMapper.readTree(response.getBody());
+            } else {
+                System.err.println("❌ 응답 실패: " + response.getStatusCode());
+                throw new RuntimeException("API 응답 오류: " + response.getStatusCode());
+            }
 
         } catch (Exception e) {
             System.err.println("❌ 예외 발생: " + e.getMessage());
@@ -75,40 +91,6 @@ public class HousingApiService {
             throw new RuntimeException("API 호출 실패: " + endpoint + " - " + e.getMessage(), e);
         }
     }
-
-
-//    private JsonNode callApi(String endpoint) {
-//        try {
-//            String url = BASE_URL + endpoint +
-//                    "?page=1&perPage=10&type=json" +
-//                    "&serviceKey=" + serviceKey;
-//
-//            HttpHeaders headers = new HttpHeaders();
-////            headers.set("Accept", "application/json");
-//
-//            HttpEntity<String> entity = new HttpEntity<>(headers);
-//
-//            System.out.println(" === API 요청 URL: " + url);
-//
-//            ResponseEntity<String> response = restTemplate.exchange(
-//                    url,
-//                    HttpMethod.GET,
-//                    entity,
-//                    String.class
-//            );
-//
-//            if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
-//                System.out.println("✅ 응답 성공: " + response.getStatusCode());
-//                return objectMapper.readTree(response.getBody());
-//            } else {
-//                System.err.println("❌ 응답 실패: " + response.getStatusCode());
-//                throw new RuntimeException("API 응답 오류: " + response.getStatusCode());
-//            }
-//
-//        } catch (Exception e) {
-//            System.err.println("❌ 예외 발생: " + e.getMessage());
-//            e.printStackTrace();
-//            throw new RuntimeException("API 호출 실패: " + endpoint + " - " + e.getMessage(), e);
-//        }
-//    }
 }
+
+

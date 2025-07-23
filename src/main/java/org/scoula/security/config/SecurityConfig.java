@@ -103,7 +103,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin().disable() // formLogin 비활성화  관련 필터해제
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); // 세션 생성 모드 설정
 
-
         http
                 // 한글인코딩필터설정
                 .addFilterBefore(encodingFilter(), CsrfFilter.class)

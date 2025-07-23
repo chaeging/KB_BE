@@ -14,6 +14,8 @@ import java.util.List;
 @NoArgsConstructor
 public class UserInfoDTO {
     private String user_id;
+    private String user_name;
+    private String address;
     private String birthdate;
     private List<String> roles;
 
@@ -21,6 +23,8 @@ public class UserInfoDTO {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         return new UserInfoDTO(
                 dto.getUserId(),
+                dto.getUser_name(),
+                dto.getAddress(),
                 formatter.format(dto.getBirthdate()),
                 dto.getAuthList().stream()
                         .map(AuthDTO::getAuth)

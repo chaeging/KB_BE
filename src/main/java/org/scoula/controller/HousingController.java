@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.function.Supplier;
 
 @RestController
-@RequestMapping("/api/v1/subscriptions")
+@RequestMapping("/api/v1/db")
 @RequiredArgsConstructor
 public class HousingController {
 
@@ -28,7 +28,7 @@ public class HousingController {
     }
 
     // ✅ [통합 조회] 전체 청약 정보 조회
-    @GetMapping
+    @GetMapping("/all-housing")
     public ResponseEntity<?> getAllSubscriptions() {
         try {
             ObjectNode result = objectMapper.createObjectNode();

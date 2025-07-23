@@ -4,7 +4,41 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e9a273c9-31fc-4020-95b0-308178de39fd" name="Changes" comment="청약 API 스프링 수정 중" />
+    <list default="true" id="e9a273c9-31fc-4020-95b0-308178de39fd" name="Changes" comment="받아오기">
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/3ab9e642-3792-415b-98a4-b34d3cfe8fa8.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/3ab9e642-3792-415b-98a4-b34d3cfe8fa8/storage_v2/_src_/schema/mysql.osA4Bg.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/3ab9e642-3792-415b-98a4-b34d3cfe8fa8/storage_v2/_src_/schema/performance_schema.kIw0nw.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/3ab9e642-3792-415b-98a4-b34d3cfe8fa8/storage_v2/_src_/schema/sys.zb4BAA.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/scoula/controller/SignUpController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/scoula/service/EmailVerificationService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/org/scoula/service/EmailVerificationServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/fafc4793-b40e-4a57-abd6-45bc35aaf6b6/storage_v2/_src_/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/fafc4793-b40e-4a57-abd6-45bc35aaf6b6/storage_v2/_src_/schema/information_schema.FNRwLQ.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/fafc4793-b40e-4a57-abd6-45bc35aaf6b6/storage_v2/_src_/schema/mysql.osA4Bg.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/fafc4793-b40e-4a57-abd6-45bc35aaf6b6/storage_v2/_src_/schema/mysql.osA4Bg.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/fafc4793-b40e-4a57-abd6-45bc35aaf6b6/storage_v2/_src_/schema/performance_schema.kIw0nw.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/fafc4793-b40e-4a57-abd6-45bc35aaf6b6/storage_v2/_src_/schema/sys.zb4BAA.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/fafc4793-b40e-4a57-abd6-45bc35aaf6b6/storage_v2/_src_/schema/sys.zb4BAA.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/fafc4793-b40e-4a57-abd6-45bc35aaf6b6/storage_v2/_src_/schema/zibi.tgs5AA.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/scoula/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/scoula/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/scoula/mapper/UserMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/scoula/mapper/UserMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/scoula/security/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/scoula/security/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/scoula/security/dto/AuthDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/scoula/security/dto/AuthDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/scoula/security/dto/MemberDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/scoula/security/dto/MemberDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/scoula/security/dto/UserDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/scoula/security/dto/UserInfoDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/scoula/security/dto/UserInfoDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/scoula/service/EmailService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/scoula/service/EmailService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/scoula/service/EmailVerification.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/scoula/service/HousingApiService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/scoula/service/HousingApiService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/org/scoula/mapper/UserMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/scoula/mapper/UserMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/org/scoula/security/account/mapper/UserDetailsMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/scoula/security/account/mapper/UserDetailsMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/scoula/security/account/mapper/UserDetailsMapperTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/scoula/security/account/mapper/UserDetailsMapperTest.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -86,36 +120,36 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Gradle.Build KB_BE.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.KB_BE [build].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.KB_BE [clean].executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.API_TEST_1 | #2.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Tomcat Server.Tomcat 9.0.105.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feature/housingApi&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/jeeminkim/Desktop/zibi/KB_BE&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2137931&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Gradle.Build KB_BE.executor": "Run",
+    "Gradle.KB_BE [build].executor": "Run",
+    "Gradle.KB_BE [clean].executor": "Run",
+    "HTTP Request.API_TEST_1 | #2.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Tomcat Server.Tomcat 9.0.105.executor": "Run",
+    "git-widget-placeholder": "Merging feature/housingApi",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/jeeminkim/Desktop/zibi/KB_BE",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Artifacts",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2137931",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mysql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="src/main/resources/email.properties" />
@@ -399,7 +433,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="feat:청약 API 스프링" />
     <MESSAGE value="청약 API 스프링 수정 중" />
-    <option name="LAST_COMMIT_MESSAGE" value="청약 API 스프링 수정 중" />
+    <MESSAGE value="받아오기" />
+    <option name="LAST_COMMIT_MESSAGE" value="받아오기" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

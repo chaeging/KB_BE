@@ -66,4 +66,9 @@
         INSERT INTO users_auth (user_idx, auth) VALUES (#{usersIdx}, 'ROLE_MEMBER')
     </insert>
 
+    <insert id="insertAuth">
+        INSERT INTO users_auth (user_idx,auth)
+        VALUES (#{user_idx},#{auth})
+    </insert>
+
 </mapper>
