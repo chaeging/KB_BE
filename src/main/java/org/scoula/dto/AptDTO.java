@@ -52,3 +52,4 @@ public class AptDTO {
 
     private List<AptTypeDTO> aptTypeList; // 연관된 주택형 리스트
 }
+

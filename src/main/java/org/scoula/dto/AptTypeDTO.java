@@ -17,3 +17,4 @@ public class AptTypeDTO {
     private Integer spsplyHshldco;   // 특별공급세대수
     private String lttotTopAmount;   // 공급금액 (분양최고금액)
 }
+

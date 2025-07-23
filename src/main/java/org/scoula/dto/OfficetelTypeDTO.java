@@ -17,3 +17,4 @@ public class OfficetelTypeDTO {
     private Integer suplyAmount;         // 공급금액 (분양최고금액, 만원)
     private Integer subscrptReqstAmount; // 청약신청금 (만원)
 }
+

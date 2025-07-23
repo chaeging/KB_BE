@@ -84,6 +84,7 @@ public class HousingApiService {
         }
     }
 
+
 //    // 테스트용 setter
 //    public void setServiceKey(String serviceKey) {
 //        this.serviceKey = serviceKey;

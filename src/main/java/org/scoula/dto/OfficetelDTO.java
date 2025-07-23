@@ -37,3 +37,4 @@ public class OfficetelDTO {
 
     private List<OfficetelTypeDTO> officetelTypeList; // 연관된 모델 리스트
 }
+
