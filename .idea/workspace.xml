@@ -4,13 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e9a273c9-31fc-4020-95b0-308178de39fd" name="Changes" comment="Feature: EmailService에 Cache 사용해 검증 하기(#33 , #35)">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="e9a273c9-31fc-4020-95b0-308178de39fd" name="Changes" comment="Feature: insertAuth(#44)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/scoula/controller/SignUpController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/scoula/controller/SignUpController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/scoula/security/dto/MemberDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/scoula/security/dto/MemberDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/scoula/security/dto/UserInfoDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/scoula/security/dto/UserInfoDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/org/scoula/security/account/mapper/UserDetailsMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/scoula/security/account/mapper/UserDetailsMapper.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,7 +95,7 @@
     "Tomcat 서버.Tomcat 9.0.105.executor": "Run",
     "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
     "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "test",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/jeeminkim/Desktop/zibi/KB_BE",
     "node.js.detected.package.eslint": "true",
