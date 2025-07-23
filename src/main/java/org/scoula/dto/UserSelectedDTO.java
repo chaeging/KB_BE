@@ -1,4 +1,3 @@
-// ✅ UserSelectedDTO.java
 package org.scoula.dto;
 
 import lombok.AllArgsConstructor;
