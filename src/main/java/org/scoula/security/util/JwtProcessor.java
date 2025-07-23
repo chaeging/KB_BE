@@ -3,6 +3,7 @@ package org.scoula.security.util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
@@ -25,7 +26,7 @@ public class JwtProcessor {
                 .setSubject(subject)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime()+ACCESS_TOKEN_VALID_MILLISECOND))
-                .signWith(key)
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 

@@ -93,6 +93,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .antMatchers("/v1/account/**").permitAll()
                 .antMatchers("/v1/signup/**").permitAll()
+                .antMatchers("/oauth/kakao/**").permitAll()
 //                .antMatchers("/api/security/all").permitAll() //모두허용
 //                .antMatchers("/api/security/member").access("hasRole('ROLE_MEMBER')") //ROLE_MEMBER이상접근허용
 //                .antMatchers("/api/security/admin").access("hasRole('ROLE_ADMIN')") //ROLE_ADMIN이상접근허용
