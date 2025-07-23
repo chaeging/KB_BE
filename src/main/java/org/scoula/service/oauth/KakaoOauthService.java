@@ -130,6 +130,10 @@ public class KakaoOauthService {
         User existingUser = userMapper.findById(userInfo.getEmail());
 
         if (existingUser != null) {
+            int count = userMapper.countUserByIdx(existingUser.getUsersIdx());
+            if (count == 0) {
+                userMapper.insertUserAuth(existingUser.getUsersIdx());
+            }
             return existingUser;
         }
 
@@ -139,6 +143,7 @@ public class KakaoOauthService {
         kakaoUser.setPassword(null);
 
         userMapper.insertUser(kakaoUser);
+        userMapper.insertUserAuth(kakaoUser.getUsersIdx());
         return kakaoUser;
     }
 }

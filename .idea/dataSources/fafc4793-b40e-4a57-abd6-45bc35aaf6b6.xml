@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dataSource name="zibi-rds">
+<dataSource name="zibi">
   <database-model serializer="dbm" dbms="MYSQL" family-id="MYSQL" format-version="4.53">
     <root id="1">
       <DefaultCasing>exact</DefaultCasing>
@@ -1036,25 +1036,25 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <Charset>utf8mb4</Charset>
     </collation>
     <schema id="288" parent="1" name="information_schema">
-      <LastIntrospectionLocalTimestamp>2025-07-22.05:24:46</LastIntrospectionLocalTimestamp>
+      <LastIntrospectionLocalTimestamp>2025-07-23.00:41:14</LastIntrospectionLocalTimestamp>
       <CollationName>utf8mb3_general_ci</CollationName>
     </schema>
     <schema id="289" parent="1" name="mysql">
       <Grants>user|||mysql.session|localhost|SELECT|G</Grants>
-      <LastIntrospectionLocalTimestamp>2025-07-22.05:24:48</LastIntrospectionLocalTimestamp>
+      <LastIntrospectionLocalTimestamp>2025-07-23.00:41:17</LastIntrospectionLocalTimestamp>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </schema>
     <schema id="290" parent="1" name="performance_schema">
-      <LastIntrospectionLocalTimestamp>2025-07-22.05:24:52</LastIntrospectionLocalTimestamp>
+      <LastIntrospectionLocalTimestamp>2025-07-23.00:41:20</LastIntrospectionLocalTimestamp>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </schema>
     <schema id="291" parent="1" name="sys">
       <Grants>sys_config|||mysql.sys|localhost|SELECT|G</Grants>
-      <LastIntrospectionLocalTimestamp>2025-07-22.05:24:52</LastIntrospectionLocalTimestamp>
+      <LastIntrospectionLocalTimestamp>2025-07-23.00:41:21</LastIntrospectionLocalTimestamp>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </schema>
     <schema id="292" parent="1" name="zibi">
-      <LastIntrospectionLocalTimestamp>2025-07-22.05:24:54</LastIntrospectionLocalTimestamp>
+      <LastIntrospectionLocalTimestamp>2025-07-23.00:41:23</LastIntrospectionLocalTimestamp>
       <CollationName>utf8mb3_general_ci</CollationName>
     </schema>
     <user id="293" parent="1" name="admin">
@@ -26331,7 +26331,6 @@ VARIABLE_NAME</ColNames>
       <StoredType>varchar(255)|0s</StoredType>
     </column>
     <column id="5087" parent="766" name="password">
-      <NotNull>1</NotNull>
       <Position>4</Position>
       <StoredType>varchar(255)|0s</StoredType>
     </column>
@@ -26377,35 +26376,35 @@ VARIABLE_NAME</ColNames>
     <key id="5097" parent="766" name="kakao_user_id">
       <UnderlyingIndexName>kakao_user_id</UnderlyingIndexName>
     </key>
-    <column id="5098" parent="767" name="auth_id">
-      <AutoIncrement>2</AutoIncrement>
+    <column id="5098" parent="767" name="users_auth_idx">
+      <AutoIncrement>1</AutoIncrement>
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StoredType>int|0s</StoredType>
     </column>
-    <column id="5099" parent="767" name="username">
+    <column id="5099" parent="767" name="user_idx">
       <NotNull>1</NotNull>
       <Position>2</Position>
-      <StoredType>varchar(255)|0s</StoredType>
+      <StoredType>int|0s</StoredType>
     </column>
     <column id="5100" parent="767" name="auth">
       <NotNull>1</NotNull>
       <Position>3</Position>
       <StoredType>varchar(50)|0s</StoredType>
     </column>
-    <foreign-key id="5101" parent="767" name="users_auth_ibfk_1">
-      <ColNames>username</ColNames>
+    <foreign-key id="5101" parent="767" name="fk_users_auth_user_idx">
+      <ColNames>user_idx</ColNames>
       <OnDelete>cascade</OnDelete>
-      <RefColNames>user_id</RefColNames>
+      <RefColNames>users_idx</RefColNames>
       <RefTableName>users</RefTableName>
     </foreign-key>
     <index id="5102" parent="767" name="PRIMARY">
-      <ColNames>auth_id</ColNames>
+      <ColNames>users_auth_idx</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <index id="5103" parent="767" name="username">
-      <ColNames>username</ColNames>
+    <index id="5103" parent="767" name="fk_users_auth_user_idx">
+      <ColNames>user_idx</ColNames>
       <Type>btree</Type>
     </index>
     <key id="5104" parent="767" name="PRIMARY">

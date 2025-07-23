@@ -56,4 +56,14 @@
         DELETE FROM users WHERE users_idx = #{id}
     </delete>
 
+    <!-- 해당 유저가 users_auth 테이블에 있는지 확인 -->
+    <select id="countUserByIdx" parameterType="long" resultType="int">
+        SELECT COUNT(*) FROM users_auth WHERE user_idx = #{usersIdx}
+    </select>
+
+    <!--  -->
+    <insert id="insertUserAuth" parameterType="long">
+        INSERT INTO users_auth (user_idx, auth) VALUES (#{usersIdx}, 'ROLE_MEMBER')
+    </insert>
+
 </mapper>
