@@ -59,7 +59,6 @@ public class CodefApiService {
         return accountMapper.findAccountsByUserIdx(userIdx);
     }
 
-    // ✅ Access Token 발급
     private String getAccessToken() {
         String url = "https://oauth.codef.io/oauth/token";
 
@@ -76,7 +75,6 @@ public class CodefApiService {
         return json.get("access_token").getAsString();
     }
 
-    // ✅ Connected ID 생성
     private String createConnectedId(String accessToken, String id, String encryptedPassword, String organization) throws Exception {
         String url = "https://development.codef.io/v1/account/create";
 
@@ -116,7 +114,6 @@ public class CodefApiService {
         return null;
     }
 
-    // ✅ 계좌 목록 요청
     private String requestAccountList(String accessToken, String connectedId, String organization) throws Exception {
         String url = "https://development.codef.io/v1/kr/bank/p/account/account-list";
 
@@ -138,7 +135,6 @@ public class CodefApiService {
         return decoded;
     }
 
-    // ✅ 청약 계좌 필터링
     private List<ChungyakAccountDTO> filterChungyakAccounts(String json, String bankName) {
         List<ChungyakAccountDTO> resultList = new ArrayList<>();
 
