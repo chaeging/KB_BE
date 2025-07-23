@@ -7,7 +7,6 @@ import org.scoula.dto.ChungyakAccountDTO;
 import org.scoula.service.CodefApiService;
 import org.scoula.security.util.JwtProcessor;
 import org.scoula.mapper.UserMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

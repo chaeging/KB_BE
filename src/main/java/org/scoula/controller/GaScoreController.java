@@ -1,8 +1,8 @@
 package org.scoula.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.scoula.dto.GaScoreDTO;
 import org.scoula.service.GaScoreService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -10,10 +10,10 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/v1/ga-score")
+@RequiredArgsConstructor
 public class GaScoreController {
 
-    @Autowired
-    private GaScoreService gaScoreService;
+    private final GaScoreService gaScoreService;
 
     @PostMapping("")
     public void saveGaScore(@RequestHeader("Authorization") String token,
