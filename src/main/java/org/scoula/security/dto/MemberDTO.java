@@ -11,13 +11,12 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MemberDTO {
+    private int usersIdx;             //users.user_idx
     private String userId;             // users.user_id
     private String userName;           // users.user_name
     private String password;           // users.password
-    private String email;              // users.email
-    private Date birthdate;            // users.birthdate
-    private Date regDate;              // users.reg_date
-    private Date updateDate;           // users.update_date
+    private String address;
     private String jwtRefreshToken;    // users.jwt_refresh_token
+    private Date birthdate;            // users.birthdate
     private List<AuthDTO> authList;    // users_auth 연관된 권한 목록
 }

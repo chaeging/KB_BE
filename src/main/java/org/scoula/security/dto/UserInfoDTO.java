@@ -5,22 +5,28 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserInfoDTO {
-    private String username;
-    private String email;
+    private String user_id;
+    private String user_name;
+    private String address;
     private String birthdate;
     private List<String> roles;
 
     public static UserInfoDTO of(MemberDTO dto) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         return new UserInfoDTO(
+
                 dto.getUserId(),
-                dto.getEmail(),
-                dto.getBirthdate().toString(),
+                dto.getUserName(),
+                dto.getAddress(),
+                formatter.format(dto.getBirthdate()),
                 dto.getAuthList().stream()
                         .map(AuthDTO::getAuth)
                         .toList()

@@ -12,7 +12,6 @@ import java.util.Base64;
 public class RsaEncryptionUtil {
 
     public String encryptPassword(String publicKeyContent, String plainPassword) throws Exception {
-        // 안전하게 공백 및 줄바꿈 제거 (혹시 모를 데이터 오류 방지)
         String cleanedKey = publicKeyContent
                 .replaceAll("\\n", "")
                 .replace("-----BEGIN PUBLIC KEY-----", "")

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.scoula.config.RootConfig;
 
+import org.scoula.mapper.UserMapper;
 import org.scoula.security.config.SecurityConfig;
 import org.scoula.security.dto.AuthDTO;
 import org.scoula.security.dto.MemberDTO;
@@ -19,10 +20,13 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 public class UserDetailsMapperTest {
     @Autowired
     private UserDetailsMapper mapper;
+    @Autowired
+    private UserMapper mapper2; // ✅ 변경
+
 
     @Test
     public void get() {
-        MemberDTO member=mapper.get("admin");
+        MemberDTO member=mapper.get("du123kim@naver.com");
         log.info(member);
         for(AuthDTO auth : member.getAuthList()) {
             log.info(auth);
@@ -58,6 +62,11 @@ public class UserDetailsMapperTest {
     }
 
     @Test
-    void testUpdateRefreshToken() {
+    void insertAuth() {
+        AuthDTO authDTO = new AuthDTO();
+        authDTO.setUser_idx(1);
+        authDTO.setAuth("ROLE_TEST");
+        mapper2.insertAuth(authDTO);
+
     }
 }
