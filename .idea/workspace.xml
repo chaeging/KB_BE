@@ -5,11 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e9a273c9-31fc-4020-95b0-308178de39fd" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/scoula/dto/HomePriceDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/scoula/dto/HomePriceDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/scoula/dto/HomeSizeDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/scoula/dto/HomeSizeDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/scoula/dto/HomeTypeDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/scoula/dto/HomeTypeDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/scoula/dto/RegionDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/scoula/dto/RegionDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/e00ed1b0-234d-4c1c-8c88-42b9b0d0f8a2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/e00ed1b0-234d-4c1c-8c88-42b9b0d0f8a2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/scoula/dto/UserSelectedDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/scoula/dto/UserSelectedDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/scoula/service/UserSelectedService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/scoula/service/UserSelectedService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,6 +66,7 @@
     <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
@@ -75,7 +76,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Tomcat Server.Tomcat 9.0.105.executor": "Run",
-    "git-widget-placeholder": "feature/selected",
+    "git-widget-placeholder": "Merging feature/selected",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/jeeminkim/Desktop/zibi/KB_BE",
     "node.js.detected.package.eslint": "true",
