@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="zibi-rbs" uuid="014acd74-897d-4145-a833-29680426d5c5">
+    <data-source source="LOCAL" name="zibi-rds" uuid="c9e22940-87cc-48ad-b332-bbbb37914f7a">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>

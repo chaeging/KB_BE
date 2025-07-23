@@ -19,7 +19,7 @@ public class AccountController {
 
     private final CodefApiService codefApiService;
     private final JwtProcessor jwtProcessor;
-    private final UserMapper userMapper;
+    private final  UserMapper userMapper;
 
     @PostMapping("/connect")
     public List<ChungyakAccountDTO> autoConnectAndFetchAccounts(
