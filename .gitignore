@@ -45,4 +45,8 @@ bin/
 **/email.properties
 
 .idea/dataSources/
+<<<<<<< HEAD
 .idea/workspace.xml
+=======
+.idea/workspace.xml
+>>>>>>> 6d1454b (refactor: 파일 수정)
