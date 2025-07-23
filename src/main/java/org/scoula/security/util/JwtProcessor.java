@@ -13,25 +13,35 @@ import java.util.Date;
 
 @Component
 public class JwtProcessor {
-    static private final long TOKEN_VALID_MILISECOND=1000L*60*5; //5분
+    private static final long ACCESS_TOKEN_VALID_MILLISECOND = 1000L * 60 * 5; // 5분
+    private static final long REFRESH_TOKEN_VALID_MILLISECOND = 1000L * 60 * 60 * 24 * 7; // 7일
 
     private String secretKey = "충분히 긴 임의의(랜덤한) 비밀키 문자열 배정";
     private Key key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
     //private Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
-    //JWT 생성
-    public String generateToken(String subject) {
+    //JWT Access 토큰 생성
+    public String generateAccessToken(String subject) {
         return Jwts.builder()
                 .setSubject(subject)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(new Date().getTime()+TOKEN_VALID_MILISECOND))
+                .setExpiration(new Date(new Date().getTime()+ACCESS_TOKEN_VALID_MILLISECOND))
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    //RefreshToken 설치
+    public String generateRefreshToken(String subject) {
+        return Jwts.builder()
+                .setSubject(subject)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + REFRESH_TOKEN_VALID_MILLISECOND))
                 .signWith(key)
                 .compact();
     }
 
-    // JWT Subject(username) 추출- 해석불가인경우예외발생
+
     //JWT(JSON Web Token)에서 사용자 이름(username)을 추출하는 기능을 수행합니다.
-    // 예외ExpiredJwtException, UnsupportedJwtException, MalformedJwtException, SignatureException,IllegalArgumentException
     public String getUsername(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key) // 서명 검증을 위한 키 설정
@@ -50,6 +60,5 @@ public class JwtProcessor {
                 .parseClaimsJws(token);
         return true;
     }
-
 
 }
