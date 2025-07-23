@@ -90,7 +90,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()//경로별접근권한설정
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
-                .antMatchers("/oauth/kakao/**").permitAll()   // 카카오 로그인 콜백 허용
+                .antMatchers("/v1/auth/kakao/**").permitAll()   // 카카오 로그인 콜백 허용
                 .antMatchers("/api/account/**").permitAll()
                 .antMatchers("/api/security/all").permitAll() //모두허용
                 .antMatchers("/api/security/member").access("hasRole('ROLE_MEMBER')") //ROLE_MEMBER이상접근허용

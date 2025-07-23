@@ -31,7 +31,7 @@ public class KakaoOauthService {
     private String REST_API_KEY;
 
     @Value("${kakao.redirect_url}")
-    private String REDIRECT_URL;
+    private String REDIRECT_URI;
 
     public KakaoUserInfoDto processKakaoLogin(String code) {
         String accessToken = this.getAccessToken(code);
@@ -57,14 +57,14 @@ public class KakaoOauthService {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>(); // MultiValueMap은 하나의 key에 여러 개의 value를 저장할 수 있는 자료구조
         params.add("grant_type", "authorization_code");     // 인가 코드 방식을 사용한다는 의미
         params.add("client_id", REST_API_KEY);
-        params.add("redirect_uri", REDIRECT_URL);
+        params.add("redirect_uri", REDIRECT_URI);
         params.add("code", authorizationCode);              // 카카오가 준 1회성 인가 코드, 이 코드를 사용해 Access Token 교환
 
         // 전체 요정 URL 확인용
         String fullUrl = tokenUrl + "?" +
                 "grant_type=authorization_code" +
                 "&client_id=" + REST_API_KEY +
-                "&redirect_uri=" + REDIRECT_URL +
+                "&redirect_uri=" + REDIRECT_URI +
                 "&code=" + authorizationCode;
 
         log.info("카카오 토큰 요청 전체 URL: {}", fullUrl);

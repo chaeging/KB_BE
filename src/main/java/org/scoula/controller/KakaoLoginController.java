@@ -23,7 +23,7 @@ public class KakaoLoginController {
      * @param code 카카오에서 전달하는 인가 코드
      * @return KakaoUserInfoDto + JWT
      */
-    @GetMapping("/oauth/kakao/callback")
+    @GetMapping("v1/auth/kakao/callback")
     @ResponseBody
     public ResponseEntity<KakaoUserInfoDto> kakaoLogin(@RequestParam("code") String code) {
         log.info("카카오 인가 코드 수신: {}", code);
