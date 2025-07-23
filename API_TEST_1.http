@@ -1,5 +1,8 @@
 ### 청약 외부 API 가져오기
 GET https://api.odcloud.kr/api/ApplyhomeInfoDetailSvc/v1/getAPTLttotPblancDetail?page=1&perPage=10&serviceKey=PQGpmr1zaI3HKxa%2BckRamEynSodJqI7OQ%2BhFp25TeBWQ81tmjkuGif%2F3XyZVhGcZxf2%2Fk3wB8ERkC8iYqQUkcA%3D%3D
 
-###
-GET http://localhost:8080/api/v1/subscriptions/apt
+### 아파트
+GET http://localhost:8080/api/v1/db/apt
+
+### 아파트 잔여세대
+GET http://localhost:8080/api/v1/db/remndr

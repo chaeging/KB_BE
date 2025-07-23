@@ -43,3 +43,6 @@ bin/
 
 **/application.properties
 **/email.properties
+
+.idea/dataSources/
+.idea/workspace.xm
