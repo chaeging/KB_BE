@@ -16,7 +16,6 @@ import java.util.List;
 @Log4j2
 @RequiredArgsConstructor
 public class AccountController {
-
     private final CodefApiService codefApiService;
     private final JwtProcessor jwtProcessor;
     private final  UserMapper userMapper;
