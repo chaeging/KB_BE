@@ -18,8 +18,7 @@ public class HousingController {
     private final HousingApiService housingApiService;
     private final ObjectMapper objectMapper;
 
-
-    //공통 예외 처리
+    // 공통 예외 처리 메서드
     private ResponseEntity<?> handleServiceCall(Supplier<JsonNode> serviceCall, String failMessage) {
         try {
             return ResponseEntity.ok(serviceCall.get());
@@ -28,7 +27,7 @@ public class HousingController {
         }
     }
 
-    // 통합 호출 API
+    // ✅ [통합 조회] 전체 청약 정보 조회
     @GetMapping
     public ResponseEntity<?> getAllSubscriptions() {
         try {
@@ -45,37 +44,37 @@ public class HousingController {
         }
     }
 
-    // 1 APT 분양정보 상세조회
+    // 1️⃣ APT 분양정보 상세조회
     @GetMapping("/apt")
     public ResponseEntity<?> getAptDetail() {
         return handleServiceCall(housingApiService::getAptDetail, "APT 상세조회 실패");
     }
 
-    // 2 오피스텔/도시형/민간임대/생활숙박시설 분양정보 상세조회
+    // 2️⃣ 오피스텔/도시형/민간임대/생활숙박시설 분양정보 상세조회
     @GetMapping("/officetel")
     public ResponseEntity<?> getOfficetelDetail() {
         return handleServiceCall(housingApiService::getOfficetelDetail, "오피스텔 상세조회 실패");
     }
 
-    // 3 APT 잔여세대 분양정보 상세조회
+    // 3️⃣ APT 잔여세대 분양정보 상세조회
     @GetMapping("/remndr")
     public ResponseEntity<?> getRemndrDetail() {
         return handleServiceCall(housingApiService::getRemndrDetail, "잔여세대 상세조회 실패");
     }
 
-    // 4 APT 분양정보 주택형별 상세조회
+    // 4️⃣ APT 분양정보 주택형별 상세조회
     @GetMapping("/apt-type")
     public ResponseEntity<?> getAptByHouseType() {
         return handleServiceCall(housingApiService::getAptByHouseType, "APT 주택형별 상세조회 실패");
     }
 
-    // 5 오피스텔/도시형/민간임대/생활숙박시설 주택형별 상세조회
+    // 5️⃣ 오피스텔/도시형/민간임대/생활숙박시설 주택형별 상세조회
     @GetMapping("/officetel-type")
     public ResponseEntity<?> getOfficetelByHouseType() {
         return handleServiceCall(housingApiService::getOfficetelByHouseType, "오피스텔 주택형별 상세조회 실패");
     }
 
-    // 6 APT 잔여세대 주택형별 상세조회
+    // 6️⃣ APT 잔여세대 주택형별 상세조회
     @GetMapping("/remndr-type")
     public ResponseEntity<?> getRemndrByHouseType() {
         return handleServiceCall(housingApiService::getRemndrByHouseType, "잔여세대 주택형별 상세조회 실패");

@@ -1,24 +1,25 @@
-package org.scoula.config;
+//package org.scoula.config;
+//
+//import org.springframework.context.annotation.Bean;
+//import org.springframework.context.annotation.Configuration;
+//import org.springframework.http.client.SimpleClientHttpRequestFactory;
+//import org.springframework.web.client.RestTemplate;
+//
+//@Configuration
+//public class RestTemplateConfig {
+//
+//    @Bean
+//    public RestTemplate restTemplate() {
+//        // Timeout 설정
+//        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+//        factory.setConnectTimeout(5000); // 연결 Timeout (ms)
+//        factory.setReadTimeout(5000);    // 응답 대기 Timeout (ms)
+//
+//        return new RestTemplate(factory);
+//    }
+//}
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.http.client.SimpleClientHttpRequestFactory;
-import org.springframework.web.client.RestTemplate;
-
-@Configuration
-public class RestTemplateConfig {
-
-    @Bean
-    public RestTemplate restTemplate() {
-        // Timeout 설정
-        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-        factory.setConnectTimeout(5000); // 연결 Timeout (ms)
-        factory.setReadTimeout(5000);    // 응답 대기 Timeout (ms)
-
-        return new RestTemplate(factory);
-    }
-}
-
+/// ///////////////////////////////////////////////////////////////////////
 
 //@Configuration
 //public class RestTemplateConfig {
