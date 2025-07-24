@@ -3,6 +3,7 @@ package org.scoula.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.scoula.security.dto.MemberDTO;
+import org.scoula.security.util.JwtProcessor;
 import org.scoula.service.AuthService;
 import org.scoula.service.UserService;
 import org.scoula.util.TokenUtils;
@@ -20,6 +21,7 @@ public class AuthController {
     private final TokenUtils tokenUtils;
     private final AuthService authService;
     private final UserService userService;
+    private final JwtProcessor jwtProcessor;
 
     @DeleteMapping("/logout")
     public ResponseEntity<?> logout(@RequestHeader("Authorization") String bearerToken) {
@@ -60,5 +62,14 @@ public class AuthController {
             log.error("[signUp] 회원가입 실패", e);
             return ResponseEntity.internalServerError().body(Map.of("message", "회원가입 실패"));
         }
+    }
+
+    @DeleteMapping("/signout")
+    public ResponseEntity<?> signOut(@RequestHeader("Authorization") String bearerToken) {
+        String accessToken = tokenUtils.extractAccessToken(bearerToken);
+        String username = jwtProcessor.getUsername(accessToken);
+        int userIdx = userService.findUserIdxByUserId(username);
+        userService.deleteUser(userIdx);
+        return ResponseEntity.ok(Map.of("message", "회원 탈퇴 완료!"));
     }
 }
