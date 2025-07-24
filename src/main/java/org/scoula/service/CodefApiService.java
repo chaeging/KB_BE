@@ -4,6 +4,7 @@ import com.google.gson.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.scoula.dto.ChungyakAccountDTO;
+import org.scoula.exception.NoAccountException;
 import org.scoula.mapper.AccountMapper;
 import org.scoula.util.RsaEncryptionUtil;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,6 +45,10 @@ public class CodefApiService {
 
         String accountListJson = requestAccountList(accessToken, connectedId, organization);
         List<ChungyakAccountDTO> accounts = filterChungyakAccounts(accountListJson, bankName);
+
+        if (accounts == null || accounts.isEmpty()) {
+            throw new NoAccountException();  // or 커스텀 메시지 가능
+        }
         saveChungyakAccounts(accounts, userIdx, false);
 
         return accounts;
@@ -56,7 +61,11 @@ public class CodefApiService {
     }
 
     public List<ChungyakAccountDTO> getChungyakAccountsByUserIdx(int userIdx) {
-        return accountMapper.findAccountsByUserIdx(userIdx);
+        List<ChungyakAccountDTO> accounts = accountMapper.findAccountsByUserIdx(userIdx);
+        if (accounts == null || accounts.isEmpty()) {
+            throw new NoAccountException("해당 사용자에게 등록된 청약 계좌가 없습니다.");
+        }
+        return accounts;
     }
 
     private String getAccessToken() {

@@ -9,32 +9,39 @@ import org.scoula.security.util.JwtProcessor;
 import org.scoula.mapper.UserMapper;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/v1/account")
 @Log4j2
 @RequiredArgsConstructor
 public class AccountController {
+
     private final CodefApiService codefApiService;
     private final JwtProcessor jwtProcessor;
-    private final  UserMapper userMapper;
+    private final UserMapper userMapper;
 
     @PostMapping("/connect")
-    public List<ChungyakAccountDTO> autoConnectAndFetchAccounts(
+    public Map<String, String> autoConnectAndFetchAccounts(
             @RequestHeader("Authorization") String token,
             @RequestBody AccountConnectDTO requestDto
     ) throws Exception {
         String userId = jwtProcessor.getUsername(token.replace("Bearer ", ""));
         int userIdx = userMapper.findUserIdxByUserId(userId);
 
-        return codefApiService.autoConnectAndFetchChungyakAccounts(
+        codefApiService.autoConnectAndFetchChungyakAccounts(
                 requestDto.getId(),
                 requestDto.getPassword(),
                 requestDto.getOrganization(),
                 requestDto.getBankName(),
                 userIdx
         );
+
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "계좌 연동이 완료되었습니다.");
+        return response;
     }
 
     @GetMapping("")
