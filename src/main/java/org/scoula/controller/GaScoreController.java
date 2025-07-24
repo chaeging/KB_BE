@@ -26,7 +26,7 @@ public class GaScoreController {
         int totalScore = gaScoreService.calculateTotalScore(token);
 
         Map<String, Integer> result = new HashMap<>();
-        result.put("totalScore", totalScore);
+        result.put("total_score", totalScore);
 
         return result;
     }

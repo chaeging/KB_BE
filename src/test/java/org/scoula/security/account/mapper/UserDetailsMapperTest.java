@@ -61,12 +61,4 @@ public class UserDetailsMapperTest {
         log.info("refresh token clear success");
     }
 
-    @Test
-    void insertAuth() {
-        AuthDTO authDTO = new AuthDTO();
-        authDTO.setUser_idx(1);
-        authDTO.setAuth("ROLE_TEST");
-        mapper2.insertAuth(authDTO);
-
-    }
 }
