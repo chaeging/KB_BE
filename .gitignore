@@ -43,4 +43,7 @@ bin/
 
 **/application.properties
 **/email.properties
-.idea/
+**/dataSources.xml
+**/dataSources.local.xml
+.idea/dataSources/
+.idea/workspace.xml
