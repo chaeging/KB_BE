@@ -2,7 +2,9 @@ package org.scoula.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.scoula.security.dto.MemberDTO;
 import org.scoula.service.AuthService;
+import org.scoula.service.UserService;
 import org.scoula.util.TokenUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,7 @@ public class AuthController {
 
     private final TokenUtils tokenUtils;
     private final AuthService authService;
+    private final UserService userService;
 
     @DeleteMapping("/logout")
     public ResponseEntity<?> logout(@RequestHeader("Authorization") String bearerToken) {
@@ -44,6 +47,17 @@ public class AuthController {
         } catch (Exception e) {
             log.error("Refresh Token 처리 중 오류", e);
             return ResponseEntity.status(500).body(Map.of("error", "Refresh Token 처리 중 오류"));
+        }
+    }
+
+    @PostMapping("/signup")
+    public ResponseEntity<?> signUp(@RequestBody MemberDTO memberDTO) {
+        try {
+            userService.signUp(memberDTO);
+            return ResponseEntity.ok(Map.of("message", "회원가입 완료"));
+        } catch (Exception e) {
+            log.error("[signUp] 회원가입 실패", e);
+            return ResponseEntity.internalServerError().body(Map.of("message", "회원가입 실패"));
         }
     }
 }
