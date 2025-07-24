@@ -7,20 +7,31 @@
 
     <update id="updateScore">
         UPDATE user_info
-        SET
-            no_house_period = #{gaScoreDTO.noHousePeriod},
+        SET no_house_period = #{gaScoreDTO.noHousePeriod},
             dependents_nm = #{gaScoreDTO.dependentsNm},
             no_house_score = #{gaScoreDTO.noHouseScore},
-            dependentes_score = #{gaScoreDTO.dependentsScore},
-            payment_period = #{gaScoreDTO.paymentPeriod}
+            dependents_score = #{gaScoreDTO.dependentsScore},
+            payment_period = #{gaScoreDTO.paymentPeriodScore}
+        WHERE users_idx = #{userIdx}
+    </update>
+
+    <update id="updateTotalScore">
+        UPDATE user_info
+        SET total_ga_score = #{totalScore}
         WHERE users_idx = #{userIdx}
     </update>
 
     <select id="getScoresByUserIdx" resultType="org.scoula.dto.GaScoreDTO">
         SELECT
             no_house_score AS noHouseScore,
-            dependentes_score AS dependentsScore,
+            dependents_score AS dependentsScore,
             payment_period AS paymentPeriod
+        FROM user_info
+        WHERE users_idx = #{userIdx}
+    </select>
+
+    <select id="getTotalScoreByUserIdx" resultType="int">
+        SELECT total_ga_score
         FROM user_info
         WHERE users_idx = #{userIdx}
     </select>

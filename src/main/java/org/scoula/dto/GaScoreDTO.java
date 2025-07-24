@@ -8,9 +8,13 @@ public class GaScoreDTO {
 
     @JsonProperty("no_house_period")
     private int noHousePeriod;
+
     @JsonProperty("dependents_nm")
     private int dependentsNm;
+
     private int noHouseScore;
     private int dependentsScore;
-    private int paymentPeriod;
+
+    @JsonProperty("payment_period_score")
+    private int paymentPeriodScore;
 }
