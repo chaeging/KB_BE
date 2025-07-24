@@ -14,4 +14,6 @@ public interface AccountMapper {
                                @Param("isPayment") boolean isPayment);
 
     List<ChungyakAccountDTO> findAccountsByUserIdx(@Param("userIdx") int userIdx);
+
+    String findEarliestAccountStartDate(@Param("userIdx") int userIdx);
 }
