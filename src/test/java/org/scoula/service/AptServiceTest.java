@@ -5,13 +5,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.scoula.config.RootConfig;
 import org.scoula.config.ServletConfig;
-import org.scoula.dto.AptDTO;
-import org.scoula.dto.AptResponseDto;
-import org.scoula.dto.AptTypeDTO;
-import org.scoula.dto.AptTypeResponseDTO;
+import org.scoula.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -79,15 +78,22 @@ AptServiceTest {
 
     @Test
     void getAllAptTypeData() {
-        AptTypeResponseDTO response = aptService.fetchAptTypeData("2025000303");
+        AptTypeResponseDTO response = aptService.fetchAptTypeData("2024000694");
         Integer current_count = response.getCurrentCount();
         log.info("Current!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! : {}",current_count);
     }
 
     @Test
-    void saveAptTypeData() {
-        aptService.saveAptTypes();
-
+    void getAptIdxAndHouseManageNo() {
+        List<AptIdxDTO> result =  aptService.getAptIdxAndHouseManageNo();
+        log.info(result.toString());
     }
+
+    @Test
+    void saveAptTypes() {
+        aptService.saveAptTypes();
+    }
+
+
 
 }

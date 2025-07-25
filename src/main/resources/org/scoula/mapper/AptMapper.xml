@@ -35,9 +35,14 @@
     <insert id="insertAptType">
         INSERT INTO apt_type (house_ty, suply_ar, suply_hshldco, spsply_hshldco, lttot_top_amount, apt_idx)
         VALUES (#{houseTy}, #{suplyAr}, #{suplyHshldco}, #{spsplyHshldco}, #{lttotTopAmount}, #{aptIdx})
+            ON DUPLICATE KEY UPDATE
+                                 suply_ar = VALUES(suply_ar),
+                                 suply_hshldco = VALUES(suply_hshldco),
+                                 spsply_hshldco = VALUES(spsply_hshldco),
+                                 lttot_top_amount = VALUES(lttot_top_amount);
     </insert>
 
-    <select id="getIdxAndHouseMangeNo" resultType="org.scoula.dto.AptDTO">
+    <select id="getIdxAndHouseMangeNo" resultType="org.scoula.dto.AptIdxDTO">
         SELECT apt_idx, house_manage_no
         FROM apt_table
     </select>

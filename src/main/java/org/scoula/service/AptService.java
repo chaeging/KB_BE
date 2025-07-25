@@ -6,10 +6,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.mybatis.spring.annotation.MapperScan;
-import org.scoula.dto.AptDTO;
-import org.scoula.dto.AptResponseDto;
-import org.scoula.dto.AptTypeDTO;
-import org.scoula.dto.AptTypeResponseDTO;
+import org.scoula.dto.*;
 import org.scoula.mapper.AptMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -96,7 +93,7 @@ public class AptService {
         try {
             StringBuilder urlBuilder = new StringBuilder(HOUSE_TYPE_URL);
             urlBuilder.append("?page=1")
-                    .append("&perPage=10")
+                    .append("&perPage=10000")
                     .append("&cond[HOUSE_MANAGE_NO::EQ]=").append(URLEncoder.encode(houseManageNo, "UTF-8"))
                     .append("&serviceKey=").append(URLEncoder.encode(API_KEY, "UTF-8"));
 
@@ -132,11 +129,31 @@ public class AptService {
         }
     }
 
-    public void saveAptTypes() {
-        List<AptDTO> aptList = aptMapper.getIdxAndHouseMangeNo();
-        log.info("aptList : {}", aptList);
-
+    //그..apt 테이블의 모든 idx 와 houseMangeNo을 가져옴 (api 호출하고 table 저장할려고)
+    public List<AptIdxDTO> getAptIdxAndHouseManageNo() {
+        List<AptIdxDTO> aptList = aptMapper.getIdxAndHouseMangeNo();
+        return aptList;
     }
+
+    public void saveAptTypes() {
+        List<AptIdxDTO> aptList = getAptIdxAndHouseManageNo();
+
+        for (AptIdxDTO dto : aptList) {
+            String houseManageNo = dto.getHouseManageNo();
+            Integer aptIdx = dto.getAptIdx();
+
+            // api 호출
+            AptTypeResponseDTO responseDTO = fetchAptTypeData(houseManageNo);
+            if (responseDTO == null || responseDTO.getData() == null) continue;
+
+            // 2. 응답 결과 순회하며 apt_type 테이블 저장
+            for (AptTypeDTO typeDTO : responseDTO.getData()) {
+                typeDTO.setAptIdx(aptIdx); // foreign key 설정
+                aptMapper.insertAptType(typeDTO); // insert 수행
+            }
+        }
+    }
+
 
 
 }
