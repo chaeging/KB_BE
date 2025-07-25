@@ -156,6 +156,14 @@ public class AptService {
         }
     }
 
+    public void deleteOldAptDataBeforeThisMonth() {
+        LocalDate firstDayOfMonth = LocalDate.now().withDayOfMonth(1);
+        log.info("아파트 데이터 삭제 : {}", firstDayOfMonth);
+        aptMapper.deleteOld(firstDayOfMonth);
+    }
+
+
+
 
 
 }

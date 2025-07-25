@@ -55,6 +55,11 @@
                                  spsply_hshldco = VALUES(spsply_hshldco),
                                  lttot_top_amount = VALUES(lttot_top_amount);
     </insert>
+    <delete id="deleteOld" parameterType="java.time.LocalDate">
+        DELETE FROM apt_table
+        WHERE <![CDATA[ rcrit_pblanc_de < #{firstDayOfMonth} ]]>
+    </delete>
+
 
     <select id="getIdxAndHouseMangeNo" resultType="org.scoula.dto.AptIdxDTO">
         SELECT apt_idx, house_manage_no

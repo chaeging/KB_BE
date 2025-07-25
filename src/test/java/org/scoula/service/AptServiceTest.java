@@ -97,6 +97,11 @@ AptServiceTest {
         aptService.saveAptTypes();
     }
 
+    @Test
+    void deleteApt() {
+        aptService.deleteOldAptDataBeforeThisMonth();
+    }
+
 
 
 }
