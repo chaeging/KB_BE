@@ -1,8 +1,5 @@
 package org.scoula.service;
 
-<<<<<<< HEAD
-public class AuthService {
-=======
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.scoula.security.util.JwtProcessor;
@@ -63,5 +60,5 @@ public class AuthService {
                 "refresh_token", newRefreshToken
         );
     }
->>>>>>> upstream/develop
+
 }

@@ -26,19 +26,11 @@ public class UserService {
 
     @Transactional
     public void signUp(MemberDTO memberDTO) {
-<<<<<<< HEAD
-        // 1. 사용자 등록
-=======
->>>>>>> upstream/develop
+
         String originalPassword = memberDTO.getPassword();
         String newPassword = passwordEncoder.encode(originalPassword);
         memberDTO.setPassword(newPassword);
         userMapper.insertUser(memberDTO);
-<<<<<<< HEAD
-
-        // 2. 권한 등록
-=======
->>>>>>> upstream/develop
         AuthDTO authDTO = new AuthDTO();
         authDTO.setUsersIdx(memberDTO.getUsersIdx());
         authDTO.setAuth("ROLE_MEMBER");

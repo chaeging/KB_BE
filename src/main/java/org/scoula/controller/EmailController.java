@@ -50,21 +50,5 @@ public class EmailController {
             return ResponseEntity.badRequest().body(Map.of("message", "이메일 인증 실패"));
         }
     }
-<<<<<<< HEAD:src/main/java/org/scoula/controller/SignUpController.java
-    @PostMapping("")
-    public ResponseEntity<?> signUp(@RequestBody MemberDTO memberDTO) {
-        try {
-            userService.signUp(memberDTO); // ✅ 트랜잭션 처리된 메소드 호출
-            return ResponseEntity.ok(Map.of("message", "회원가입 완료"));
-        } catch (Exception e) {
-            log.error("[signUp] 회원가입 실패", e);
-            return ResponseEntity.internalServerError().body(Map.of("message", "회원가입 실패"));
-        }
-    }
-=======
-
->>>>>>> upstream/develop:src/main/java/org/scoula/controller/EmailController.java
-
-
 
 }
