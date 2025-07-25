@@ -3,8 +3,12 @@ package org.scoula.service;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.mybatis.spring.annotation.MapperScan;
+import org.scoula.dto.AptDTO;
 import org.scoula.dto.AptResponseDto;
+import org.scoula.mapper.AptMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
@@ -15,18 +19,21 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.List;
 
 @Service
 @Log4j2
 @PropertySource("classpath:/application.properties")
+@RequiredArgsConstructor
 public class AptService {
 
     @Value("${house.decoding.key}")
     private String API_KEY;
     @Value("${house.url}")
     private String HOUSE_URL;
+    private final AptMapper aptMapper;
 
-    public AptResponseDto fetchAptData(int page, int perPage) {
+    public AptResponseDto fetchAptData(int page, int perPage,String startDate ) {
         try {
 
             //URL만들기
@@ -34,6 +41,7 @@ public class AptService {
             urlBuilder.append("?")
                     .append("page=").append(page)
                     .append("&perPage=").append(perPage)
+                    .append("&cond[RCRIT_PBLANC_DE::GTE]=").append(startDate)
                     .append("&serviceKey=").append(URLEncoder.encode(API_KEY, "UTF-8"));
 
             URL url = new URL(urlBuilder.toString());
@@ -72,5 +80,11 @@ public class AptService {
         }
     }
 
-
+    public void saveAptData(AptResponseDto responseDto) {
+        if (responseDto != null && responseDto.getData() != null) {
+            for (AptDTO dto : responseDto.getData()) {
+                aptMapper.insertApt(dto);
+            }
+        }
+    }
 }

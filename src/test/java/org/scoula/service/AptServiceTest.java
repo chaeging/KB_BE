@@ -3,6 +3,7 @@ package org.scoula.service;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.scoula.config.RootConfig;
 import org.scoula.config.ServletConfig;
 import org.scoula.dto.AptDTO;
 import org.scoula.dto.AptResponseDto;
@@ -13,16 +14,17 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = { AptService.class }) // AptService만 테스트
+@ContextConfiguration(classes = { AptService.class, RootConfig.class }) // AptService만 테스트
 @Log4j2
-class AptServiceTest {
+class
+AptServiceTest {
 
     @Autowired
     private AptService aptService;
 
     @Test
     void fetchAptData() {
-        AptResponseDto response = aptService.fetchAptData(1, 1);
+        AptResponseDto response = aptService.fetchAptData(1, 1,"2025-07");
         log.info("전체 응답 {}",response);
 
         if (response != null && response.getData() != null) {
@@ -32,11 +34,33 @@ class AptServiceTest {
         }
     }
 
-
     @Test
     void getAllAptData() {
-        AptResponseDto response = aptService.fetchAptData(1,1);
-        Integer total_count = response.getTotalCount();
-        log.info("토탈카운트!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!{}",total_count);
+        AptResponseDto response = aptService.fetchAptData(1,1,"2025-07");
+        Integer match_count = response.getMatchCount();
+        log.info("Match!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!{}",match_count);
+        AptResponseDto response2 = aptService.fetchAptData(1,match_count,"2025-07");
+        if (response2 != null && response2.getData() != null) {
+            for (AptDTO apt : response2.getData()) {
+                log.info("Apt: {} \n", apt);
+            }
+        }
+
     }
+
+    @Test
+    void saveAptData() {
+        AptResponseDto response = aptService.fetchAptData(1, 23, "2025-07");
+        Integer match_count = response.getMatchCount();
+        aptService.saveAptData(response);
+        if (response != null && response.getData() != null) {
+            for (AptDTO apt : response.getData()) {
+                log.info("저장된 APT: {}", apt);
+            }
+        } else {
+            fail("response 또는 data가 null입니다.");
+        }
+    }
+
+
 }
