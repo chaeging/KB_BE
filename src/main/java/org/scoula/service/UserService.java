@@ -26,13 +26,11 @@ public class UserService {
 
     @Transactional
     public void signUp(MemberDTO memberDTO) {
-        // 1. 사용자 등록
+
         String originalPassword = memberDTO.getPassword();
         String newPassword = passwordEncoder.encode(originalPassword);
         memberDTO.setPassword(newPassword);
         userMapper.insertUser(memberDTO);
-
-        // 2. 권한 등록
         AuthDTO authDTO = new AuthDTO();
         authDTO.setUsersIdx(memberDTO.getUsersIdx());
         authDTO.setAuth("ROLE_MEMBER");
@@ -43,12 +41,16 @@ public class UserService {
         userMapper.updateUser(user);
     }
 
-    public void deleteUser(Long id) {
+    public void deleteUser(Integer id) {
         userMapper.deleteUser(id);
     }
 
     public MemberDTO findByUsername(String username) {
         return userMapper.findByUsername(username);
+    }
+
+    public Integer findUserIdxByUserId (String usersId) {
+        return userMapper.findUserIdxByUserId(usersId);
     }
 }
 

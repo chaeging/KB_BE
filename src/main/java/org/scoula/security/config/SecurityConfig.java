@@ -72,10 +72,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new CorsFilter(source);
     }
 
-    //접근 제한 무시 경로 설정
+    //jwt 관련
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/assets/**", "/*", "/v1/auth/refresh");
+        web.ignoring().antMatchers("/assets/**", "/*", "/v1/auth/refresh","/v1/auth/signup");
     }
 
     // 문자셋필터
@@ -85,23 +85,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         encodingFilter.setForceEncoding(true);
         return encodingFilter;
     }
-
+    //권한 가지고 접근 제한
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()//경로별접근권한설정
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
-                .antMatchers("/oauth/kakao/**").permitAll()   // 카카오 로그인 콜백 허용
-                .antMatchers("/api/account/**").permitAll()
-                .antMatchers("/api/security/all").permitAll() //모두허용
-                .antMatchers("/api/security/member").access("hasRole('ROLE_MEMBER')") //ROLE_MEMBER이상접근허용
-                .antMatchers("/api/security/admin").access("hasRole('ROLE_ADMIN')") //ROLE_ADMIN이상접근허용
-                .antMatchers("/api/v1/db/**").permitAll() //청약api확인하는거허용
-                .anyRequest().authenticated() //나머지는로그인된경우모두허용
-                .and()
-                .csrf().disable()// CSRF 비활성화
-                .formLogin().disable() // formLogin 비활성화  관련 필터해제
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); // 세션 생성 모드 설정
+                .antMatchers("/v1/account/**").permitAll()
+                .antMatchers("/v1/email/**").permitAll()
+                .antMatchers("/v1/auth/signout").permitAll() // 👈 여기가 핵심
+                .antMatchers("/oauth/kakao/**").permitAll()
+                .anyRequest().authenticated(); //나머지는로그인된경우모두허용
+
 
         http
                 // 한글인코딩필터설정
