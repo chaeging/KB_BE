@@ -11,7 +11,7 @@
             dependents_nm = #{gaScoreDTO.dependentsNm},
             no_house_score = #{gaScoreDTO.noHouseScore},
             dependents_score = #{gaScoreDTO.dependentsScore},
-            payment_period = #{gaScoreDTO.paymentPeriodScore}
+            payment_period_score = #{gaScoreDTO.paymentPeriodScore}
         WHERE users_idx = #{userIdx}
     </update>
 
@@ -25,7 +25,7 @@
         SELECT
             no_house_score AS noHouseScore,
             dependents_score AS dependentsScore,
-            payment_period AS paymentPeriod
+            payment_period_score AS paymentPeriodScore
         FROM user_info
         WHERE users_idx = #{userIdx}
     </select>
