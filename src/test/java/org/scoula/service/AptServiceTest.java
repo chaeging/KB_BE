@@ -7,6 +7,8 @@ import org.scoula.config.RootConfig;
 import org.scoula.config.ServletConfig;
 import org.scoula.dto.AptDTO;
 import org.scoula.dto.AptResponseDto;
+import org.scoula.dto.AptTypeDTO;
+import org.scoula.dto.AptTypeResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -62,5 +64,30 @@ AptServiceTest {
         }
     }
 
+    @Test
+    void getAptTypeData() {
+        AptTypeResponseDTO response = aptService.fetchAptTypeData("2025000326");
+        log.info("전체 응답 {}",response);
+
+        if (response != null && response.getData() != null) {
+            for (AptTypeDTO apt : response.getData()) {
+                log.info("Apt: {} \n", apt);
+            }
+        }
+
+    }
+
+    @Test
+    void getAllAptTypeData() {
+        AptTypeResponseDTO response = aptService.fetchAptTypeData("2025000303");
+        Integer current_count = response.getCurrentCount();
+        log.info("Current!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! : {}",current_count);
+    }
+
+    @Test
+    void saveAptTypeData() {
+        aptService.saveAptTypes();
+
+    }
 
 }

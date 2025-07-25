@@ -32,4 +32,14 @@
                      #{parcprcUlsAt}, #{pblancUrl}
                  )
     </insert>
+    <insert id="insertAptType">
+        INSERT INTO apt_type (house_ty, suply_ar, suply_hshldco, spsply_hshldco, lttot_top_amount, apt_idx)
+        VALUES (#{houseTy}, #{suplyAr}, #{suplyHshldco}, #{spsplyHshldco}, #{lttotTopAmount}, #{aptIdx})
+    </insert>
+
+    <select id="getIdxAndHouseMangeNo" resultType="org.scoula.dto.AptDTO">
+        SELECT apt_idx, house_manage_no
+        FROM apt_table
+    </select>
+
 </mapper>

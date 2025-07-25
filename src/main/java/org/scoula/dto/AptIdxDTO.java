@@ -1,0 +1,7 @@
+package org.scoula.dto;
+
+import lombok.Data;
+
+@Data
+public class AptIdxDTO {
+}

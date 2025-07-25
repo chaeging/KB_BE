@@ -8,6 +8,8 @@ import lombok.extern.log4j.Log4j2;
 import org.mybatis.spring.annotation.MapperScan;
 import org.scoula.dto.AptDTO;
 import org.scoula.dto.AptResponseDto;
+import org.scoula.dto.AptTypeDTO;
+import org.scoula.dto.AptTypeResponseDTO;
 import org.scoula.mapper.AptMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -31,9 +33,11 @@ public class AptService {
     private String API_KEY;
     @Value("${house.url}")
     private String HOUSE_URL;
+    @Value("${house.type.url}")
+    private String HOUSE_TYPE_URL;
     private final AptMapper aptMapper;
 
-    public AptResponseDto fetchAptData(int page, int perPage,String startDate ) {
+    public AptResponseDto fetchAptData(int page, int perPage, String startDate) {
         try {
 
             //URL만들기
@@ -49,7 +53,7 @@ public class AptService {
             //헤더 설정
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
-            conn.setRequestProperty("Accept", "application/json");
+
 
             int responseCode = conn.getResponseCode();
             log.info("Response Code: {}", responseCode);
@@ -87,4 +91,52 @@ public class AptService {
             }
         }
     }
+
+    public AptTypeResponseDTO fetchAptTypeData(String houseManageNo) {
+        try {
+            StringBuilder urlBuilder = new StringBuilder(HOUSE_TYPE_URL);
+            urlBuilder.append("?page=1")
+                    .append("&perPage=10")
+                    .append("&cond[HOUSE_MANAGE_NO::EQ]=").append(URLEncoder.encode(houseManageNo, "UTF-8"))
+                    .append("&serviceKey=").append(URLEncoder.encode(API_KEY, "UTF-8"));
+
+            URL url = new URL(urlBuilder.toString());
+
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+
+            int responseCode = conn.getResponseCode();
+            log.info("Response Code: {}", responseCode);
+
+            BufferedReader br = (responseCode >= 200 && responseCode <= 299)
+                    ? new BufferedReader(new InputStreamReader(conn.getInputStream()))
+                    : new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+
+            br.close();
+            conn.disconnect();
+            log.info("응답 본문: {}", sb);
+
+            ObjectMapper mapper = new ObjectMapper();
+//            mapper.setPropertyNamingStrategy(PropertyNamingStrategies.UPPER_CAMEL_CASE);
+            return mapper.readValue(sb.toString(), AptTypeResponseDTO.class);
+
+        } catch (Exception e) {
+            log.error("아파트 타입 데이터 요청 중 오류 발생", e);
+            return null;
+        }
+    }
+
+    public void saveAptTypes() {
+        List<AptDTO> aptList = aptMapper.getIdxAndHouseMangeNo();
+        log.info("aptList : {}", aptList);
+
+    }
+
+
 }
