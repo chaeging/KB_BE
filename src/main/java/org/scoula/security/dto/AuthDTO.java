@@ -9,7 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuthDTO implements GrantedAuthority {
-    private int user_idx;
+    private int usersIdx;
     private String auth;      // users_auth.auth (권한명: ROLE_USER 등)
 
     @Override

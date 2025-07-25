@@ -15,11 +15,11 @@ public interface UserMapper {
 
     MemberDTO findById(@Param("userId") String userId);
     List<MemberDTO> findAll();
-    void insertUser(MemberDTO user);
-    void updateUser(MemberDTO user);
+    void insertUser(MemberDTO member);
+    void updateUser(MemberDTO member);
     void deleteUser(int userIdx);
     MemberDTO findByUsername(@Param("username") String username);
-    int countUserByIdx(@Param("userIdx") int userIdx);  //  users_auth 테이블에 해당 유저 정보가 저장되어있는지 확인
-//    void insertUserAuth(@Param("usersIdx") Long usersIdx);
+    int countUserByIdx(@Param("usersIdx") int usersIdx);  //  users_auth 테이블에 해당 유저 정보가 저장되어있는지 확인
+//    void insertUserAuth(@Param("usersIdx") int usersIdx);
     void insertAuth(AuthDTO authDTO);
 }

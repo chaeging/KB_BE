@@ -2,9 +2,11 @@ package org.scoula.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.scoula.security.dto.AuthDTO;
 import org.scoula.security.dto.MemberDTO;
 import org.scoula.service.EmailService;
 import org.scoula.service.EmailVerificationService;
+import org.scoula.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +22,7 @@ import java.util.Map;
 public class SignUpController {
     private final EmailService emailService;
     private final EmailVerificationService emailVerification;
+    private final UserService userService;
 
 
 
@@ -47,10 +50,17 @@ public class SignUpController {
             return ResponseEntity.badRequest().body(Map.of("message", "이메일 인증 실패"));
         }
     }
-//    @PostMapping("")
-//    public ResponseEntity<?> signUp(@RequestBody MemberDTO memberDTO) {
-//
-//    }
+    @PostMapping("")
+    public ResponseEntity<?> signUp(@RequestBody MemberDTO memberDTO) {
+        try {
+            userService.signUp(memberDTO); // ✅ 트랜잭션 처리된 메소드 호출
+            return ResponseEntity.ok(Map.of("message", "회원가입 완료"));
+        } catch (Exception e) {
+            log.error("[signUp] 회원가입 실패", e);
+            return ResponseEntity.internalServerError().body(Map.of("message", "회원가입 실패"));
+        }
+    }
+
 
 
 }

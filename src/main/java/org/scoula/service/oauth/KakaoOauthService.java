@@ -3,16 +3,15 @@ package org.scoula.service.oauth;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.scoula.security.dto.AuthDTO;
-import org.scoula.security.dto.MemberDTO;
 import org.scoula.dto.oauth.KakaoUserInfoDto;
 import org.scoula.mapper.UserMapper;
+import org.scoula.security.dto.AuthDTO;
+import org.scoula.security.dto.MemberDTO;
 import org.scoula.security.util.JwtProcessor;
 import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -33,7 +32,7 @@ public class KakaoOauthService {
     private String REST_API_KEY;
 
     @Value("${kakao.redirect_url}")
-    private String REDIRECT_URI;
+    private String REDIRECT_URL;
 
     public KakaoUserInfoDto processKakaoLogin(String code) {
         String accessToken = this.getAccessToken(code);
@@ -59,14 +58,14 @@ public class KakaoOauthService {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>(); // MultiValueMap은 하나의 key에 여러 개의 value를 저장할 수 있는 자료구조
         params.add("grant_type", "authorization_code");     // 인가 코드 방식을 사용한다는 의미
         params.add("client_id", REST_API_KEY);
-        params.add("redirect_uri", REDIRECT_URI);
+        params.add("redirect_uri", REDIRECT_URL);
         params.add("code", authorizationCode);              // 카카오가 준 1회성 인가 코드, 이 코드를 사용해 Access Token 교환
 
         // 전체 요정 URL 확인용
         String fullUrl = tokenUrl + "?" +
                 "grant_type=authorization_code" +
                 "&client_id=" + REST_API_KEY +
-                "&redirect_uri=" + REDIRECT_URI +
+                "&redirect_uri=" + REDIRECT_URL +
                 "&code=" + authorizationCode;
 
         log.info("카카오 토큰 요청 전체 URL: {}", fullUrl);
@@ -128,37 +127,30 @@ public class KakaoOauthService {
     }
 
     // MyBatis로 사용자 DB 처리
-
     public MemberDTO processKakaoUser(KakaoUserInfoDto userInfo) {
         MemberDTO existingUser = userMapper.findById(userInfo.getEmail());
 
         if (existingUser != null) {
-            int count = userMapper.countUserByIdx(existingUser.getUserIdx());
+            int count = userMapper.countUserByIdx(existingUser.getUsersIdx());
             if (count == 0) {
-                AuthDTO authDTO = new AuthDTO();
-                authDTO.setUser_idx(existingUser.getUserIdx());
-                authDTO.setAuth("ROLE_MEMBER");
-                userMapper.insertAuth(authDTO);
+                AuthDTO authUser = new AuthDTO();
+                authUser.setUsersIdx(existingUser.getUsersIdx());
+                authUser.setAuth("ROLE_MEMBER");
+                userMapper.insertAuth(authUser);
             }
             return existingUser;
         }
 
         MemberDTO kakaoUser = new MemberDTO();
         kakaoUser.setUserId(userInfo.getEmail());
-        kakaoUser.se(userInfo.getNickname());
+        kakaoUser.setUserName(userInfo.getNickname());
         kakaoUser.setPassword(null);
 
         userMapper.insertUser(kakaoUser);
 
-        // 만약 userIdx가 0이면 DB에서 다시 조회
-        if (kakaoUser.getUserIdx() == 0) {
-            int userIdx = userMapper.findUserIdxByUserId(kakaoUser.getUserId());
-            kakaoUser.setUserIdx(userIdx);
-        }
-
         AuthDTO kakaoAuth = new AuthDTO();
-        kakaoAuth.setUser_idx(kakaoUser.getUserIdx());
         kakaoAuth.setAuth("ROLE_MEMBER");
+        kakaoAuth.setUsersIdx(userMapper.findUserIdxByUserId(userInfo.getEmail()));
         userMapper.insertAuth(kakaoAuth);
         return kakaoUser;
     }

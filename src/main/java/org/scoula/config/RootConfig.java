@@ -23,7 +23,7 @@ import javax.sql.DataSource;
 @PropertySource("classpath:/application.properties")
 @MapperScan(basePackages = {"org.scoula.mapper"})
 @EnableCaching
-
+@EnableTransactionManagement
 public class RootConfig {
     @Value("${jdbc.driver}") String driver;
     @Value("${jdbc.url}") String url;
