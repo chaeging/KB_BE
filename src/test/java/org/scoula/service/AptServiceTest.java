@@ -87,19 +87,8 @@ AptServiceTest {
     }
 
     @Test
-    void getAptIdxAndHouseManageNo() {
-        List<AptIdxDTO> result =  aptService.getAptIdxAndHouseManageNo();
-        log.info(result.toString());
-    }
-
-    @Test
-    void saveAptTypes() {
-        aptService.saveAptTypes();
-    }
-
-    @Test
-    void deleteApt() {
-        aptService.deleteOldAptDataBeforeThisMonth();
+    void syncAptData() {
+        aptService.syncAptData();
     }
 
 

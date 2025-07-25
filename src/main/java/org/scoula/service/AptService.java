@@ -162,6 +162,31 @@ public class AptService {
         aptMapper.deleteOld(firstDayOfMonth);
     }
 
+    public void syncAptData() {
+
+        AptResponseDto response = fetchAptData(1, 1);
+        Integer matchCount = response.getMatchCount();
+        log.info("총 Match 수: {}", matchCount);
+
+        if (matchCount > 1) {
+            response = fetchAptData(1, matchCount);
+        }
+
+        saveAptData(response);
+
+        if (response != null && response.getData() != null) {
+            for (AptDTO apt : response.getData()) {
+                log.info("저장된 APT: {}", apt);
+            }
+        } else {
+            throw new IllegalStateException("response 또는 data가 null입니다.");
+        }
+
+        saveAptTypes();
+
+    }
+
+
 
 
 
