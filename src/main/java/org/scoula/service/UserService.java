@@ -1,8 +1,9 @@
 package org.scoula.service;
 
 import lombok.RequiredArgsConstructor;
-import org.scoula.domain.User;
+//import org.scoula.domain.User;
 import org.scoula.mapper.UserMapper;
+import org.scoula.security.dto.MemberDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,27 +13,27 @@ import java.util.List;
 public class UserService {
     private final UserMapper userMapper;
 
-    public User getUser(String email) {
+    public MemberDTO getUser(String email) {
         return userMapper.findById(email);
     }
 
-    public List<User> getAllUsers() {
+    public List<MemberDTO> getAllUsers() {
         return userMapper.findAll();
     }
 
-    public void addUser(User user) {
+    public void addUser(MemberDTO user) {
         userMapper.insertUser(user);
     }
 
-    public void updateUser(User user) {
+    public void updateUser(MemberDTO user) {
         userMapper.updateUser(user);
     }
 
-    public void deleteUser(Long id) {
-        userMapper.deleteUser(id);
+    public void deleteUser(int idx) {
+        userMapper.deleteUser(idx);
     }
 
-    public User findByUsername(String username) {
+    public MemberDTO findByUsername(String username) {
         return userMapper.findByUsername(username);
     }
 }

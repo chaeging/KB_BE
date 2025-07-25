@@ -3,7 +3,8 @@ package org.scoula.service.oauth;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.scoula.domain.User;
+import org.scoula.security.dto.AuthDTO;
+import org.scoula.security.dto.MemberDTO;
 import org.scoula.dto.oauth.KakaoUserInfoDto;
 import org.scoula.mapper.UserMapper;
 import org.scoula.security.util.JwtProcessor;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -37,7 +39,7 @@ public class KakaoOauthService {
         String accessToken = this.getAccessToken(code);
         KakaoUserInfoDto userInfo = this.getUserInfo(accessToken);
 
-        User user = this.processKakaoUser(userInfo);
+        MemberDTO user = this.processKakaoUser(userInfo);
 
         // JWT 발급 (JwtProcessor 사용)
         String jwtToken = jwtProcessor.generateAccessToken(user.getUserId());
@@ -126,24 +128,38 @@ public class KakaoOauthService {
     }
 
     // MyBatis로 사용자 DB 처리
-    public User processKakaoUser(KakaoUserInfoDto userInfo) {
-        User existingUser = userMapper.findById(userInfo.getEmail());
+
+    public MemberDTO processKakaoUser(KakaoUserInfoDto userInfo) {
+        MemberDTO existingUser = userMapper.findById(userInfo.getEmail());
 
         if (existingUser != null) {
-            int count = userMapper.countUserByIdx(existingUser.getUsersIdx());
+            int count = userMapper.countUserByIdx(existingUser.getUserIdx());
             if (count == 0) {
-                userMapper.insertUserAuth(existingUser.getUsersIdx());
+                AuthDTO authDTO = new AuthDTO();
+                authDTO.setUser_idx(existingUser.getUserIdx());
+                authDTO.setAuth("ROLE_MEMBER");
+                userMapper.insertAuth(authDTO);
             }
             return existingUser;
         }
 
-        User kakaoUser = new User();
+        MemberDTO kakaoUser = new MemberDTO();
         kakaoUser.setUserId(userInfo.getEmail());
-        kakaoUser.setUserName(userInfo.getNickname());
+        kakaoUser.se(userInfo.getNickname());
         kakaoUser.setPassword(null);
 
         userMapper.insertUser(kakaoUser);
-        userMapper.insertUserAuth(kakaoUser.getUsersIdx());
+
+        // 만약 userIdx가 0이면 DB에서 다시 조회
+        if (kakaoUser.getUserIdx() == 0) {
+            int userIdx = userMapper.findUserIdxByUserId(kakaoUser.getUserId());
+            kakaoUser.setUserIdx(userIdx);
+        }
+
+        AuthDTO kakaoAuth = new AuthDTO();
+        kakaoAuth.setUser_idx(kakaoUser.getUserIdx());
+        kakaoAuth.setAuth("ROLE_MEMBER");
+        userMapper.insertAuth(kakaoAuth);
         return kakaoUser;
     }
 }
