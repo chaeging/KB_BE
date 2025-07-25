@@ -6,7 +6,7 @@
 <mapper namespace="org.scoula.mapper.UserMapper">
 
     <!-- user_id로 users_idx 조회 -->
-    <select id="findUserIdxByUserId" parameterType="String" resultType="int">
+    <select id="findUserIdxByUserId" parameterType="String" resultType="Integer">
         SELECT users_idx
         FROM users
         WHERE user_id = #{userId}
@@ -53,7 +53,7 @@
     </update>
 
     <!-- 사용자 삭제 -->
-    <delete id="deleteUser" parameterType="long">
+    <delete id="deleteUser" parameterType="Integer">
         DELETE FROM users WHERE users_idx = #{id}
     </delete>
 
