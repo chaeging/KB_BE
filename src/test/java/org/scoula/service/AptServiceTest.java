@@ -31,4 +31,12 @@ class AptServiceTest {
             }
         }
     }
+
+
+    @Test
+    void getAllAptData() {
+        AptResponseDto response = aptService.fetchAptData(1,1);
+        Integer total_count = response.getTotalCount();
+        log.info("토탈카운트!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!{}",total_count);
+    }
 }

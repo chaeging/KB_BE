@@ -1,5 +1,8 @@
 package org.scoula.service;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.log4j.Log4j2;
 import org.scoula.dto.AptResponseDto;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,7 +42,6 @@ public class AptService {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
-//            conn.setRequestProperty("User-Agent", "Mozilla/5.0");
 
             int responseCode = conn.getResponseCode();
             log.info("Response Code: {}", responseCode);
@@ -60,6 +62,8 @@ public class AptService {
             conn.disconnect();
             log.info("응답 본문: {}", sb);
             ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule()); //LocalDate
+            mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
             return mapper.readValue(sb.toString(), AptResponseDto.class);
 
         } catch (Exception e) {
@@ -67,4 +71,6 @@ public class AptService {
             return null;
         }
     }
+
+
 }
