@@ -31,6 +31,20 @@
                      #{bsnsMbyNm}, #{mvnPrearngeYm}, #{specltRdnEarthAt}, #{mdatTrgetAreaSecd},
                      #{parcprcUlsAt}, #{pblancUrl}
                  )
+            ON DUPLICATE KEY UPDATE
+                                 house_nm = VALUES(house_nm),
+                                 house_secd = VALUES(house_secd),
+                                 house_secd_nm = VALUES(house_secd_nm),
+                                 house_dtl_secd = VALUES(house_dtl_secd),
+                                 house_dtl_secd_nm = VALUES(house_dtl_secd_nm),
+                                 rent_secd = VALUES(rent_secd),
+                                 rent_secd_nm = VALUES(rent_secd_nm),
+                                 subscrpt_area_code = VALUES(subscrpt_area_code),
+                                 subscrpt_area_code_nm = VALUES(subscrpt_area_code_nm),
+                                 hssply_adres = VALUES(hssply_adres),
+                                 tot_suply_hshldco = VALUES(tot_suply_hshldco),
+                                 rcrit_pblanc_de = VALUES(rcrit_pblanc_de),
+                                 pblanc_url = VALUES(pblanc_url)
     </insert>
     <insert id="insertAptType">
         INSERT INTO apt_type (house_ty, suply_ar, suply_hshldco, spsply_hshldco, lttot_top_amount, apt_idx)

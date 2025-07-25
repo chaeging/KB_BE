@@ -25,7 +25,7 @@ AptServiceTest {
 
     @Test
     void fetchAptData() {
-        AptResponseDto response = aptService.fetchAptData(1, 1,"2025-07");
+        AptResponseDto response = aptService.fetchAptData(1, 1);
         log.info("전체 응답 {}",response);
 
         if (response != null && response.getData() != null) {
@@ -37,22 +37,25 @@ AptServiceTest {
 
     @Test
     void getAllAptData() {
-        AptResponseDto response = aptService.fetchAptData(1,1,"2025-07");
+        AptResponseDto response = aptService.fetchAptData(1,1);
         Integer match_count = response.getMatchCount();
         log.info("Match!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!{}",match_count);
-        AptResponseDto response2 = aptService.fetchAptData(1,match_count,"2025-07");
+        AptResponseDto response2 = aptService.fetchAptData(1,match_count);
         if (response2 != null && response2.getData() != null) {
             for (AptDTO apt : response2.getData()) {
                 log.info("Apt: {} \n", apt);
             }
         }
-
     }
 
     @Test
     void saveAptData() {
-        AptResponseDto response = aptService.fetchAptData(1, 23, "2025-07");
+        AptResponseDto response = aptService.fetchAptData(1,1);
         Integer match_count = response.getMatchCount();
+        log.info("Match!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!{}",match_count);
+        if (match_count > 1) {
+            response = aptService.fetchAptData(1, match_count);
+        }
         aptService.saveAptData(response);
         if (response != null && response.getData() != null) {
             for (AptDTO apt : response.getData()) {

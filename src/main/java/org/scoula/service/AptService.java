@@ -18,6 +18,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -34,10 +36,11 @@ public class AptService {
     private String HOUSE_TYPE_URL;
     private final AptMapper aptMapper;
 
-    public AptResponseDto fetchAptData(int page, int perPage, String startDate) {
+    public AptResponseDto fetchAptData(int page, int perPage) {
         try {
+            // 오늘 날짜 월로 쿼리 날리기 yyyy-MM 포맷
+            String startDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM"));
 
-            //URL만들기
             StringBuilder urlBuilder = new StringBuilder(HOUSE_URL);
             urlBuilder.append("?")
                     .append("page=").append(page)
@@ -47,31 +50,29 @@ public class AptService {
 
             URL url = new URL(urlBuilder.toString());
 
-            //헤더 설정
+            // 헤더 설정
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
-
 
             int responseCode = conn.getResponseCode();
             log.info("Response Code: {}", responseCode);
 
-            BufferedReader br;
-            if (responseCode >= 200 && responseCode <= 299) {
-                br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            } else {
-                br = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
-            }
+            BufferedReader br = (responseCode >= 200 && responseCode <= 299)
+                    ? new BufferedReader(new InputStreamReader(conn.getInputStream()))
+                    : new BufferedReader(new InputStreamReader(conn.getErrorStream()));
 
             StringBuilder sb = new StringBuilder();
             String line;
             while ((line = br.readLine()) != null) {
                 sb.append(line);
             }
+
             br.close();
             conn.disconnect();
             log.info("응답 본문: {}", sb);
+
             ObjectMapper mapper = new ObjectMapper();
-            mapper.registerModule(new JavaTimeModule()); //LocalDate
+            mapper.registerModule(new JavaTimeModule()); // LocalDate 처리
             mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
             return mapper.readValue(sb.toString(), AptResponseDto.class);
 
@@ -80,6 +81,7 @@ public class AptService {
             return null;
         }
     }
+
 
     public void saveAptData(AptResponseDto responseDto) {
         if (responseDto != null && responseDto.getData() != null) {
