@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.scoula.mapper.AptMapper">
+
+    <insert id="insertApt" parameterType="org.scoula.dto.AptDTO">
+        INSERT INTO apt_table (
+            house_manage_no, pblanc_no, house_nm, house_secd, house_secd_nm,
+            house_dtl_secd, house_dtl_secd_nm, rent_secd, rent_secd_nm,
+            subscrpt_area_code, subscrpt_area_code_nm, hssply_adres,
+            tot_suply_hshldco, rcrit_pblanc_de, rcept_bgnde, rcept_endde,
+            spsply_rcept_bgnde, spsply_rcept_endde, gnrl_rnk1_crsparea_rcptde,
+            gnrl_rnk1_crsparea_endde, gnrl_rnk1_etc_area_rcptde, gnrl_rnk1_etc_area_endde,
+            gnrl_rnk2_crsparea_rcptde, gnrl_rnk2_crsparea_endde, gnrl_rnk2_etc_area_rcptde,
+            gnrl_rnk2_etc_area_endde, przwner_presnatn_de, cntrct_cncls_bgnde,
+            cntrct_cncls_endde, hmpg_adres, cnstrct_entrps_nm, mdhs_telno,
+            bsns_mby_nm, mvn_prearnge_ym, speclt_rdn_earth_at, mdat_trget_area_secd,
+            parcprc_uls_at, pblanc_url
+        ) VALUES (
+                     #{houseManageNo}, #{pblancNo}, #{houseNm}, #{houseSecd}, #{houseSecdNm},
+                     #{houseDtlSecd}, #{houseDtlSecdNm}, #{rentSecd}, #{rentSecdNm},
+                     #{subscrptAreaCode}, #{subscrptAreaCodeNm}, #{hssplyAdres},
+                     #{totSuplyHshldco}, #{rcritPblancDe}, #{rceptBgnde}, #{rceptEndde},
+                     #{spsplyRceptBgnde}, #{spsplyRceptEndde}, #{gnrlRnk1CrspareaRcptde},
+                     #{gnrlRnk1CrspareaEndde}, #{gnrlRnk1EtcAreaRcptde}, #{gnrlRnk1EtcAreaEndde},
+                     #{gnrlRnk2CrspareaRcptde}, #{gnrlRnk2CrspareaEndde}, #{gnrlRnk2EtcAreaRcptde},
+                     #{gnrlRnk2EtcAreaEndde}, #{przwnerPresnatnDe}, #{cntrctCnclsBgnde},
+                     #{cntrctCnclsEndde}, #{hmpgAdres}, #{cnstrctEntrpsNm}, #{mdhsTelno},
+                     #{bsnsMbyNm}, #{mvnPrearngeYm}, #{specltRdnEarthAt}, #{mdatTrgetAreaSecd},
+                     #{parcprcUlsAt}, #{pblancUrl}
+                 )
+            ON DUPLICATE KEY UPDATE
+                                 house_nm = VALUES(house_nm),
+                                 house_secd = VALUES(house_secd),
+                                 house_secd_nm = VALUES(house_secd_nm),
+                                 house_dtl_secd = VALUES(house_dtl_secd),
+                                 house_dtl_secd_nm = VALUES(house_dtl_secd_nm),
+                                 rent_secd = VALUES(rent_secd),
+                                 rent_secd_nm = VALUES(rent_secd_nm),
+                                 subscrpt_area_code = VALUES(subscrpt_area_code),
+                                 subscrpt_area_code_nm = VALUES(subscrpt_area_code_nm),
+                                 hssply_adres = VALUES(hssply_adres),
+                                 tot_suply_hshldco = VALUES(tot_suply_hshldco),
+                                 rcrit_pblanc_de = VALUES(rcrit_pblanc_de),
+                                 pblanc_url = VALUES(pblanc_url)
+    </insert>
+    <insert id="insertAptType">
+        INSERT INTO apt_type (house_ty, suply_ar, suply_hshldco, spsply_hshldco, lttot_top_amount, apt_idx)
+        VALUES (#{houseTy}, #{suplyAr}, #{suplyHshldco}, #{spsplyHshldco}, #{lttotTopAmount}, #{aptIdx})
+            ON DUPLICATE KEY UPDATE
+                                 suply_ar = VALUES(suply_ar),
+                                 suply_hshldco = VALUES(suply_hshldco),
+                                 spsply_hshldco = VALUES(spsply_hshldco),
+                                 lttot_top_amount = VALUES(lttot_top_amount);
+    </insert>
+    <delete id="deleteOld" parameterType="java.time.LocalDate">
+        DELETE FROM apt_table
+        WHERE <![CDATA[ rcrit_pblanc_de < #{firstDayOfMonth} ]]>
+    </delete>
+
+
+    <select id="getIdxAndHouseMangeNo" resultType="org.scoula.dto.AptIdxDTO">
+        SELECT apt_idx, house_manage_no
+        FROM apt_table
+    </select>
+
+</mapper>
