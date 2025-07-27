@@ -93,7 +93,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .antMatchers("/v1/account/**").permitAll()
                 .antMatchers("/v1/email/**").permitAll()
-                .antMatchers("/v1/auth/signout").permitAll()
+                .antMatchers("/v1/auth/**").permitAll()
                 .antMatchers("/oauth/kakao/**").permitAll()
                 .anyRequest().authenticated(); //나머지는로그인된경우모두허용
 
