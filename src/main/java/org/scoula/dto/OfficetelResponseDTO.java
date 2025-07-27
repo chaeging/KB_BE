@@ -7,7 +7,7 @@ import java.util.List;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AptResponseDto {
+public class OfficetelResponseDTO {
     private Integer matchCount;
-    private List<AptDTO> data;
+    private List<OfficetelDTO> data;
 }

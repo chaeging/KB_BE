@@ -6,7 +6,4 @@ import org.scoula.security.dto.RefreshTokenDTO;
 
 public interface UserDetailsMapper {
     public MemberDTO get(String username);
-    void updateRefreshToken(RefreshTokenDTO refreshTokenDTO);
-    String getRefreshToken(String user_id);
-    void clearRefreshToken(String user_id);
 }

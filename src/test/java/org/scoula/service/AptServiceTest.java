@@ -4,13 +4,10 @@ import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.scoula.config.RootConfig;
-import org.scoula.config.ServletConfig;
 import org.scoula.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,7 +22,7 @@ AptServiceTest {
 
     @Test
     void fetchAptData() {
-        AptResponseDto response = aptService.fetchAptData(1, 1);
+        AptResponseDTO response = aptService.fetchAptData(1, 1);
         log.info("전체 응답 {}",response);
 
         if (response != null && response.getData() != null) {
@@ -37,10 +34,10 @@ AptServiceTest {
 
     @Test
     void getAllAptData() {
-        AptResponseDto response = aptService.fetchAptData(1,1);
+        AptResponseDTO response = aptService.fetchAptData(1,1);
         Integer match_count = response.getMatchCount();
         log.info("Match!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!{}",match_count);
-        AptResponseDto response2 = aptService.fetchAptData(1,match_count);
+        AptResponseDTO response2 = aptService.fetchAptData(1,match_count);
         if (response2 != null && response2.getData() != null) {
             for (AptDTO apt : response2.getData()) {
                 log.info("Apt: {} \n", apt);
@@ -50,7 +47,7 @@ AptServiceTest {
 
     @Test
     void saveAptData() {
-        AptResponseDto response = aptService.fetchAptData(1,1);
+        AptResponseDTO response = aptService.fetchAptData(1,1);
         Integer match_count = response.getMatchCount();
         log.info("Match!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!{}",match_count);
         if (match_count > 1) {
