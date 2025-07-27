@@ -4,13 +4,12 @@ import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.scoula.config.RootConfig;
-import org.scoula.dto.AptDTO;
-import org.scoula.dto.AptResponseDTO;
-import org.scoula.dto.OfficetelDTO;
-import org.scoula.dto.OfficetelResponseDTO;
+import org.scoula.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,8 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ContextConfiguration(classes = { OfficetelService.class, RootConfig.class }) // AptService만 테스트
 @Log4j2
 class OfficetelServiceTest {
-    @Autowired
-    private OfficetelService OfficeService;
+
     @Autowired
     private OfficetelService officetelService;
 
@@ -68,4 +66,46 @@ class OfficetelServiceTest {
             fail("response 또는 data가 null입니다.");
         }
     }
+
+    @Test
+     void getOfficeTypeData() {
+       OfficetelTypeResponseDTO response = officetelService.fetchOfficetelTypeData("2025950037");
+        log.info("전체 응답 {}",response);
+
+        if (response != null && response.getData() != null) {
+            for (OfficetelTypeDTO apt : response.getData()) {
+                log.info("OfficetelType: {} \n", apt);
+            }
+        }
+    }
+
+
+    @Test
+    void getAllAptTypeData() {
+        OfficetelTypeResponseDTO response = officetelService.fetchOfficetelTypeData("2025950037");
+        Integer match_count = response.getMatchCount();
+        log.info("Current!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! : {}",match_count);
+    }
+
+    @Test
+    void getallIdx() {
+        List<OfficetelIdxDTO> response =  officetelService.getOfficetelIdxAndHouseManageNo();
+        response.forEach(dto -> log.info(dto.toString()));
+    }
+
+    @Test
+    void saveOfficetelTypes (){
+        officetelService.saveOfficetelTypes();
+    }
+
+    @Test
+    void syncOfficetelData() {
+        officetelService.syncOfficetelData();
+    }
+
+    @Test
+    void deleteOfficetelData() {
+        officetelService.deleteOldOfficetelDataBeforeThisMonth();
+    }
+
 }
