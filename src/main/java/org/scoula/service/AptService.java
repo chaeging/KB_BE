@@ -1,11 +1,9 @@
 package org.scoula.service;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.mybatis.spring.annotation.MapperScan;
 import org.scoula.dto.*;
 import org.scoula.mapper.AptMapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,7 +34,7 @@ public class AptService {
     private String HOUSE_TYPE_URL;
     private final AptMapper aptMapper;
 
-    public AptResponseDto fetchAptData(int page, int perPage) {
+    public AptResponseDTO fetchAptData(int page, int perPage) {
         try {
             // 오늘 날짜 월로 쿼리 날리기 yyyy-MM 포맷
             String startDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM"));
@@ -74,7 +72,7 @@ public class AptService {
             ObjectMapper mapper = new ObjectMapper();
             mapper.registerModule(new JavaTimeModule()); // LocalDate 처리
             mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-            return mapper.readValue(sb.toString(), AptResponseDto.class);
+            return mapper.readValue(sb.toString(), AptResponseDTO.class);
 
         } catch (Exception e) {
             log.error("아파트 데이터 요청 중 오류 발생", e);
@@ -82,8 +80,7 @@ public class AptService {
         }
     }
 
-
-    public void saveAptData(AptResponseDto responseDto) {
+    public void saveAptData(AptResponseDTO responseDto) {
         if (responseDto != null && responseDto.getData() != null) {
             for (AptDTO dto : responseDto.getData()) {
                 aptMapper.insertApt(dto);
@@ -164,7 +161,7 @@ public class AptService {
 
     public void syncAptData() {
 
-        AptResponseDto response = fetchAptData(1, 1);
+        AptResponseDTO response = fetchAptData(1, 1);
         Integer matchCount = response.getMatchCount();
         log.info("총 Match 수: {}", matchCount);
 
