@@ -55,6 +55,68 @@
                                  spsply_hshldco = VALUES(spsply_hshldco),
                                  lttot_top_amount = VALUES(lttot_top_amount);
     </insert>
+    <insert id="insertOfficetel" parameterType="org.scoula.dto.OfficetelDTO">
+        INSERT INTO officetel_table (
+            house_manage_no,
+            pblanc_no,
+            house_nm,
+            house_secd,
+            house_secd_nm,
+            house_dtl_secd,
+            house_dtl_secd_nm,
+            search_house_secd,
+            subscrpt_area_code,
+            subscrpt_area_code_nm,
+            hssply_hshldco,
+            tot_suply_hshldco,
+            rcrit_pblanc_de,
+            subscrpt_rcept_bgnde,
+            subscrpt_rcept_endde,
+            przwner_presnatn_de,
+            cntrct_cncls_bgnde,
+            cntrct_cncls_endde,
+            hmpg_adres,
+            bsns_mby_nm,
+            mdhs_telno,
+            mvn_prearnge_ym,
+            pblanc_url
+        ) VALUES (
+                     #{houseManageNo},
+                     #{pblancNo},
+                     #{houseNm},
+                     #{houseSecd},
+                     #{houseSecdNm},
+                     #{houseDtlSecd},
+                     #{houseDtlSecdNm},
+                     #{searchHouseSecd},
+                     #{subscrptAreaCode},
+                     #{subscrptAreaCodeNm},
+                     #{hssplyHshldco},
+                     #{totSuplyHshldco},
+                     #{rcritPblancDe},
+                     #{rceptBgnde},
+                     #{rceptEndde},
+                     #{przwnerPresnatnDe},
+                     #{cntrctCnclsBgnde},
+                     #{cntrctCnclsEndde},
+                     #{hmpgAdres},
+                     #{bsnsMbyNm},
+                     #{mdhsTelno},
+                     #{mvnPrearngeYm},
+                     #{pblancUrl}
+                 )
+        ON DUPLICATE KEY UPDATE
+                             house_nm = VALUES(house_nm),
+                             tot_suply_hshldco = VALUES(tot_suply_hshldco),
+                             subscrpt_rcept_bgnde = VALUES(subscrpt_rcept_bgnde),
+                             subscrpt_rcept_endde = VALUES(subscrpt_rcept_endde),
+                             cntrct_cncls_bgnde = VALUES(cntrct_cncls_bgnde),
+                             cntrct_cncls_endde = VALUES(cntrct_cncls_endde),
+                             hmpg_adres = VALUES(hmpg_adres),
+                             bsns_mby_nm = VALUES(bsns_mby_nm),
+                             pblanc_url = VALUES(pblanc_url);
+    </insert>
+
     <delete id="deleteOld" parameterType="java.time.LocalDate">
         DELETE FROM apt_table
         WHERE <![CDATA[ rcrit_pblanc_de < #{firstDayOfMonth} ]]>
