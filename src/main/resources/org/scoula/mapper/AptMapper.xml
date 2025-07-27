@@ -164,5 +164,12 @@
     </insert>
 
 
+    <delete id="deleteOldFromOfficetel" parameterType="java.time.LocalDate">
+        DELETE FROM officetel_table
+        WHERE <![CDATA[ rcrit_pblanc_de < #{firstDayOfMonth} ]]>
+    </delete>
+
+
+
 
 </mapper>

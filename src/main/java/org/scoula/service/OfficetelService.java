@@ -157,4 +157,55 @@ public class OfficetelService {
         }
     }
 
+    public void syncOfficetelData() {
+        try {
+            OfficetelResponseDTO response = fetchOfficetelData(1, 1);
+            if (response == null) {
+                log.warn("[syncOfficetelData] 오피스텔 데이터 응답이 null입니다. 동기화 중단.");
+                return;
+            }
+
+            Integer matchCount = response.getMatchCount();
+            log.info("[syncOfficetelData] 총 Match 수: {}", matchCount);
+
+            if (matchCount > 1) {
+                response = fetchOfficetelData(1, matchCount);
+                if (response == null) {
+                    log.warn("[syncOfficetelData] 전체 데이터 재요청 실패. 동기화 중단.");
+                    return;
+                }
+            }
+
+            // 저장 처리
+            saveOfficetelData(response);
+            log.info("[syncOfficetelData] 오피스텔 본 데이터 저장 완료");
+
+            if (response.getData() != null && !response.getData().isEmpty()) {
+                for (OfficetelDTO officetel : response.getData()) {
+                    log.info("저장된 Officetel: {}", officetel);
+                }
+            } else {
+                log.warn("[syncOfficetelData] 데이터 리스트가 비어 있습니다.");
+            }
+
+
+            try {
+                saveOfficetelTypes();
+                log.info("[syncOfficetelData] 오피스텔 타입 데이터 저장 완료");
+            } catch (Exception e) {
+                log.error("[syncOfficetelData] 오피스텔 타입 저장 중 오류 발생", e);
+            }
+
+        } catch (Exception e) {
+            log.error("[syncOfficetelData] 전체 동기화 중 예외 발생", e);
+        }
+    }
+
+    public void deleteOldOfficetelDataBeforeThisMonth() {
+        LocalDate firstDayOfMonth = LocalDate.now().withDayOfMonth(1);
+        log.info("오피스텔 데이터 삭제 : {}", firstDayOfMonth);
+        officeMapper.deleteOldFromOfficetel(firstDayOfMonth);
+    }
+
+
 }

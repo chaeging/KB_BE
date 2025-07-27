@@ -17,6 +17,7 @@ public interface AptMapper {
     void insertOfficetel(OfficetelDTO officetelDTO);
     List<OfficetelIdxDTO>getIdxAndHouseManageNoFromOfficetel();
     void insertOfficetelType(OfficetelTypeDTO officetelTypeDTO);
+    void deleteOldFromOfficetel(@Param("firstDayOfMonth") LocalDate firstDayOfMonth);
 
 
 }

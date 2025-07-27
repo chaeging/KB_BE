@@ -98,5 +98,14 @@ class OfficetelServiceTest {
         officetelService.saveOfficetelTypes();
     }
 
+    @Test
+    void syncOfficetelData() {
+        officetelService.syncOfficetelData();
+    }
+
+    @Test
+    void deleteOfficetelData() {
+        officetelService.deleteOldOfficetelDataBeforeThisMonth();
+    }
 
 }
