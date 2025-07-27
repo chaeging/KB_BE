@@ -128,4 +128,41 @@
         FROM apt_table
     </select>
 
+    <select id="getIdxAndHouseManageNoFromOfficetel" resultType="org.scoula.dto.OfficetelIdxDTO">
+        SELECT officetel_idx, house_manage_no
+        FROM officetel_table
+    </select>
+
+    <insert id="insertOfficetelType">
+        INSERT INTO officetel_type (
+            model_no,
+            officetel_idx,
+            tp,
+            excluse_ar,
+            suply_hshldco,
+            suply_amount,
+            subscrpt_reqst_amount,
+            house_manage_no,
+            pblanc_no
+        ) VALUES (
+                     #{modelNo},
+                     #{officetelIdx},
+                     #{tp},
+                     #{excluseAr},
+                     #{suplyHshldco},
+                     #{suplyAmount},
+                     #{subscrptReqstAmount},
+                     #{houseManageNo},
+                     #{pblancNo}
+                 )
+        ON DUPLICATE KEY UPDATE
+                             excluse_ar = VALUES(excluse_ar),
+                             suply_hshldco = VALUES(suply_hshldco),
+                             suply_amount = VALUES(suply_amount),
+                             subscrpt_reqst_amount = VALUES(subscrpt_reqst_amount),
+                             tp = VALUES(tp);
+    </insert>
+
+
+
 </mapper>

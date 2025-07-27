@@ -13,7 +13,10 @@ public interface AptMapper {
     List<AptIdxDTO> getIdxAndHouseMangeNo(); // apt 테이블에서  house_manage_no 와 apt_idx 만 가져옴
     void insertAptType(AptTypeDTO aptTypeResponseDTO);
     void deleteOld(@Param("firstDayOfMonth") LocalDate firstDayOfMonth);
+
     void insertOfficetel(OfficetelDTO officetelDTO);
+    List<OfficetelIdxDTO>getIdxAndHouseManageNoFromOfficetel();
+    void insertOfficetelType(OfficetelTypeDTO officetelTypeDTO);
 
 
 }
