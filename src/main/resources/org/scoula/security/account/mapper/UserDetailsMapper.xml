@@ -14,7 +14,6 @@
         <result property="userName" column="user_name"/>
         <result property="password" column="password"/>
         <result property="address" column="address"/>
-        <result property="jwtRefreshToken" column="jwt_refresh_token"/>
         <result property="birthdate" column="birthdate"/>
         <collection property="authList" resultMap="authMap"/>
     </resultMap>
@@ -35,22 +34,10 @@
 
     </select>
 
-    <update id="updateRefreshToken">
-        UPDATE users
-        SET jwt_refresh_token = #{jwt_refresh_token}
-        WHERE user_id = #{user_id}
-    </update>
 
-    <select id="getRefreshToken" resultType="java.lang.String">
-        SELECT jwt_refresh_token
-        FROM users
-        WHERE user_id = #{user_id}
-    </select>
 
-    <update id="clearRefreshToken">
-        UPDATE users
-        SET jwt_refresh_token = NULL
-        WHERE user_id = #{user_id}
-    </update>
+
+
+
 
 </mapper>

@@ -1,20 +1,26 @@
 package org.scoula.dto;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class AptTypeDTO {
-    private Integer aptTypeIdx;      // APT 타입 고유 ID
-    private String houseTy;          // 주택형
-    private BigDecimal suplyAr;      // 공급면적
-    private Integer suplyHshldco;    // 일반공급세대수
-    private Integer spsplyHshldco;   // 특별공급세대수
-    private String lttotTopAmount;   // 공급금액 (분양최고금액)
-}
+    @JsonProperty("HOUSE_TY")
+    private String houseTy;
 
+    @JsonProperty("SUPLY_AR")
+    private Double suplyAr;
+
+    @JsonProperty("SUPLY_HSHLDCO")
+    private Integer suplyHshldco;
+
+    @JsonProperty("SPSPLY_HSHLDCO")
+    private Integer spsplyHshldco;
+
+    @JsonProperty("LTTOT_TOP_AMOUNT")
+    private String lttotTopAmount;
+
+    private Integer aptIdx;
+}
