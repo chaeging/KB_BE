@@ -35,11 +35,22 @@ public class UserService {
         authDTO.setUsersIdx(memberDTO.getUsersIdx());
         authDTO.setAuth("ROLE_MEMBER");
         userMapper.insertAuth(authDTO);
+
     }
 
+    // 회원 정보 수정
     public void updateUser(MemberDTO user) {
+
+        // 예외 -> userId가 null이면 업데이트 불가
+        if (user.getUserId() == null || user.getUserId().isEmpty()) {
+            throw new IllegalArgumentException("userId는 필수입니다. 수정할 수 없습니다.");
+        }
+
+
         userMapper.updateUser(user);
     }
+
+
 
     public void deleteUser(Integer id) {
         userMapper.deleteUser(id);

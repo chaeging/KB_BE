@@ -72,4 +72,13 @@ public class AuthController {
         userService.deleteUser(userIdx);
         return ResponseEntity.ok(Map.of("message", "회원 탈퇴 완료!"));
     }
+
+    // 회원정보 수정
+    @PutMapping("/update")
+    public ResponseEntity<String> updateUser(@RequestBody MemberDTO user) {
+        userService.updateUser(user);
+        return ResponseEntity.ok("수정 완료");
+    }
+
+
 }

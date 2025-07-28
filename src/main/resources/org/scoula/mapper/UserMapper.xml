@@ -41,12 +41,9 @@
     <!-- 사용자 수정 -->
     <update id="updateUser" parameterType="MemberDTO">
         UPDATE users
-        SET user_id = #{userId},
+        SET
             user_name = #{userName},
-            password = #{password},
             address = #{address},
-            jwt_refresh_token = #{jwtRefreshToken},
-            kakao_user_id = #{kakaoUserId},
             birthdate = #{birthdate}
         WHERE users_idx = #{usersIdx}
 
