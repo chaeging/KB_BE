@@ -8,7 +8,8 @@ import lombok.Data;
 public class KakaoUserInfoDto {
     private Long kakaoId;
     private String email;
-    private String nickname;
-    private String profileImageUrl;
+    private String name;
+    private String birthday;
+    private String address;
     private String token;
 }
