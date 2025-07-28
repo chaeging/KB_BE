@@ -6,7 +6,7 @@
 <mapper namespace="org.scoula.mapper.UserMapper">
 
     <!-- user_id로 users_idx 조회 -->
-    <select id="findUserIdxByUserId" parameterType="String" resultType="int">
+    <select id="findUserIdxByUserId" parameterType="String" resultType="Integer">
         SELECT users_idx
         FROM users
         WHERE user_id = #{userId}
@@ -50,17 +50,27 @@
         WHERE users_idx = #{usersIdx}
 
     </update>
+    <update id="updatePasswordByUsername">
+        UPDATE users
+        SET password = #{password}
+        WHERE user_id = #{userId}
+    </update>
+
 
     <!-- 사용자 삭제 -->
-    <delete id="deleteUser" parameterType="int">
-        DELETE FROM users WHERE users_idx = #{userIdx}
+    <delete id="deleteUser" parameterType="String">
+        DELETE FROM users WHERE user_id = #{id}
     </delete>
 
     <!-- 해당 유저가 users_auth 테이블에 있는지 확인 -->
-    <select id="countUserByIdx" parameterType="int" resultType="int">
+    <select id="countUserByIdx" parameterType="long" resultType="int">
         SELECT COUNT(*) FROM users_auth WHERE user_idx = #{usersIdx}
     </select>
 
+    <!-- 사용자 auth 정보 기입-->
+    <insert id="insertUserAuth" parameterType="long">
+        INSERT INTO users_auth (user_idx, auth) VALUES (#{usersIdx}, 'ROLE_MEMBER')
+    </insert>
 
     <resultMap id="authMap" type="org.scoula.security.dto.AuthDTO">
         <result property="usersIdx" column="user_idx" />
