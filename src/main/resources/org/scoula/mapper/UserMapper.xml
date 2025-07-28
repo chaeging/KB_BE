@@ -14,28 +14,28 @@
 
     <!-- user_id로 사용자 조회 -->
     <select id="findById" parameterType="String" resultType="MemberDTO">
-        SELECT users_idx, user_id, user_name, password, address, jwt_refresh_token, kakao_user_id, birthdate
+        SELECT users_idx, user_id, user_name, password, address, kakao_user_id, birthdate
         FROM users
         WHERE user_id = #{userId}
     </select>
 
     <!-- 모든 사용자 조회 -->
     <select id="findAll" resultType="MemberDTO">
-        SELECT users_idx, user_id, user_name, password, address, jwt_refresh_token, kakao_user_id, birthdate
+        SELECT users_idx, user_id, user_name, password, address, kakao_user_id, birthdate
         FROM users
     </select>
 
     <!-- user_name으로 사용자 조회 -->
     <select id="findByUsername" parameterType="string" resultType="MemberDTO">
-        SELECT users_idx, user_id, user_name, password, address, jwt_refresh_token, kakao_user_id, birthdate
+        SELECT users_idx, user_id, user_name, password, address, kakao_user_id, birthdate
         FROM users
         WHERE user_name = #{username}
     </select>
 
     <!-- 사용자 추가 -->
     <insert id="insertUser" parameterType="MemberDTO" useGeneratedKeys="true" keyProperty="usersIdx">
-        INSERT INTO users (user_id, user_name, password, address, jwt_refresh_token, kakao_user_id, birthdate)
-        VALUES (#{userId}, #{userName}, #{password}, #{address}, #{jwtRefreshToken}, #{kakaoUserId}, #{birthdate})
+        INSERT INTO users (user_id, user_name, password, address, kakao_user_id, birthdate)
+        VALUES (#{userId}, #{userName}, #{password}, #{address}, #{kakaoUserId}, #{birthdate})
     </insert>
 
     <!-- 사용자 수정 -->
@@ -45,7 +45,6 @@
             user_name = #{userName},
             password = #{password},
             address = #{address},
-            jwt_refresh_token = #{jwtRefreshToken},
             kakao_user_id = #{kakaoUserId},
             birthdate = #{birthdate}
         WHERE users_idx = #{usersIdx}

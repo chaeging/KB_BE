@@ -22,5 +22,5 @@ public class MemberDTO {
     private String jwtRefreshToken;    // users.jwt_refresh_token
     private Date birthdate;            // users.birthdate
     private List<AuthDTO> authList;
-    private String kakaoUserId;
+    private Long kakaoUserId;
 }
