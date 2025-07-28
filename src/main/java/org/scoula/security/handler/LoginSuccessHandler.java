@@ -28,6 +28,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     private AuthResultDTO makeAuthResult(CustomUser user) {
         String username = user.getUsername();
+        log.info("로그인 성공!!! username = {}", username);
         String accessToken = jwtProcessor.generateAccessToken(username);
         String refreshToken = jwtProcessor.generateRefreshToken(username);
 

@@ -37,7 +37,6 @@ public class AuthController {
         }
     }
 
-
     @PostMapping("/refresh")
     public ResponseEntity<?> refresh(@RequestBody Map<String, String> body) {
         String refreshToken = body.get("refreshToken");
@@ -68,17 +67,19 @@ public class AuthController {
     public ResponseEntity<?> signOut(@RequestHeader("Authorization") String bearerToken) {
         String accessToken = tokenUtils.extractAccessToken(bearerToken);
         String username = jwtProcessor.getUsername(accessToken);
-        int userIdx = userService.findUserIdxByUserId(username);
-        userService.deleteUser(userIdx);
+        userService.deleteUser(username);
         return ResponseEntity.ok(Map.of("message", "회원 탈퇴 완료!"));
     }
 
-    // 회원정보 수정
-    @PutMapping("/update")
-    public ResponseEntity<String> updateUser(@RequestBody MemberDTO user) {
-        userService.updateUser(user);
-        return ResponseEntity.ok("수정 완료");
+    @PutMapping("/password")
+    public ResponseEntity<?> changePassword(@RequestHeader("Authorization") String bearerToken,
+                                           @RequestBody Map<String, String> body) {
+        String accessToken = tokenUtils.extractAccessToken(bearerToken);
+        String userid = jwtProcessor.getUsername(accessToken);
+
+        String oldPassword = body.get("oldPassword");
+        String newPassword = body.get("newPassword");
+        userService.updatePassword(userid,oldPassword,newPassword);
+        return ResponseEntity.ok(Map.of("message","비밀번호 변경 완료!"));
     }
-
-
 }
