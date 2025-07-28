@@ -36,9 +36,32 @@ public class UserService {
         userMapper.insertAuth(authDTO);
     }
 
+//    @Transactional
     public void updateUser(MemberDTO user) {
+        // usersIdx가 0 이하이거나 비어있으면 예외
+        if (user.getUsersIdx() <= 0) {
+            throw new IllegalArgumentException("usersIdx는 필수입니다.");
+        }
+
+        // userId가 null 이거나 비어있으면 예외
+        if (user.getUserId() == null || user.getUserId().trim().isEmpty()) {
+            throw new IllegalArgumentException("userId는 필수입니다.");
+        }
+
+        // 필수 값 유효성 검사
+        if (user.getUserName() == null || user.getUserName().trim().isEmpty()) {
+            throw new IllegalArgumentException("userName은 필수 입력값입니다.");
+        }
+        if (user.getAddress() == null || user.getAddress().trim().isEmpty()) {
+            throw new IllegalArgumentException("address는 필수 입력값입니다.");
+        }
+        if (user.getBirthdate() == null) {
+            throw new IllegalArgumentException("birthdate는 필수 입력값입니다.");
+        }
+
         userMapper.updateUser(user);
     }
+
 
     public void deleteUser(String userId) {
         userMapper.deleteUser(userId);
