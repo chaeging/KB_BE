@@ -25,6 +25,15 @@ tasks.withType(JavaCompile) {
 }
 
 dependencies {
+    //jackson
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.12.6'
+
+
+    //resttemplate
+    implementation 'org.apache.httpcomponents:httpcore:4.4.15'
+    implementation 'org.apache.httpcomponents:httpclient:4.5.13'
+
+    //메일
     implementation 'org.springframework:spring-context-support:5.3.37'
     implementation 'com.sun.mail:javax.mail:1.6.2'
 
@@ -45,6 +54,7 @@ dependencies {
     implementation("org.springframework.security:spring-security-config:${springSecurityVersion}")
     implementation("org.springframework.security:spring-security-core:${springSecurityVersion}")
     implementation("org.springframework.security:spring-security-taglibs:${springSecurityVersion}")
+
     // 스프링
     implementation ("org.springframework:spring-context:${springVersion}")
             { exclude group: 'commons-logging', module: 'commons-logging' }
@@ -93,6 +103,13 @@ dependencies {
     testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+
+    // Mockito Core
+    testImplementation 'org.mockito:mockito-core:5.11.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.11.0'
+    // JUnit 5
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
 
     // 데이터베이스
     implementation 'com.mysql:mysql-connector-j:8.1.0'

@@ -1,40 +1,91 @@
 package org.scoula.dto;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.time.LocalDate;
+import java.time.YearMonth;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class OfficetelDTO {
 
-    private String houseManageNo;         // 주택관리번호
-    private String pblancNo;              // 공고번호
-    private String houseNm;               // 주택명
-    private String houseSecd;             // 주택구분코드
-    private String houseSecdNm;          // 주택구분코드명
-    private String houseDtlSecd;         // 주택상세구분코드
-    private String houseDtlSecdNm;       // 주택상세구분코드명
-    private String searchHouseSecd;      // 주택구분 (상세코드)
-    private String subscrptAreaCode;     // 공급지역코드
-    private String subscrptAreaCodeNm;   // 공급지역명
-    private String hssplyHshldco;        // 공급위치
-    private Integer totSuplyHshldco;     // 공급규모
-    private String rcritPblancDe;        // 모집공고일
-    private String subscrptRceptBgnde;   // 청약접수시작일
-    private String subscrptRceptEndde;   // 청약접수종료일
-    private String przwnerPresnatnDe;    // 당첨자발표일
-    private String cntrctCnclsBgnde;     // 계약시작일
-    private String cntrctCnclsEndde;     // 계약종료일
-    private String hmpgAdres;            // 홈페이지주소
-    private String bsnsMbyNm;            // 사업주체명 (시행사)
-    private String mdhsTelno;            // 문의처
-    private String mvnPrearngeYm;        // 입주예정월 (YYYYMM)
-    private String pblancUrl;            // 모집공고 상세 URL
+    @JsonProperty("HOUSE_MANAGE_NO")
+    private String houseManageNo;
 
-    private List<OfficetelTypeDTO> officetelTypeList; // 연관된 모델 리스트
+    @JsonProperty("PBLANC_NO")
+    private String pblancNo;
+
+    @JsonProperty("HOUSE_NM")
+    private String houseNm;
+
+    @JsonProperty("HOUSE_SECD")
+    private String houseSecd;
+
+    @JsonProperty("HOUSE_SECD_NM")
+    private String houseSecdNm;
+
+    @JsonProperty("HOUSE_DTL_SECD")
+    private String houseDtlSecd;
+
+    @JsonProperty("HOUSE_DTL_SECD_NM")
+    private String houseDtlSecdNm;
+
+    @JsonProperty("SEARCH_HOUSE_SECD")
+    private String searchHouseSecd;
+
+    @JsonProperty("SUBSCRPT_AREA_CODE")
+    private String subscrptAreaCode;
+
+    @JsonProperty("SUBSCRPT_AREA_CODE_NM")
+    private String subscrptAreaCodeNm;
+
+    @JsonProperty("HSSPLY_HSHLDCO")
+    private String hssplyHshldco;
+
+    @JsonProperty("TOT_SUPLY_HSHLDCO")
+    private Integer totSuplyHshldco;
+
+    @JsonProperty("RCRIT_PBLANC_DE")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate rcritPblancDe;
+
+    @JsonProperty("SUBSCRPT_RCEPT_BGNDE")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate rceptBgnde;
+
+    @JsonProperty("SUBSCRPT_RCEPT_ENDDE")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate rceptEndde;
+
+    @JsonProperty("PRZWNER_PRESNATN_DE")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate przwnerPresnatnDe;
+
+    @JsonProperty("CNTRCT_CNCLS_BGNDE")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate cntrctCnclsBgnde;
+
+    @JsonProperty("CNTRCT_CNCLS_ENDDE")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate cntrctCnclsEndde;
+
+    @JsonProperty("HMPG_ADRES")
+    private String hmpgAdres;
+
+    @JsonProperty("BSNS_MBY_NM")
+    private String bsnsMbyNm;
+
+    @JsonProperty("MDHS_TELNO")
+    private String mdhsTelno;
+
+    @JsonProperty("MVN_PREARNGE_YM")
+    private String mvnPrearngeYm;
+
+    @JsonProperty("PBLANC_URL")
+    private String pblancUrl;
 }
+
 

@@ -2,9 +2,11 @@ package org.scoula.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.scoula.security.dto.AuthDTO;
 import org.scoula.security.dto.MemberDTO;
 import org.scoula.service.EmailService;
 import org.scoula.service.EmailVerificationService;
+import org.scoula.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,16 +16,17 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/v1/signup")
+@RequestMapping("/v1/email")
 @RequiredArgsConstructor
 @Log4j2
-public class SignUpController {
+public class EmailController {
     private final EmailService emailService;
     private final EmailVerificationService emailVerification;
+    private final UserService userService;
 
 
 
-    @PostMapping("/email")
+    @PostMapping("")
     public ResponseEntity<?> sendVerificationCode(@RequestBody Map<String, String> request) {
         String email = request.get("user_id");
         emailService.sendVerificationCode(email);
@@ -32,7 +35,7 @@ public class SignUpController {
         return ResponseEntity.ok(Map.of("message","검증 코드 발송 완료!"));
     }
 
-    @PostMapping("/email/verification")
+    @PostMapping("/verification")
     public ResponseEntity<?> verifyEmailCode(@RequestBody Map<String, String> request) {
         String email = request.get("user_id");
         String inputCode = request.get("code");
@@ -47,11 +50,5 @@ public class SignUpController {
             return ResponseEntity.badRequest().body(Map.of("message", "이메일 인증 실패"));
         }
     }
-//    @PostMapping("")
-//    public ResponseEntity<?> signUp(@RequestBody MemberDTO memberDTO) {
-//
-//
-//    }
-
 
 }
