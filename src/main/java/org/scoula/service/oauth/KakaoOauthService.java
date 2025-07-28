@@ -46,7 +46,7 @@ public class KakaoOauthService {
 
         // JWT 발급 (JwtProcessor 사용)
         String jwtToken = jwtProcessor.generateAccessToken(user.getUserId());
-        userInfo.setToken(jwtToken);
+//        userInfo.setToken(jwtToken);
 
         return userInfo;
     }
@@ -94,6 +94,38 @@ public class KakaoOauthService {
         }
     }
 
+    public String getShippingAddress(String accessToken) {
+        String url = "https://kapi.kakao.com/v1/user/shipping_address";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + accessToken);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        try {
+            ResponseEntity<String> response = restTemplate.exchange(
+                    url, HttpMethod.GET, entity, String.class
+            );
+
+            log.info("배송지 정보 응답: {}", response.getBody());
+
+            JsonNode root = objectMapper.readTree(response.getBody());
+            JsonNode addresses = root.path("shipping_addresses");
+
+            if (addresses.isArray() && addresses.size() > 0) {
+                String fullAddress = addresses.get(0).path("base_address").asText();
+                return fullAddress.split(" ")[0] + " " + fullAddress.split(" ")[1] + " " + fullAddress.split(" ")[2];
+            } else {
+                return null;
+            }
+
+        } catch (Exception e) {
+            log.error("배송지 정보 요청 실패", e);
+            throw new RuntimeException("배송지 정보 요청 실패", e);
+        }
+    }
+
+
     public KakaoUserInfoDto getUserInfo(String accessToken) {
         String userUrl = "https://kapi.kakao.com/v2/user/me";
 
@@ -123,12 +155,7 @@ public class KakaoOauthService {
             String birthyear = kakaoAccount.path("birthyear").asText(null);
 
             // 배송지 정보 추출
-            JsonNode shippingNode = kakaoAccount.path("shipping_address");
-            String shippingAddress = null;
-
-            if (!shippingNode.isMissingNode() && shippingNode.has("base_address")) {
-                shippingAddress = shippingNode.get("base_address").asText();
-            }
+            String shippingAddress = getShippingAddress(accessToken);
 
             log.info("Shipping address: {}", shippingAddress);
 
