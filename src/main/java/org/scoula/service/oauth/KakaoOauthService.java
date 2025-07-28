@@ -114,7 +114,7 @@ public class KakaoOauthService {
 
             if (addresses.isArray() && addresses.size() > 0) {
                 String fullAddress = addresses.get(0).path("base_address").asText();
-                return fullAddress.split(" ")[0] + " " + fullAddress.split(" ")[1] + " " + fullAddress.split(" ")[2];
+                return fullAddress.split(" ")[0] + " " + fullAddress.split(" ")[1];
             } else {
                 return null;
             }
