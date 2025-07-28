@@ -67,7 +67,7 @@
             search_house_secd,
             subscrpt_area_code,
             subscrpt_area_code_nm,
-            hssply_hshldco,
+            hssply_adres,
             tot_suply_hshldco,
             rcrit_pblanc_de,
             subscrpt_rcept_bgnde,
@@ -91,7 +91,7 @@
                      #{searchHouseSecd},
                      #{subscrptAreaCode},
                      #{subscrptAreaCodeNm},
-                     #{hssplyHshldco},
+                     #{hssplyAdres},
                      #{totSuplyHshldco},
                      #{rcritPblancDe},
                      #{rceptBgnde},
@@ -114,8 +114,10 @@
                              cntrct_cncls_endde = VALUES(cntrct_cncls_endde),
                              hmpg_adres = VALUES(hmpg_adres),
                              bsns_mby_nm = VALUES(bsns_mby_nm),
-                             pblanc_url = VALUES(pblanc_url);
+                             pblanc_url = VALUES(pblanc_url),
+                             hssply_adres = VALUES(hssply_adres);
     </insert>
+
 
     <delete id="deleteOld" parameterType="java.time.LocalDate">
         DELETE FROM apt_table
