@@ -2,6 +2,7 @@ package org.scoula.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -10,59 +11,137 @@ import java.time.LocalDate;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AptDTO {
 
-    private String houseManageNo;         // 주택관리번호
-    private String pblancNo;              // 공고번호
-    private String houseNm;               // 주택명
-    private String houseSecd;             // 주택구분코드
-    private String houseSecdNm;           // 주택구분코드명
-    private String houseDtlSecd;          // 주택상세구분코드
-    private String houseDtlSecdNm;        // 주택상세구분코드명
-    private String rentSecd;              // 분양구분코드
-    private String rentSecdNm;            // 분양구분코드명
-    private String subscrptAreaCode;      // 공급지역코드
-    private String subscrptAreaCodeNm;    // 공급지역명
-    private String hssplyAdres;           // 공급위치
-    private Integer totSuplyHshldco;      // 공급규모
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate rcritPblancDe;      // 모집공고일
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate rceptBgnde;         // 청약접수시작일
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate rceptEndde;         // 청약접수종료일
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate spsplyRceptBgnde;   // 특별공급 접수시작일
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate spsplyRceptEndde;   // 특별공급 접수종료일
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate gnrlRnk1CrspareaRcptde; // 1순위 해당지역 접수시작일
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate gnrlRnk1CrspareaEndde;  // 1순위 해당지역 접수종료일
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate gnrlRnk1EtcAreaRcptde;  // 1순위 기타지역 접수시작일
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate gnrlRnk1EtcAreaEndde;   // 1순위 기타지역 접수종료일
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate gnrlRnk2CrspareaRcptde; // 2순위 해당지역 접수시작일
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate gnrlRnk2CrspareaEndde;  // 2순위 해당지역 접수종료일
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate gnrlRnk2EtcAreaRcptde;  // 2순위 기타지역 접수시작일
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate gnrlRnk2EtcAreaEndde;   // 2순위 기타지역 접수종료일
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate przwnerPresnatnDe;      // 당첨자 발표일
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate cntrctCnclsBgnde;       // 계약 시작일
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate cntrctCnclsEndde;       // 계약 종료일
-    private String hmpgAdres;                 // 홈페이지 주소
-    private String cnstrctEntrpsNm;           // 건설업체명 (시공사)
-    private String mdhsTelno;                 // 문의처
-    private String bsnsMbyNm;                 // 사업주체명 (시행사)
-    private String mvnPrearngeYm;             // 입주 예정월 (YYYYMM)
-    private String specltRdnEarthAt;          // 투기과열지구 여부 (Y/N)
-    private String mdatTrgetAreaSecd;         // 조정대상지역 여부 (Y/N)
-    private String parcprcUlsAt;              // 분양가상한제 적용 여부 (Y/N)
-    private String pblancUrl;                 // 모집공고 상세 URL
-}
+    @JsonProperty("HOUSE_MANAGE_NO")
+    private String houseManageNo;
 
+    @JsonProperty("PBLANC_NO")
+    private String pblancNo;
+
+    @JsonProperty("HOUSE_NM")
+    private String houseNm;
+
+    @JsonProperty("HOUSE_SECD")
+    private String houseSecd;
+
+    @JsonProperty("HOUSE_SECD_NM")
+    private String houseSecdNm;
+
+    @JsonProperty("HOUSE_DTL_SECD")
+    private String houseDtlSecd;
+
+    @JsonProperty("HOUSE_DTL_SECD_NM")
+    private String houseDtlSecdNm;
+
+    @JsonProperty("RENT_SECD")
+    private String rentSecd;
+
+    @JsonProperty("RENT_SECD_NM")
+    private String rentSecdNm;
+
+    @JsonProperty("SUBSCRPT_AREA_CODE")
+    private String subscrptAreaCode;
+
+    @JsonProperty("SUBSCRPT_AREA_CODE_NM")
+    private String subscrptAreaCodeNm;
+
+    @JsonProperty("HSSPLY_ADRES")
+    private String hssplyAdres;
+
+    @JsonProperty("TOT_SUPLY_HSHLDCO")
+    private Integer totSuplyHshldco;
+
+    @JsonProperty("RCRIT_PBLANC_DE")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate rcritPblancDe;
+
+    @JsonProperty("RCEPT_BGNDE")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate rceptBgnde;
+
+    @JsonProperty("RCEPT_ENDDE")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate rceptEndde;
+
+    @JsonProperty("SPSPLY_RCEPT_BGNDE")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate spsplyRceptBgnde;
+
+    @JsonProperty("SPSPLY_RCEPT_ENDDE")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate spsplyRceptEndde;
+
+    @JsonProperty("GNRL_RNK1_CRSPAREA_RCPTDE")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate gnrlRnk1CrspareaRcptde;
+
+    @JsonProperty("GNRL_RNK1_CRSPAREA_ENDDE")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate gnrlRnk1CrspareaEndde;
+
+    @JsonProperty("GNRL_RNK1_ETC_AREA_RCPTDE")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate gnrlRnk1EtcAreaRcptde;
+
+    @JsonProperty("GNRL_RNK1_ETC_AREA_ENDDE")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate gnrlRnk1EtcAreaEndde;
+
+    @JsonProperty("GNRL_RNK2_CRSPAREA_RCPTDE")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate gnrlRnk2CrspareaRcptde;
+
+    @JsonProperty("GNRL_RNK2_CRSPAREA_ENDDE")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate gnrlRnk2CrspareaEndde;
+
+    @JsonProperty("GNRL_RNK2_ETC_AREA_RCPTDE")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate gnrlRnk2EtcAreaRcptde;
+
+    @JsonProperty("GNRL_RNK2_ETC_AREA_ENDDE")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate gnrlRnk2EtcAreaEndde;
+
+    @JsonProperty("PRZWNER_PRESNATN_DE")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate przwnerPresnatnDe;
+
+    @JsonProperty("CNTRCT_CNCLS_BGNDE")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate cntrctCnclsBgnde;
+
+    @JsonProperty("CNTRCT_CNCLS_ENDDE")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate cntrctCnclsEndde;
+
+    @JsonProperty("HMPG_ADRES")
+    private String hmpgAdres;
+
+    @JsonProperty("CNSTRCT_ENTRPS_NM")
+    private String cnstrctEntrpsNm;
+
+    @JsonProperty("MDHS_TELNO")
+    private String mdhsTelno;
+
+    @JsonProperty("BSNS_MBY_NM")
+    private String bsnsMbyNm;
+
+    @JsonProperty("MVN_PREARNGE_YM")
+    private String mvnPrearngeYm;
+
+    @JsonProperty("SPECLT_RDN_EARTH_AT")
+    private String specltRdnEarthAt;
+
+    @JsonProperty("MDAT_TRGET_AREA_SECD")
+    private String mdatTrgetAreaSecd;
+
+    @JsonProperty("PARCPRC_ULS_AT")
+    private String parcprcUlsAt;
+
+    @JsonProperty("PBLANC_URL")
+    private String pblancUrl;
+
+    private Long lattitude;
+
+    private Long longitude;
+}
