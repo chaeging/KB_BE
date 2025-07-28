@@ -15,9 +15,10 @@ import org.springframework.web.servlet.view.JstlView;
 @EnableWebMvc
 
 @ComponentScan(basePackages = {"org.scoula.controller",
-        "org.scoula.exception",
-        "org.scoula.util",
-        "org.scoula.service"})
+                                "org.scoula.exception",
+                                "org.scoula.service",
+                                "org.scoula.config",
+                                "org.scoula.util"})
 
 public class ServletConfig implements WebMvcConfigurer {
     @Override

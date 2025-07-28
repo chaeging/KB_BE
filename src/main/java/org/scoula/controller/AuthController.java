@@ -82,4 +82,30 @@ public class AuthController {
         userService.updatePassword(userid,oldPassword,newPassword);
         return ResponseEntity.ok(Map.of("message","비밀번호 변경 완료!"));
     }
+
+    // 회원정보 수정
+    @PutMapping("/update")
+    public ResponseEntity<?> updateUser(@RequestHeader("Authorization") String bearerToken,
+                                        @RequestBody MemberDTO user) {
+        String accessToken = tokenUtils.extractAccessToken(bearerToken);
+        String userId = jwtProcessor.getUsername(accessToken);
+
+        // DB에서 users_idx 조회
+        Integer usersIdx = userService.findUserIdxByUserId(userId);
+        if (usersIdx == null) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "해당 사용자를 찾을 수 없습니다."));
+        }
+
+        log.info("/v1/auth/update 엔드포인트 호출됨");
+
+        user.setUsersIdx(usersIdx);
+        //JWT에 있는 userId로 강제 설정
+        user.setUserId(userId); // 절대 수정 못함
+
+        userService.updateUser(user);
+        log.info("수정 요청 받은 userName: {}", user.getUserName());
+        System.out.println(">> PUT 요청 도착: " + user);
+        return ResponseEntity.ok(Map.of("message", "회원정보 수정 완료"));
+    }
 }
