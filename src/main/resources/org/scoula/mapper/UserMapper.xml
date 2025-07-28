@@ -13,33 +13,33 @@
     </select>
 
     <!-- user_id로 사용자 조회 -->
-    <select id="findById" parameterType="String" resultType="org.scoula.domain.User">
+    <select id="findById" parameterType="String" resultType="MemberDTO">
         SELECT users_idx, user_id, user_name, password, address, jwt_refresh_token, kakao_user_id, birthdate
         FROM users
         WHERE user_id = #{userId}
     </select>
 
     <!-- 모든 사용자 조회 -->
-    <select id="findAll" resultType="org.scoula.domain.User">
+    <select id="findAll" resultType="MemberDTO">
         SELECT users_idx, user_id, user_name, password, address, jwt_refresh_token, kakao_user_id, birthdate
         FROM users
     </select>
 
     <!-- user_name으로 사용자 조회 -->
-    <select id="findByUsername" parameterType="string" resultType="org.scoula.domain.User">
+    <select id="findByUsername" parameterType="string" resultType="MemberDTO">
         SELECT users_idx, user_id, user_name, password, address, jwt_refresh_token, kakao_user_id, birthdate
         FROM users
         WHERE user_name = #{username}
     </select>
 
     <!-- 사용자 추가 -->
-    <insert id="insertUser" parameterType="org.scoula.domain.User">
+    <insert id="insertUser" parameterType="MemberDTO" useGeneratedKeys="true" keyProperty="usersIdx">
         INSERT INTO users (user_id, user_name, password, address, jwt_refresh_token, kakao_user_id, birthdate)
         VALUES (#{userId}, #{userName}, #{password}, #{address}, #{jwtRefreshToken}, #{kakaoUserId}, #{birthdate})
     </insert>
 
     <!-- 사용자 수정 -->
-    <update id="updateUser" parameterType="org.scoula.domain.User">
+    <update id="updateUser" parameterType="MemberDTO">
         UPDATE users
         SET user_id = #{userId},
             user_name = #{userName},
@@ -48,22 +48,31 @@
             jwt_refresh_token = #{jwtRefreshToken},
             kakao_user_id = #{kakaoUserId},
             birthdate = #{birthdate}
-        WHERE users_idx = #{id}
+        WHERE users_idx = #{usersIdx}
+
     </update>
 
     <!-- 사용자 삭제 -->
-    <delete id="deleteUser" parameterType="long">
-        DELETE FROM users WHERE users_idx = #{id}
+    <delete id="deleteUser" parameterType="int">
+        DELETE FROM users WHERE users_idx = #{userIdx}
     </delete>
 
     <!-- 해당 유저가 users_auth 테이블에 있는지 확인 -->
-    <select id="countUserByIdx" parameterType="long" resultType="int">
+    <select id="countUserByIdx" parameterType="int" resultType="int">
         SELECT COUNT(*) FROM users_auth WHERE user_idx = #{usersIdx}
     </select>
 
-    <!--  -->
-    <insert id="insertUserAuth" parameterType="long">
-        INSERT INTO users_auth (user_idx, auth) VALUES (#{usersIdx}, 'ROLE_MEMBER')
+
+    <resultMap id="authMap" type="org.scoula.security.dto.AuthDTO">
+        <result property="usersIdx" column="user_idx" />
+        <result property="auth" column="auth" />
+    </resultMap>
+
+    <insert id="insertAuth" parameterType="AuthDTO">
+        INSERT INTO users_auth (user_idx, auth)
+        VALUES (#{usersIdx}, #{auth})
     </insert>
+
+
 
 </mapper>

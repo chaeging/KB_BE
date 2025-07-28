@@ -1,9 +1,11 @@
 package org.scoula.service;
-
 import lombok.RequiredArgsConstructor;
-import org.scoula.domain.User;
 import org.scoula.mapper.UserMapper;
+import org.scoula.security.dto.AuthDTO;
+import org.scoula.security.dto.MemberDTO;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -11,29 +13,43 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService {
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    public User getUser(String email) {
+    public MemberDTO getUser(String email) {
         return userMapper.findById(email);
     }
 
-    public List<User> getAllUsers() {
+    public List<MemberDTO> getAllUsers() {
         return userMapper.findAll();
     }
 
-    public void addUser(User user) {
-        userMapper.insertUser(user);
+
+    @Transactional
+    public void signUp(MemberDTO memberDTO) {
+        // 1. 사용자 등록
+        String originalPassword = memberDTO.getPassword();
+        String newPassword = passwordEncoder.encode(originalPassword);
+        memberDTO.setPassword(newPassword);
+        userMapper.insertUser(memberDTO);
+
+        // 2. 권한 등록
+        AuthDTO authDTO = new AuthDTO();
+        authDTO.setUsersIdx(memberDTO.getUsersIdx());
+        authDTO.setAuth("ROLE_MEMBER");
+        userMapper.insertAuth(authDTO);
     }
 
-    public void updateUser(User user) {
+    public void updateUser(MemberDTO user) {
         userMapper.updateUser(user);
     }
 
-    public void deleteUser(Long id) {
-        userMapper.deleteUser(id);
+    public void deleteUser(int userIdx) {
+        userMapper.deleteUser(userIdx);
     }
 
-    public User findByUsername(String username) {
+    public MemberDTO findByUsername(String username) {
         return userMapper.findByUsername(username);
     }
 }
+
 

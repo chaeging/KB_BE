@@ -3,9 +3,10 @@ package org.scoula.service.oauth;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.scoula.domain.User;
 import org.scoula.dto.oauth.KakaoUserInfoDto;
 import org.scoula.mapper.UserMapper;
+import org.scoula.security.dto.AuthDTO;
+import org.scoula.security.dto.MemberDTO;
 import org.scoula.security.util.JwtProcessor;
 import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +38,7 @@ public class KakaoOauthService {
         String accessToken = this.getAccessToken(code);
         KakaoUserInfoDto userInfo = this.getUserInfo(accessToken);
 
-        User user = this.processKakaoUser(userInfo);
+        MemberDTO user = this.processKakaoUser(userInfo);
 
         // JWT 발급 (JwtProcessor 사용)
         String jwtToken = jwtProcessor.generateAccessToken(user.getUserId());
@@ -89,6 +90,36 @@ public class KakaoOauthService {
         }
     }
 
+    public String getAddress(String accessToken) {
+        String url = "https://kauth.kakao.com/oauth/address";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + accessToken);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        try {
+            ResponseEntity<String> response = restTemplate.exchange(
+                    url, HttpMethod.GET, entity, String.class
+            );
+
+            log.info("배송지 정보 응답: {}", response.getBody());
+
+            JsonNode root = objectMapper.readTree(response.getBody());
+            JsonNode addresses = root.path("shipping_addresses");
+
+            if (addresses.isArray() && addresses.size() > 0) {
+                return addresses.get(0).path("base_address").asText();
+            } else {
+                return null;
+            }
+
+        } catch (Exception e) {
+            log.error("배송지 정보 요청 실패", e);
+            throw new RuntimeException("배송지 정보 요청 실패", e);
+        }
+    }
+
     public KakaoUserInfoDto getUserInfo(String accessToken) {
         String userUrl = "https://kapi.kakao.com/v2/user/me";
 
@@ -117,6 +148,7 @@ public class KakaoOauthService {
             JsonNode profile = kakaoAccount.get("profile");
             String nickname = profile.get("nickname").asText(null);
             String profileImageUrl = profile.get("profile_image_url").asText(null);
+            String address = getAddress(accessToken);
 
             return new KakaoUserInfoDto(kakaoId, email, nickname, profileImageUrl, null);
         } catch (Exception e) {
@@ -126,24 +158,31 @@ public class KakaoOauthService {
     }
 
     // MyBatis로 사용자 DB 처리
-    public User processKakaoUser(KakaoUserInfoDto userInfo) {
-        User existingUser = userMapper.findById(userInfo.getEmail());
+    public MemberDTO processKakaoUser(KakaoUserInfoDto userInfo) {
+        MemberDTO existingUser = userMapper.findById(userInfo.getEmail());
 
         if (existingUser != null) {
             int count = userMapper.countUserByIdx(existingUser.getUsersIdx());
             if (count == 0) {
-                userMapper.insertUserAuth(existingUser.getUsersIdx());
+                AuthDTO authUser = new AuthDTO();
+                authUser.setUsersIdx(existingUser.getUsersIdx());
+                authUser.setAuth("ROLE_MEMBER");
+                userMapper.insertAuth(authUser);
             }
             return existingUser;
         }
 
-        User kakaoUser = new User();
+        MemberDTO kakaoUser = new MemberDTO();
         kakaoUser.setUserId(userInfo.getEmail());
         kakaoUser.setUserName(userInfo.getNickname());
         kakaoUser.setPassword(null);
 
         userMapper.insertUser(kakaoUser);
-        userMapper.insertUserAuth(kakaoUser.getUsersIdx());
+
+        AuthDTO kakaoAuth = new AuthDTO();
+        kakaoAuth.setAuth("ROLE_MEMBER");
+        kakaoAuth.setUsersIdx(userMapper.findUserIdxByUserId(userInfo.getEmail()));
+        userMapper.insertAuth(kakaoAuth);
         return kakaoUser;
     }
 }

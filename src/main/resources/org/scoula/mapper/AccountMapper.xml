@@ -41,4 +41,10 @@
 
     </select>
 
+    <select id="findEarliestAccountStartDate" resultType="string">
+        SELECT MIN(res_account_start_date)
+        FROM account
+        WHERE user_idx = #{userIdx}
+    </select>
+
 </mapper>
