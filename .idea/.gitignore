@@ -1,3 +1,10 @@
+<<<<<<< HEAD
+# Default ignored files
+/shelf/
+/workspace.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+=======
 # 디폴트 무시된 파일
 /shelf/
 /workspace.xml
@@ -5,6 +12,7 @@
 /httpRequests/
 # 환경에 따라 달라지는 Maven 홈 디렉터리
 /mavenHomeManager.xml
+>>>>>>> upstream/develop
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
