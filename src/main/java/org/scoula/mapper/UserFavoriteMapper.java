@@ -15,4 +15,10 @@ public interface UserFavoriteMapper {
 
     // 특정 즐겨찾기 삭제
     int deleteUserFavorite(int userFavoriteIdx);
+
+    // 아파트 즐겨찾기 여부
+    boolean isFavoriteAPT(int usersIdx, int noticeIdx);
+
+    // 오피스텔 즐겨찾기 여부
+    boolean isFavoriteOFFI(int usersIdx, int noticeIdx);
 }
