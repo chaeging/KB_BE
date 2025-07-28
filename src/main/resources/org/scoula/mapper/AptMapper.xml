@@ -268,11 +268,91 @@
                              tp = VALUES(tp);
     </insert>
 
-
     <delete id="deleteOldFromOfficetel" parameterType="java.time.LocalDate">
         DELETE FROM officetel_table
         WHERE <![CDATA[ rcrit_pblanc_de < #{firstDayOfMonth} ]]>
     </delete>
+
+
+    <resultMap id="officetelTypeMap" type="org.scoula.dto.OfficetelTypeDTO">
+        <result property="modelNo" column="model_no"/>
+        <result property="tp" column="tp"/>
+        <result property="excluseAr" column="excluse_ar"/>
+        <result property="suplyHshldco" column="suply_hshldco"/>
+        <result property="suplyAmount" column="suply_amount"/>
+        <result property="subscrptReqstAmount" column="subscrpt_reqst_amount"/>
+        <result property="houseManageNo" column="house_manage_no"/>
+        <result property="pblancNo" column="pblanc_no"/>
+    </resultMap>
+
+
+    <resultMap id="officetelDetailMap" type="org.scoula.dto.OfficetelDetailDTO">
+        <id property="pblancNo" column="pblanc_no"/>
+        <result property="houseManageNo" column="house_manage_no"/>
+        <result property="houseNm" column="house_nm"/>
+        <result property="houseSecd" column="house_secd"/>
+        <result property="houseSecdNm" column="house_secd_nm"/>
+        <result property="houseDtlSecd" column="house_dtl_secd"/>
+        <result property="houseDtlSecdNm" column="house_dtl_secd_nm"/>
+        <result property="searchHouseSecd" column="search_house_secd"/>
+        <result property="subscrptAreaCode" column="subscrpt_area_code"/>
+        <result property="subscrptAreaCodeNm" column="subscrpt_area_code_nm"/>
+        <result property="hssplyAdres" column="hssply_adres"/>
+        <result property="totSuplyHshldco" column="tot_suply_hshldco"/>
+        <result property="rcritPblancDe" column="rcrit_pblanc_de"/>
+        <result property="rceptBgnde" column="rcept_bgnde"/>
+        <result property="rceptEndde" column="rcept_endde"/>
+        <result property="przwnerPresnatnDe" column="przwner_presnatn_de"/>
+        <result property="cntrctCnclsBgnde" column="cntrct_cncls_bgnde"/>
+        <result property="cntrctCnclsEndde" column="cntrct_cncls_endde"/>
+        <result property="hmpgAdres" column="hmpg_adres"/>
+        <result property="bsnsMbyNm" column="bsns_mby_nm"/>
+        <result property="mdhsTelno" column="mdhs_telno"/>
+        <result property="mvnPrearngeYm" column="mvn_prearnge_ym"/>
+        <result property="pblancUrl" column="pblanc_url"/>
+        <collection property="officetelType" resultMap="officetelTypeMap"/>
+    </resultMap>
+
+    <select id="getOfficetelDetails" resultMap="officetelDetailMap">
+        SELECT
+            ot.house_manage_no,
+            ot.pblanc_no,
+            ot.house_nm,
+            ot.house_secd,
+            ot.house_secd_nm,
+            ot.house_dtl_secd,
+            ot.house_dtl_secd_nm,
+            ot.search_house_secd,
+            ot.subscrpt_area_code,
+            ot.subscrpt_area_code_nm,
+            ot.hssply_adres,
+            ot.tot_suply_hshldco,
+            ot.rcrit_pblanc_de,
+            ot.subscrpt_rcept_bgnde ,
+            ot.subscrpt_rcept_endde,
+            ot.przwner_presnatn_de,
+            ot.cntrct_cncls_bgnde,
+            ot.cntrct_cncls_endde,
+            ot.hmpg_adres,
+            ot.bsns_mby_nm,
+            ot.mdhs_telno,
+            ot.mvn_prearnge_ym,
+            ot.pblanc_url,
+            ott.model_no,
+            ott.tp,
+            ott.excluse_ar,
+            ott.suply_hshldco,
+            ott.suply_amount,
+            ott.subscrpt_reqst_amount,
+            ott.house_manage_no ,
+            ott.pblanc_no
+        FROM officetel_table ot
+                 LEFT JOIN officetel_type ott
+                           ON ot.officetel_idx = ott.officetel_idx
+        WHERE ot.pblanc_no = #{pblancNo}
+    </select>
+
+
 
 
 

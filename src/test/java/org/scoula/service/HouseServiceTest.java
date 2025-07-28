@@ -21,4 +21,6 @@ class HouseServiceTest {
     void getAllHousingList() {
         houseService.getAllHousingList().forEach(dto -> log.info(dto.toString()));
     }
+
+
 }

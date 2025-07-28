@@ -19,6 +19,7 @@ public interface AptMapper {
     void insertOfficetelType(OfficetelTypeDTO officetelTypeDTO);
     void deleteOldFromOfficetel(@Param("firstDayOfMonth") LocalDate firstDayOfMonth);
     AptDetailDTO getAptDetails(String pblanc_no);
+    OfficetelDetailDTO getOfficetelDetails(String pblanc_no);
 
 
 }
