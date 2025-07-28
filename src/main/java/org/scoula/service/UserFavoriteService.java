@@ -16,22 +16,40 @@ public class UserFavoriteService {
     private final UserFavoriteMapper userFavoriteMapper;
 
     // 즐겨찾기 추가
-    public void addFavorite(int usersIdx, String houseType, int noticeIdx) {
-        UserFavoriteDTO favorite = new UserFavoriteDTO();
-        favorite.setUsersIdx(usersIdx);
-        if ("APT".equals(houseType) || "신혼희망타운".equals(houseType)) {
-            favorite.setAptIdx(noticeIdx);
-            favorite.setOffiIdx(null);
-        } else {
-            favorite.setOffiIdx(noticeIdx);
-            favorite.setAptIdx(null);
+    public boolean addFavorite(int usersIdx, String houseType, int noticeIdx) {
+        try {
+            UserFavoriteDTO favorite = new UserFavoriteDTO();
+            favorite.setUsersIdx(usersIdx);
+            if ("APT".equals(houseType) || "신혼희망타운".equals(houseType)) {
+                favorite.setAptIdx(noticeIdx);
+                favorite.setOffiIdx(null);
+            } else {
+                favorite.setOffiIdx(noticeIdx);
+                favorite.setAptIdx(null);
+            }
+
+            if (userFavoriteMapper.insertUserFavorite(favorite) == 1) {
+                return true;
+            }
+            return false;
+
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return false;
         }
-        userFavoriteMapper.insertUserFavorite(favorite);
     }
 
     // 즐겨찾기 해제
-    public void deleteFavorite(int userFavoriteIdx) {
-        userFavoriteMapper.deleteUserFavorite(userFavoriteIdx);
+    public boolean deleteFavorite(int userFavoriteIdx) {
+        try {
+            if (userFavoriteMapper.deleteUserFavorite(userFavoriteIdx) == 1) {
+                return true;
+            }
+            return false;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return false;
+        }
     }
 
     // 즐겨찾기 목록 조회
