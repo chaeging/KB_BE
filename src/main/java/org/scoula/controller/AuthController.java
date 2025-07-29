@@ -4,6 +4,7 @@ import io.swagger.annotations.*;
 import io.swagger.models.Swagger;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.scoula.dto.swagger.SwaggerPasswordChangeRequestDTO;
 import org.scoula.dto.swagger.SwaggerRefreshTokenRequestDTO;
 import org.scoula.security.dto.MemberDTO;
 import org.scoula.security.util.JwtProcessor;
@@ -104,12 +105,12 @@ public class AuthController {
             @ApiResponse(code = 200, message = "비밀번호 변경 완료")
     })
     public ResponseEntity<?> changePassword(@RequestHeader("Authorization") String bearerToken,
-                                            @RequestBody Map<String, String> body) {
+                                            @RequestBody SwaggerPasswordChangeRequestDTO body) {
         String accessToken = tokenUtils.extractAccessToken(bearerToken);
         String userid = jwtProcessor.getUsername(accessToken);
 
-        String oldPassword = body.get("oldPassword");
-        String newPassword = body.get("newPassword");
+        String oldPassword = body.getOldPassword() == null ? "" : body.getOldPassword() ;
+        String newPassword = body.getNewPassword() == null ? "" : body.getNewPassword();
         userService.updatePassword(userid, oldPassword, newPassword);
         return ResponseEntity.ok(Map.of("message", "비밀번호 변경 완료!"));
     }
