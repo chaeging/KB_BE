@@ -2,6 +2,7 @@ package org.scoula.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.scoula.security.dto.AuthDTO;
 import org.scoula.security.dto.MemberDTO;
 import org.scoula.service.EmailService;
 import org.scoula.service.EmailVerificationService;
@@ -49,8 +50,5 @@ public class EmailController {
             return ResponseEntity.badRequest().body(Map.of("message", "이메일 인증 실패"));
         }
     }
-
-
-
 
 }
