@@ -64,7 +64,7 @@ public class UserDetailsMapperTest {
     @Test
     void insertAuth() {
         AuthDTO authDTO = new AuthDTO();
-        authDTO.setUser_idx(1);
+        authDTO.setUsersIdx(1);
         authDTO.setAuth("ROLE_TEST");
         mapper2.insertAuth(authDTO);
 
