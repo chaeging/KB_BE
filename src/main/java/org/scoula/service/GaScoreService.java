@@ -1,49 +1,98 @@
 package org.scoula.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.scoula.dto.GaScoreDTO;
+import org.scoula.mapper.AccountMapper;
 import org.scoula.mapper.GaScoreMapper;
 import org.scoula.mapper.UserMapper;
 import org.scoula.security.util.JwtProcessor;
+import org.scoula.util.TokenUtils;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class GaScoreService {
 
-    private final JwtProcessor jwtProcessor;
-    private final UserMapper userMapper;
     private final GaScoreMapper gaScoreMapper;
+    private final UserMapper userMapper;
+    private final AccountMapper accountMapper; // ✅ 추가
+    private final TokenUtils tokenUtils;
+    private final JwtProcessor jwtProcessor; // JWT 파싱용
 
-    public void processAndSaveScore(String token, GaScoreDTO gaScoreDTO) {
-        String userId = jwtProcessor.getUsername(token.replace("Bearer ", ""));
+    public GaScoreDTO saveGaScore(GaScoreDTO dto, HttpServletRequest request) {
+        // 1. 헤더에서 토큰 추출
+        String bearerToken = request.getHeader("Authorization");
+        String accessToken = tokenUtils.extractAccessToken(bearerToken);
+
+        // 2. JWT에서 userIdx 추출
+        String userId = jwtProcessor.getUsername(accessToken);
         int userIdx = userMapper.findUserIdxByUserId(userId);
 
-        int noHouseScore = calculateNoHouseScore(gaScoreDTO.getNoHousePeriod());
-        int dependentsScore = calculateDependentsScore(gaScoreDTO.getDependentsNm());
-        int paymentPeriodScore = gaScoreDTO.getPaymentPeriodScore();
+        // 3. 날짜 필드 조건 처리
+        if (dto.getHouseDisposal() == 0) {
+            dto.setDisposalDate(null);
+        }
+        if (dto.getMaritalStatus() == 0) {
+            dto.setWeddingDate(null);
+        }
+
+        // 4. 점수 계산
+        int noHouseScore = Math.min(dto.getNoHousePeriod() * 2, 32);
+        int dependentsScore = Math.min((dto.getDependentsNm() + 1) * 5, 35);
+
+        int paymentPeriod = calculatePaymentPeriod(userIdx);
+        int paymentPeriodScore = calculatePaymentPeriodScore(paymentPeriod);
 
         int totalScore = noHouseScore + dependentsScore + paymentPeriodScore;
 
-        gaScoreDTO.setNoHouseScore(noHouseScore);
-        gaScoreDTO.setDependentsScore(dependentsScore);
-        gaScoreDTO.setPaymentPeriodScore(paymentPeriodScore);
+        // 5. DTO에 결과 세팅
+        dto.setNoHouseScore(noHouseScore);
+        dto.setDependentsScore(dependentsScore);
+        dto.setPaymentPeriod(paymentPeriod);
+        dto.setPaymentPeriodScore(paymentPeriodScore);
+        dto.setTotalGaScore(totalScore);
 
-        gaScoreMapper.updateScore(userIdx, gaScoreDTO);
-        gaScoreMapper.updateTotalScore(userIdx, totalScore);
+        // 6. DB 저장
+        gaScoreMapper.insertGaScore(dto, userIdx);
+
+        log.info("사용자 {} 청약 가점 저장 완료: totalScore={}", userIdx, totalScore);
+
+        return dto;
     }
 
-    public int calculateTotalScore(String token) {
-        String userId = jwtProcessor.getUsername(token.replace("Bearer ", ""));
-        int userIdx = userMapper.findUserIdxByUserId(userId);
-        return gaScoreMapper.getTotalScoreByUserIdx(userIdx);
+    // AccountMapper 활용해서 계좌 개설일 조회
+    private int calculatePaymentPeriod(int userIdx) {
+        LocalDate startDate = accountMapper.findAccountStartDate(userIdx);
+        if (startDate == null) return 0;
+
+        return (int) ChronoUnit.MONTHS.between(startDate, LocalDate.now());
     }
 
-    private int calculateNoHouseScore(int noHousePeriod) {
-        return Math.min(noHousePeriod * 2, 20);
-    }
-
-    private int calculateDependentsScore(int dependentsNm) {
-        return Math.min(dependentsNm * 5, 35);
+    private int calculatePaymentPeriodScore(int months) {
+        int years = months / 12;
+        if (months < 6) return 1;
+        if (months < 12) return 2;
+        if (years < 2) return 3;
+        if (years < 3) return 4;
+        if (years < 4) return 5;
+        if (years < 5) return 6;
+        if (years < 6) return 7;
+        if (years < 7) return 8;
+        if (years < 8) return 9;
+        if (years < 9) return 10;
+        if (years < 10) return 11;
+        if (years < 11) return 12;
+        if (years < 12) return 13;
+        if (years < 13) return 14;
+        if (years < 14) return 15;
+        if (years < 15) return 16;
+        return 17;
     }
 }
