@@ -1,12 +1,12 @@
 package org.scoula.service;
 
-
 import lombok.RequiredArgsConstructor;
 import org.scoula.dto.ProbabilityDTO;
+import org.scoula.dto.ScoreRecord;
+import org.scoula.dto.AptInfo;
 import org.scoula.mapper.ProbabilityMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -60,42 +60,5 @@ public class ProbabilityService {
         double d4 = Math.pow(r.getSupplyCount() - input.getSupplyCount(), 2);
         double d5 = r.getResidentCode() == input.getResidentCode() ? 0 : 100;
         return d1 + d2 + d3 + d4 + d5;
-    }
-
-    public static class ScoreRecord {
-        private double minScore;
-        private double avgScore;
-        private double maxScore;
-        private int supplyCount;
-        private int residentCode;
-
-        public double getMinScore() { return minScore; }
-        public double getAvgScore() { return avgScore; }
-        public double getMaxScore() { return maxScore; }
-        public int getSupplyCount() { return supplyCount; }
-        public int getResidentCode() { return residentCode; }
-
-        public void setMinScore(double minScore) { this.minScore = minScore; }
-        public void setAvgScore(double avgScore) { this.avgScore = avgScore; }
-        public void setMaxScore(double maxScore) { this.maxScore = maxScore; }
-        public void setSupplyCount(int supplyCount) { this.supplyCount = supplyCount; }
-        public void setResidentCode(int residentCode) { this.residentCode = residentCode; }
-    }
-
-    public static class AptInfo {
-        private String sido;
-        private String sigungu;
-        private int residentCode;
-        private int supplyCount;
-
-        public String getSido() { return sido; }
-        public String getSigungu() { return sigungu; }
-        public int getResidentCode() { return residentCode; }
-        public int getSupplyCount() { return supplyCount; }
-
-        public void setSido(String sido) { this.sido = sido; }
-        public void setSigungu(String sigungu) { this.sigungu = sigungu; }
-        public void setResidentCode(int residentCode) { this.residentCode = residentCode; }
-        public void setSupplyCount(int supplyCount) { this.supplyCount = supplyCount; }
     }
 }

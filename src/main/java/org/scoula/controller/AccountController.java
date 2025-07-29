@@ -12,6 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/v1/account")
 @Log4j2
@@ -22,11 +25,8 @@ public class AccountController {
     private final JwtProcessor jwtProcessor;
     private final UserMapper userMapper;
 
-    /**
-     * 청약 계좌 자동 연결 및 거래내역 조회 후 저장
-     */
     @PostMapping("/connect")
-    public ResponseEntity<ChungyakAccountDTO> autoConnectAndFetchAccount(
+    public ResponseEntity<Map<String, String>> autoConnectAndFetchAccount(
             @RequestHeader("Authorization") String token,
             @RequestBody AccountConnectDTO requestDto
     ) {
@@ -34,7 +34,7 @@ public class AccountController {
             String userId = jwtProcessor.getUsername(token.replace("Bearer ", ""));
             int userIdx = userMapper.findUserIdxByUserId(userId);
 
-            ChungyakAccountDTO account = codefApiService.autoConnectAndFetchChungyakAccount(
+            codefApiService.autoConnectAndFetchChungyakAccount(
                     requestDto.getId(),
                     requestDto.getPassword(),
                     requestDto.getOrganization(),
@@ -42,17 +42,20 @@ public class AccountController {
                     userIdx
             );
 
-            return ResponseEntity.ok(account);
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "계좌 등록이 완료되었습니다.");
+            return ResponseEntity.ok(response);
 
         } catch (Exception e) {
             log.error("청약 계좌 연결 실패", e);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("message", "계좌 등록에 실패했습니다.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
     }
 
-    /**
-     * 사용자 청약 계좌 조회
-     */
+
+
     @GetMapping("")
     public ResponseEntity<ChungyakAccountDTO> getUserAccount(@RequestHeader("Authorization") String token) {
         try {

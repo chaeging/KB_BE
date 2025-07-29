@@ -2,8 +2,8 @@ package org.scoula.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.scoula.service.ProbabilityService.ScoreRecord;
-import org.scoula.service.ProbabilityService.AptInfo;
+import org.scoula.dto.ScoreRecord;
+import org.scoula.dto.AptInfo;
 
 import java.util.List;
 
