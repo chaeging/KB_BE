@@ -21,5 +21,5 @@ public class MemberDTO {
     private String address;
     private Date birthdate;            // users.birthdate
     private List<AuthDTO> authList;
-    private String kakaoUserId;
+    private Long kakaoUserId;
 }
