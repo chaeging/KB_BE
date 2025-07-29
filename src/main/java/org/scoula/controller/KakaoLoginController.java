@@ -9,7 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/oauth/kakao")
 public class KakaoLoginController {
@@ -22,7 +22,6 @@ public class KakaoLoginController {
      * @return KakaoUserInfoDto + JWT
      */
     @GetMapping("/callback")
-    @ResponseBody
     public ResponseEntity<KakaoUserInfoDto> kakaoLogin(@RequestParam("code") String code) {
         log.info("카카오 인가 코드 수신: {}", code);
 
