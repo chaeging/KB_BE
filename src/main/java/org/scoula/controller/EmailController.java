@@ -16,17 +16,17 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/v1/signup")
+@RequestMapping("/v1/email")
 @RequiredArgsConstructor
 @Log4j2
-public class SignUpController {
+public class EmailController {
     private final EmailService emailService;
     private final EmailVerificationService emailVerification;
     private final UserService userService;
 
 
 
-    @PostMapping("/email")
+    @PostMapping("")
     public ResponseEntity<?> sendVerificationCode(@RequestBody Map<String, String> request) {
         String email = request.get("user_id");
         emailService.sendVerificationCode(email);
@@ -35,7 +35,7 @@ public class SignUpController {
         return ResponseEntity.ok(Map.of("message","검증 코드 발송 완료!"));
     }
 
-    @PostMapping("/email/verification")
+    @PostMapping("/verification")
     public ResponseEntity<?> verifyEmailCode(@RequestBody Map<String, String> request) {
         String email = request.get("user_id");
         String inputCode = request.get("code");
@@ -50,17 +50,5 @@ public class SignUpController {
             return ResponseEntity.badRequest().body(Map.of("message", "이메일 인증 실패"));
         }
     }
-    @PostMapping("")
-    public ResponseEntity<?> signUp(@RequestBody MemberDTO memberDTO) {
-        try {
-            userService.signUp(memberDTO); // ✅ 트랜잭션 처리된 메소드 호출
-            return ResponseEntity.ok(Map.of("message", "회원가입 완료"));
-        } catch (Exception e) {
-            log.error("[signUp] 회원가입 실패", e);
-            return ResponseEntity.internalServerError().body(Map.of("message", "회원가입 실패"));
-        }
-    }
-
-
 
 }

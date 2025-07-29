@@ -1,14 +1,13 @@
 package org.scoula.controller;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import lombok.extern.log4j.Log4j2;
-import org.apache.ibatis.annotations.Delete;
-import org.scoula.security.account.mapper.UserDetailsMapper;
-import org.scoula.security.dto.RefreshTokenDTO;
+import org.scoula.security.dto.MemberDTO;
 import org.scoula.security.util.JwtProcessor;
+import org.scoula.service.AuthService;
+import org.scoula.service.UserService;
+import org.scoula.util.TokenUtils;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -18,77 +17,95 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Log4j2
 public class AuthController {
-    private final JwtProcessor jwtProcessor;
-    private final UserDetailsMapper userDetailsMapper;
-    public static final String BEARER_PREFIX = "Bearer ";
 
+    private final TokenUtils tokenUtils;
+    private final AuthService authService;
+    private final UserService userService;
+    private final JwtProcessor jwtProcessor;
 
     @DeleteMapping("/logout")
     public ResponseEntity<?> logout(@RequestHeader("Authorization") String bearerToken) {
         try {
-            //  1. access 토큰 꺼내기
-            String accessToken = null;
-            if (bearerToken != null && bearerToken.startsWith(BEARER_PREFIX)) {
-                accessToken = bearerToken.substring(BEARER_PREFIX.length());}
-            else {
-                return ResponseEntity.status(400).body(Map.of("error", "Authorization 헤더가 유효하지 않습니다"));}
-
-            // 2. 유효성 검사하기
-            if (!jwtProcessor.validateToken(accessToken)) {
-                return ResponseEntity.status(401).body(Map.of("error", "유효하지 않은 Access Token"));}
-
-            // 3. Refresh Token 삭제
-            String username = jwtProcessor.getUsername(accessToken);
-            userDetailsMapper.clearRefreshToken(username);
-            log.info("Refresh Token 삭제 완료 - 사용자: {}", username);
-
+            String accessToken = tokenUtils.extractAccessToken(bearerToken);
+            authService.logoutWithAccessToken(accessToken);
             return ResponseEntity.ok(Map.of("message", "로그아웃 성공"));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         } catch (Exception e) {
-            log.error("로그아웃 처리 중 오류", e);
-            return ResponseEntity.status(500).body(Map.of("error", "로그아웃 처리 중 오류 발생"));
+            log.error("로그아웃 처리 중 서버 오류", e);
+            return ResponseEntity.internalServerError().body(Map.of("error", "로그아웃 처리 중 오류 발생"));
         }
     }
 
-
-
     @PostMapping("/refresh")
-    public ResponseEntity<?> refreshAccessToken(@RequestBody Map<String,String> body) {
-        String refresh_token = body.get("refreshToken");
+    public ResponseEntity<?> refresh(@RequestBody Map<String, String> body) {
+        String refreshToken = body.get("refreshToken");
 
-        try{
-            // 1. refresh token 유효성 검사 (만기여부)
-            if (!jwtProcessor.validateToken(refresh_token)) {
-                return ResponseEntity.status(401).body(Map.of("error", "유효하지 않은 Refresh Token 입니다"));}
+        try {
+            Map<String, String> tokens = authService.refreshAccessToken(refreshToken);
+            return ResponseEntity.ok(tokens);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(401).body(Map.of("error", e.getMessage()));
+        } catch (Exception e) {
+            log.error("Refresh Token 처리 중 서버 오류", e);
+            return ResponseEntity.internalServerError().body(Map.of("error", "Refresh Token 처리 중 오류"));
+        }
+    }
 
-            //2.userid 가 필요
-            String user_id = jwtProcessor.getUsername(refresh_token);
+    @PostMapping("/signup")
+    public ResponseEntity<?> signUp(@RequestBody MemberDTO memberDTO) {
+        try {
+            userService.signUp(memberDTO);
+            return ResponseEntity.ok(Map.of("message", "회원가입 완료"));
+        } catch (Exception e) {
+            log.error("[signUp] 회원가입 실패", e);
+            return ResponseEntity.internalServerError().body(Map.of("message", "회원가입 실패"));
+        }
+    }
 
-            //3.db에 있는 refresh 값과 비교 이걸 하기 위해서 userid 가 필요하네
-            String savedRefreshToken = userDetailsMapper.getRefreshToken(user_id);
-            //비교해보자
-            if(savedRefreshToken == null || !savedRefreshToken.equals(refresh_token)) {
-                return ResponseEntity.status(401).body(Map.of("error", "유효하지 않은 Refresh Token 입니다"));}
+    @DeleteMapping("/signout")
+    public ResponseEntity<?> signOut(@RequestHeader("Authorization") String bearerToken) {
+        String accessToken = tokenUtils.extractAccessToken(bearerToken);
+        String username = jwtProcessor.getUsername(accessToken);
+        userService.deleteUser(username);
+        return ResponseEntity.ok(Map.of("message", "회원 탈퇴 완료!"));
+    }
 
-            //4.일치하면 새로운 access toekn 과 refresh token 발금(rotate방식)
-            String newAccessToken = jwtProcessor.generateAccessToken(user_id);
-            String newRefreshToken = jwtProcessor.generateRefreshToken(user_id);
+    @PutMapping("/password")
+    public ResponseEntity<?> changePassword(@RequestHeader("Authorization") String bearerToken,
+                                           @RequestBody Map<String, String> body) {
+        String accessToken = tokenUtils.extractAccessToken(bearerToken);
+        String userid = jwtProcessor.getUsername(accessToken);
 
-            //5.DB에 RefreshToken 저장
-            RefreshTokenDTO refreshTokenDTO =  new RefreshTokenDTO();
-            refreshTokenDTO.setUser_id(user_id);
-            refreshTokenDTO.setJwt_refresh_token(newRefreshToken);
-            userDetailsMapper.updateRefreshToken(refreshTokenDTO);
+        String oldPassword = body.get("oldPassword");
+        String newPassword = body.get("newPassword");
+        userService.updatePassword(userid,oldPassword,newPassword);
+        return ResponseEntity.ok(Map.of("message","비밀번호 변경 완료!"));
+    }
 
-            //6.마지막으로 응답 처리
-            return ResponseEntity.ok(Map.of(
-                    "access_token", newAccessToken,
-                    "refresh_token", newRefreshToken
-            ));
-        }catch (Exception e) {
-            log.error("Refresh Token 처리 중 오류", e);
-            return ResponseEntity.status(500).body(Map.of("error", "Refresh Token 처리 중 오류"));
+    // 회원정보 수정
+    @PutMapping("/update")
+    public ResponseEntity<?> updateUser(@RequestHeader("Authorization") String bearerToken,
+                                        @RequestBody MemberDTO user) {
+        String accessToken = tokenUtils.extractAccessToken(bearerToken);
+        String userId = jwtProcessor.getUsername(accessToken);
+
+        // DB에서 users_idx 조회
+        Integer usersIdx = userService.findUserIdxByUserId(userId);
+        if (usersIdx == null) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "해당 사용자를 찾을 수 없습니다."));
         }
 
-        }
+        log.info("/v1/auth/update 엔드포인트 호출됨");
 
+        user.setUsersIdx(usersIdx);
+        //JWT에 있는 userId로 강제 설정
+        user.setUserId(userId); // 절대 수정 못함
+
+        userService.updateUser(user);
+        log.info("수정 요청 받은 userName: {}", user.getUserName());
+        System.out.println(">> PUT 요청 도착: " + user);
+        return ResponseEntity.ok(Map.of("message", "회원정보 수정 완료"));
+    }
 }

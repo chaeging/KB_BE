@@ -14,6 +14,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -34,38 +36,86 @@ public class CodefApiService {
     @Value("${codef.public.key}")
     private String publicKey;
 
-    public List<ChungyakAccountDTO> autoConnectAndFetchChungyakAccounts(
+    /**
+     * 계좌 자동 연결 후 청약 계좌 정보 및 거래내역 조회
+     */
+    public ChungyakAccountDTO autoConnectAndFetchChungyakAccount(
             String id, String password, String organization, String bankName, int userIdx) throws Exception {
 
         String accessToken = getAccessToken();
         String encryptedPassword = rsaEncryptor.encryptPassword(publicKey, password);
+
         String connectedId = createConnectedId(accessToken, id, encryptedPassword, organization);
+        if (connectedId == null) {
+            throw new NoAccountException("ConnectedId 생성 실패");
+        }
 
-        if (connectedId == null) return Collections.emptyList();
-
+        // 계좌 목록 조회
         String accountListJson = requestAccountList(accessToken, connectedId, organization);
         List<ChungyakAccountDTO> accounts = filterChungyakAccounts(accountListJson, bankName);
 
         if (accounts == null || accounts.isEmpty()) {
-            throw new NoAccountException();  // or 커스텀 메시지 가능
+            throw new NoAccountException("청약 계좌를 찾을 수 없습니다.");
         }
-        saveChungyakAccounts(accounts, userIdx, false);
 
-        return accounts;
+        // 단일 계좌만 선택
+        ChungyakAccountDTO account = accounts.get(0);
+
+        // 거래내역에서 필요한 값만 추가
+        addTransactionDetails(accessToken, connectedId, organization, account);
+
+        // DB 저장 (isPayment 반영)
+        boolean isPayment = account.getResAccountTrDate() != null;
+        accountMapper.insertChungyakAccount(account, userIdx, isPayment);
+
+        return account;
     }
 
-    private void saveChungyakAccounts(List<ChungyakAccountDTO> accounts, int userIdx, boolean isPayment) {
-        for (ChungyakAccountDTO dto : accounts) {
-            accountMapper.insertChungyakAccount(dto, userIdx, isPayment);
-        }
-    }
+    /**
+     * 거래내역에서만 얻을 수 있는 값 채우기
+     */
+    private void addTransactionDetails(String accessToken, String connectedId,
+                                       String organization, ChungyakAccountDTO dto) throws Exception {
 
-    public List<ChungyakAccountDTO> getChungyakAccountsByUserIdx(int userIdx) {
-        List<ChungyakAccountDTO> accounts = accountMapper.findAccountsByUserIdx(userIdx);
-        if (accounts == null || accounts.isEmpty()) {
-            throw new NoAccountException("해당 사용자에게 등록된 청약 계좌가 없습니다.");
+        String url = "https://development.codef.io/v1/kr/bank/p/installment-savings/transaction-list";
+
+        LocalDate today = LocalDate.now();
+        String endDate = today.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        String startDate = today.withDayOfMonth(1).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+
+        JsonObject body = new JsonObject();
+        body.addProperty("connectedId", connectedId);
+        body.addProperty("organization", organization);
+        body.addProperty("account", dto.getResAccount());
+        body.addProperty("startDate", startDate);
+        body.addProperty("endDate", endDate);
+        body.addProperty("orderBy", "0");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Authorization", "Bearer " + accessToken);
+
+        HttpEntity<String> entity = new HttpEntity<>(body.toString(), headers);
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+
+        String decoded = URLDecoder.decode(response.getBody(), StandardCharsets.UTF_8.name());
+        log.info("거래내역 응답 (디코딩): {}", decoded);
+
+        JsonObject root = JsonParser.parseString(decoded).getAsJsonObject();
+        JsonObject data = root.getAsJsonObject("data");
+
+        // 거래내역 전용 값
+        dto.setResFinalRoundNo(getSafe(data, "resFinalRoundNo"));
+
+        if (data.has("resTrHistoryList")) {
+            JsonArray history = data.getAsJsonArray("resTrHistoryList");
+            if (!history.isEmpty()) {
+                JsonObject lastTran = history.get(0).getAsJsonObject();
+                dto.setResAccountTrDate(getSafe(lastTran, "resAccountTrDate"));
+            } else {
+                dto.setResAccountTrDate(null); // 거래내역 없음
+            }
         }
-        return accounts;
     }
 
     private String getAccessToken() {
@@ -156,14 +206,13 @@ public class CodefApiService {
                     String accountName = account.has("resAccountName") ? account.get("resAccountName").getAsString() : "";
 
                     if (accountName.contains("청약")) {
-                        ChungyakAccountDTO dto = new ChungyakAccountDTO(
-                                getSafe(account, "resAccountDisplay"),
-                                getSafe(account, "resAccountBalance"),
-                                getSafe(account, "resAccountStartDate"),
-                                getSafe(account, "resAccount"),
-                                getSafe(account, "resAccountName"),
-                                bankName
-                        );
+                        ChungyakAccountDTO dto = new ChungyakAccountDTO();
+                        dto.setAccountDisplay(getSafe(account, "resAccountDisplay"));
+                        dto.setAccountBalance(getSafe(account, "resAccountBalance"));
+                        dto.setAccountStartDate(getSafe(account, "resAccountStartDate"));
+                        dto.setResAccount(getSafe(account, "resAccount"));
+                        dto.setResAccountName(getSafe(account, "resAccountName"));
+                        dto.setBankName(bankName);
                         resultList.add(dto);
                     }
                 }
@@ -171,6 +220,14 @@ public class CodefApiService {
         }
 
         return resultList;
+    }
+
+    public ChungyakAccountDTO getAccountByUserIdx(int userIdx) {
+        ChungyakAccountDTO account = accountMapper.findAccountByUserIdx(userIdx);
+        if (account == null) {
+            throw new NoAccountException("해당 사용자에게 등록된 청약 계좌가 없습니다.");
+        }
+        return account;
     }
 
     private String getSafe(JsonObject obj, String key) {

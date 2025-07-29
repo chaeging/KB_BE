@@ -38,13 +38,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
     throws ServletException, IOException {
+
         String bearerToken=request.getHeader(AUTHORIZATION_HEADER);
         if(bearerToken!=null && bearerToken.startsWith(BEARER_PREFIX)){
             String token=bearerToken.substring(BEARER_PREFIX.length());
+            try {
 
-            //토큰에서사용자정보추출및Authentication객체구성후SecurityContext에저장
-            Authentication authentication=getAuthentication(token);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+                if (jwtProcessor.validateToken(token)) {
+
+                    Authentication authentication = getAuthentication(token);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+            } catch (Exception e) {
+
+                throw e; // super.doFilter()에서 catch됨
+            }
+
         }
         super.doFilter(request,response,filterChain);
     }
