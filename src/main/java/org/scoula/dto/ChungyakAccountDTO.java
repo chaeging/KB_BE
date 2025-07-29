@@ -26,4 +26,10 @@ public class ChungyakAccountDTO {
 
     @JsonProperty("bank_name")
     private String bankName;
+
+    @JsonProperty("res_final_round_no")
+    private String resFinalRoundNo;
+
+    @JsonProperty("res_account_tr_date")
+    private String resAccountTrDate;
 }

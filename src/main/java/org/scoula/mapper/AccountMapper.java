@@ -13,7 +13,10 @@ public interface AccountMapper {
                                @Param("userIdx") int userIdx,
                                @Param("isPayment") boolean isPayment);
 
-    List<ChungyakAccountDTO> findAccountsByUserIdx(@Param("userIdx") int userIdx);
+    // 단일 계좌 반환용 (최신 등록된 계좌 하나)
+    ChungyakAccountDTO findAccountByUserIdx(@Param("userIdx") int userIdx);
 
+    // 최초 계좌 개설일 조회
     String findEarliestAccountStartDate(@Param("userIdx") int userIdx);
 }
+

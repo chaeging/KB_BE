@@ -13,6 +13,8 @@
             res_account_start_date,
             res_account_name,
             bank_name,
+            res_final_round_no,
+            res_account_tr_date,
             user_idx,
             is_payment
         )
@@ -23,6 +25,8 @@
                    #{dto.accountStartDate},
                    #{dto.resAccountName},
                    #{dto.bankName},
+                   #{dto.resFinalRoundNo},
+                   #{dto.resAccountTrDate},
                    #{userIdx},
                    #{isPayment}
                )
@@ -35,10 +39,13 @@
             res_account_balance AS accountBalance,
             res_account_start_date AS accountStartDate,
             res_account_name AS resAccountName,
-            bank_name AS bankName
+            bank_name AS bankName,
+            res_final_round_no AS resFinalRoundNo,
+            res_account_tr_date AS resAccountTrDate
         FROM account
         WHERE user_idx = #{userIdx}
-
+        ORDER BY account_idx DESC
+        LIMIT 1
     </select>
 
     <select id="findEarliestAccountStartDate" resultType="string">
