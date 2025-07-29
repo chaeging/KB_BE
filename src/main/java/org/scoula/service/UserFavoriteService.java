@@ -21,9 +21,17 @@ public class UserFavoriteService {
             UserFavoriteDTO favorite = new UserFavoriteDTO();
             favorite.setUsersIdx(usersIdx);
             if ("APT".equals(houseType) || "신혼희망타운".equals(houseType)) {
+                if (isFavoriteAPT(usersIdx, noticeIdx)) {
+                    log.info("APT 즐겨찾기가 이미 존재합니다. usersIdx={}, noticeIdx={}", usersIdx, noticeIdx);
+                    return false;  // 이미 존재
+                }
                 favorite.setAptIdx(noticeIdx);
                 favorite.setOffiIdx(null);
             } else {
+                if (isFavoriteOFFI(usersIdx, noticeIdx)) {
+                    log.info("OFFI 즐겨찾기가 이미 존재합니다. usersIdx={}, noticeIdx={}", usersIdx, noticeIdx);
+                    return false;  // 이미 존재
+                }
                 favorite.setOffiIdx(noticeIdx);
                 favorite.setAptIdx(null);
             }
@@ -58,10 +66,11 @@ public class UserFavoriteService {
     }
 
     // 즐겨찾기 여부 확인
-    public boolean isFavorite(int usersIdx, String houseType, int noticeIdx) {
-        if (houseType.equals("APT") || houseType.equals("신혼희망타운")) {
-            return userFavoriteMapper.isFavoriteAPT(usersIdx, noticeIdx);
-        }
+    public boolean isFavoriteAPT(int usersIdx, int noticeIdx) {
+        return userFavoriteMapper.isFavoriteAPT(usersIdx, noticeIdx);
+    }
+
+    public boolean isFavoriteOFFI(int usersIdx, int noticeIdx) {
         return userFavoriteMapper.isFavoriteOFFI(usersIdx, noticeIdx);
     }
 }

@@ -1,6 +1,7 @@
 package org.scoula.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.scoula.dto.UserFavoriteDTO;
 
 import java.util.List;
@@ -17,8 +18,9 @@ public interface UserFavoriteMapper {
     int deleteUserFavorite(int userFavoriteIdx);
 
     // 아파트 즐겨찾기 여부
-    boolean isFavoriteAPT(int usersIdx, int noticeIdx);
+    boolean isFavoriteAPT(@Param("usersIdx") int usersIdx, @Param("noticeIdx") int noticeIdx);
 
     // 오피스텔 즐겨찾기 여부
-    boolean isFavoriteOFFI(int usersIdx, int noticeIdx);
+    boolean isFavoriteOFFI(@Param("usersIdx") int usersIdx, @Param("noticeIdx") int noticeIdx);
+
 }
