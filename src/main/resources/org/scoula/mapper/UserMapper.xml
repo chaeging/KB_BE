@@ -41,15 +41,13 @@
     <!-- 사용자 수정 -->
     <update id="updateUser" parameterType="MemberDTO">
         UPDATE users
-        SET user_id = #{userId},
+        SET
             user_name = #{userName},
-            password = #{password},
             address = #{address},
-            kakao_user_id = #{kakaoUserId},
             birthdate = #{birthdate}
         WHERE users_idx = #{usersIdx}
-
     </update>
+
     <update id="updatePasswordByUsername">
         UPDATE users
         SET password = #{password}
