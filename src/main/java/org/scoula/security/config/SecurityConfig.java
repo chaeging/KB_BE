@@ -75,7 +75,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     //jwt 관련
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/assets/**", "/*", "/v1/auth/refresh","/v1/auth/signup");
+        web.ignoring().antMatchers(
+                "/assets/**",
+                "/*",
+                "/v1/auth/refresh",
+                "/v1/auth/signup",
+
+                // Swagger 관련 경로 추가
+                "/v2/api-docs",
+                "/swagger-resources/**",
+                "/swagger-ui.html",
+                "/webjars/**",
+                "/swagger/**"
+        );
     }
 
     // 문자셋필터
