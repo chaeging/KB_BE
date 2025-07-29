@@ -1,5 +1,6 @@
 package org.scoula.dto.swagger.Auth;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -13,5 +14,6 @@ public class SwaggerRefreshTokenRequestDTO {
             required= true,
             example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
     )
+    @JsonProperty("refresh_token")
     private String refreshToken;
 }

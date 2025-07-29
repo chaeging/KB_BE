@@ -53,7 +53,7 @@ public class AuthController {
             @ApiResponse(code = 401, message = "Refresh Token이 유효하지 않음")
     })
     public ResponseEntity<?> refresh(
-            @ApiParam(value   = "예) { \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\" }", required= true)
+            @ApiParam(value   = "예) { \"refresh_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\" }", required= true)
             @RequestBody SwaggerRefreshTokenRequestDTO body) {
         String refreshToken = body.getRefreshToken() == null ? "" : body.getRefreshToken();
 
