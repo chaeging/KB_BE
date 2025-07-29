@@ -1,9 +1,6 @@
 package org.scoula.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.scoula.dto.AptDetailDTO;
@@ -35,6 +32,7 @@ public class SubscriptionController {
             value = "모든 청약공고 가져오기",
             notes = "page, pageSize 쿼리 파라미터로 페이징 처리합니다. 인증 헤더 필요"
     )
+    @ApiImplicitParam(name = "Authorization", value = "Bearer {JWT}", required = true, paramType = "header", dataType = "string")
     @ApiResponses({
             @ApiResponse(
                     code = 200,
@@ -50,6 +48,7 @@ public class SubscriptionController {
     }
 
     @GetMapping("/apartments/detail")
+    @ApiImplicitParam(name = "Authorization", value = "Bearer {JWT}", required = true, paramType = "header", dataType = "string")
     @ApiOperation(
             value = "아파트 청약공고 상세 정보 조회",
             notes = "pblanc_no(청약공고번호)로 아파트 상세 정보를 조회합니다."
@@ -66,6 +65,7 @@ public class SubscriptionController {
     }
 
     @GetMapping("/officetels/detail")
+    @ApiImplicitParam(name = "Authorization", value = "Bearer {JWT}", required = true, paramType = "header", dataType = "string")
     @ApiOperation(
             value = "오피스텔 청약공고 상세 정보 조회",
             notes = "pblanc_no(청약공고번호)로 오피스텔 상세 정보를 조회합니다."
