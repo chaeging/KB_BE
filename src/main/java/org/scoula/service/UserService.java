@@ -87,7 +87,12 @@ public class UserService {
             throw new IllegalArgumentException("기존 비밀번호가 일치하지 않습니다.");
         }
 
-        // 3. 새 비밀번호 암호화 후 업데이트
+        // 3. 새 비밀번호가 기존 비밀번호와 동일한지 확인
+        if (passwordEncoder.matches(newPassword, member.getPassword())) {
+            throw new IllegalArgumentException("기존 비밀번호와 새 비밀번호가 동일합니다.");
+        }
+
+        // 4. 새 비밀번호 암호화 후 업데이트
         String encodedNewPassword = passwordEncoder.encode(newPassword);
         member.setPassword(encodedNewPassword);
 
@@ -96,6 +101,7 @@ public class UserService {
             throw new IllegalStateException("비밀번호 변경 실패: 업데이트 실패");
         }
     }
+
 
 
 
