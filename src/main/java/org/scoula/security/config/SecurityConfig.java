@@ -65,12 +65,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("*");
+        // 와일드카드 + credentials 허용
+        config.addAllowedOriginPattern("*");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
+
 
     //jwt 관련
     @Override
@@ -102,7 +104,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()//경로별접근권한설정
-                .antMatchers(HttpMethod.OPTIONS).permitAll()
+                .antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
                 .antMatchers("/v1/account/**").permitAll()
                 .antMatchers("/v1/email/**").permitAll()
                 .antMatchers("/v1/auth/**").permitAll()
@@ -112,6 +114,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
         http
+                .addFilterBefore(corsFilter(),
+                        org.springframework.security.web.access.channel.ChannelProcessingFilter.class)
                 // 한글인코딩필터설정
                 .addFilterBefore(encodingFilter(), CsrfFilter.class)
                 //인증 에러 필터
