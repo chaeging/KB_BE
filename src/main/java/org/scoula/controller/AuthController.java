@@ -1,8 +1,10 @@
 package org.scoula.controller;
 
 import io.swagger.annotations.*;
+import io.swagger.models.Swagger;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.scoula.dto.swagger.SwaggerRefreshTokenRequestDTO;
 import org.scoula.security.dto.MemberDTO;
 import org.scoula.security.util.JwtProcessor;
 import org.scoula.service.AuthService;
@@ -45,13 +47,15 @@ public class AuthController {
     }
 
     @PostMapping("/refresh")
-    @ApiOperation(value = "Access Token 재발급", notes = "클라이언트가 Refresh Token을 통해 Access Token과 Refresh Token을 재발급 요청합니다.")
+    @ApiOperation("Access Token 재발급")
     @ApiResponses({
             @ApiResponse(code = 200, message = "토큰 재발급 성공", response = Map.class),
             @ApiResponse(code = 401, message = "Refresh Token이 유효하지 않음")
     })
-    public ResponseEntity<?> refresh(@RequestBody Map<String, String> body) {
-        String refreshToken = body.get("refreshToken");
+    public ResponseEntity<?> refresh(
+            @ApiParam(value   = "예) { \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\" }", required= true)
+            @RequestBody SwaggerRefreshTokenRequestDTO body) {
+        String refreshToken = body.getRefreshToken() == null ? "" : body.getRefreshToken();
 
         try {
             Map<String, String> tokens = authService.refreshAccessToken(refreshToken);
