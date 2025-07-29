@@ -32,4 +32,7 @@ public class ChungyakAccountDTO {
 
     @JsonProperty("res_account_tr_date")
     private String resAccountTrDate;
+
+    @JsonProperty("is_payment")
+    private boolean isPayment;
 }
