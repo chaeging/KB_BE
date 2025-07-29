@@ -30,10 +30,11 @@ public class EmailController {
     private final EmailVerificationService emailVerification;
 
     @ApiOperation("회원 가입 시 입력한 이메일로 인증 코드 발송")
+    @ApiImplicitParam(name = "Authorization", value = "Bearer {JWT}", required = true, paramType = "header", dataType = "string")
     @ApiResponses({
             @ApiResponse(code = 200, message = "검증 코드 발송 완료!")
     })
-    @PostMapping
+    @PostMapping("")
     public ResponseEntity<?> sendVerificationCode(@RequestBody SwaggerSendVerificationCode body) {
         String email = body.getUserId() == null ? "" : body.getUserId();
         emailService.sendVerificationCode(email);
@@ -41,13 +42,13 @@ public class EmailController {
         return ResponseEntity.ok(Map.of("message", "검증 코드 발송 완료!"));
     }
 
+
     @ApiOperation("이메일 인증 코드 검증")
     @ApiResponses({
             @ApiResponse(code = 200, message = "이메일 인증 성공"),
             @ApiResponse(code = 400, message = "이메일 인증 실패")
     })
-
-
+    @ApiImplicitParam(name = "Authorization", value = "Bearer {JWT}", required = true, paramType = "header", dataType = "string")
     @PostMapping("/verification")
     public ResponseEntity<?> verifyEmailCode(@RequestBody SwaggerVerifyEmailCode body) {
         String email = body.getUserId() == null ? "" : body.getUserId();
