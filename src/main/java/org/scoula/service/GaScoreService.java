@@ -1,30 +1,19 @@
 package org.scoula.service;
 
+import lombok.RequiredArgsConstructor;
 import org.scoula.dto.GaScoreDTO;
-import org.scoula.mapper.AccountMapper;
 import org.scoula.mapper.GaScoreMapper;
 import org.scoula.mapper.UserMapper;
 import org.scoula.security.util.JwtProcessor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-
 @Service
+@RequiredArgsConstructor
 public class GaScoreService {
 
-    @Autowired
-    private JwtProcessor jwtProcessor;
-
-    @Autowired
-    private UserMapper userMapper;
-
-    @Autowired
-    private GaScoreMapper gaScoreMapper;
-
-    @Autowired
-    private AccountMapper accountMapper;
+    private final JwtProcessor jwtProcessor;
+    private final UserMapper userMapper;
+    private final GaScoreMapper gaScoreMapper;
 
     public void processAndSaveScore(String token, GaScoreDTO gaScoreDTO) {
         String userId = jwtProcessor.getUsername(token.replace("Bearer ", ""));
@@ -32,24 +21,22 @@ public class GaScoreService {
 
         int noHouseScore = calculateNoHouseScore(gaScoreDTO.getNoHousePeriod());
         int dependentsScore = calculateDependentsScore(gaScoreDTO.getDependentsNm());
-        int paymentPeriod = calculatePaymentPeriod(userIdx);
+        int paymentPeriodScore = gaScoreDTO.getPaymentPeriodScore();
+
+        int totalScore = noHouseScore + dependentsScore + paymentPeriodScore;
 
         gaScoreDTO.setNoHouseScore(noHouseScore);
         gaScoreDTO.setDependentsScore(dependentsScore);
-        gaScoreDTO.setPaymentPeriod(paymentPeriod);
+        gaScoreDTO.setPaymentPeriodScore(paymentPeriodScore);
 
         gaScoreMapper.updateScore(userIdx, gaScoreDTO);
+        gaScoreMapper.updateTotalScore(userIdx, totalScore);
     }
 
     public int calculateTotalScore(String token) {
         String userId = jwtProcessor.getUsername(token.replace("Bearer ", ""));
         int userIdx = userMapper.findUserIdxByUserId(userId);
-
-        GaScoreDTO gaScoreDTO = gaScoreMapper.getScoresByUserIdx(userIdx);
-
-        return gaScoreDTO.getNoHouseScore() +
-                gaScoreDTO.getDependentsScore() +
-                gaScoreDTO.getPaymentPeriod();
+        return gaScoreMapper.getTotalScoreByUserIdx(userIdx);
     }
 
     private int calculateNoHouseScore(int noHousePeriod) {
@@ -58,12 +45,5 @@ public class GaScoreService {
 
     private int calculateDependentsScore(int dependentsNm) {
         return Math.min(dependentsNm * 5, 35);
-    }
-
-    private int calculatePaymentPeriod(int userIdx) {
-        String startDateStr = accountMapper.findEarliestAccountStartDate(userIdx);
-        if (startDateStr == null) return 0;
-        LocalDate startDate = LocalDate.parse(startDateStr);
-        return (int) ChronoUnit.MONTHS.between(startDate, LocalDate.now());
     }
 }
