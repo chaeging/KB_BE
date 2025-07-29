@@ -1,5 +1,6 @@
 package org.scoula.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -32,6 +33,10 @@ public class RootConfig {
     @Autowired
     ApplicationContext applicationContext;
 
+    @Bean
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper();
+    }
     @Bean
     public CacheManager cacheManager() {
         return new ConcurrentMapCacheManager("emailVerificationCache", "refreshTokenCache");
