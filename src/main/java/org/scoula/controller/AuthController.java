@@ -1,11 +1,10 @@
 package org.scoula.controller;
 
 import io.swagger.annotations.*;
-import io.swagger.models.Swagger;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.scoula.dto.swagger.SwaggerPasswordChangeRequestDTO;
-import org.scoula.dto.swagger.SwaggerRefreshTokenRequestDTO;
+import org.scoula.dto.swagger.Auth.SwaggerPasswordChangeRequestDTO;
+import org.scoula.dto.swagger.Auth.SwaggerRefreshTokenRequestDTO;
 import org.scoula.security.dto.MemberDTO;
 import org.scoula.security.util.JwtProcessor;
 import org.scoula.service.AuthService;
