@@ -1,5 +1,7 @@
 package org.scoula.service;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.scoula.dto.swagger.Auth.SwaggerPasswordResetRequestDTO;
 import org.scoula.mapper.UserMapper;
 import org.scoula.security.dto.AuthDTO;
 import org.scoula.security.dto.MemberDTO;
@@ -11,6 +13,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class UserService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
@@ -102,6 +105,23 @@ public class UserService {
         }
     }
 
+    public void resetPassword(SwaggerPasswordResetRequestDTO request) {
+        try {
+            String encodedPassword = passwordEncoder.encode(request.getNewPassword());
+            request.setNewPassword(encodedPassword);
+
+            int updated = userMapper.resetPassword(request);
+            if (updated == 0) {
+                throw new IllegalStateException("해당 사용자 ID를 찾을 수 없습니다.");
+            }
+
+            log.info("비밀번호 초기화 완료 - userId: {}, newPassword: {}", request.getUserId(), request.getNewPassword());
+
+        } catch (Exception e) {
+            log.error("비밀번호 초기화 중 오류 발생 - userId: {}", request.getUserId(), e);
+            throw new RuntimeException("비밀번호 초기화 처리 중 서버 오류가 발생했습니다.");
+        }
+    }
 
 
 
