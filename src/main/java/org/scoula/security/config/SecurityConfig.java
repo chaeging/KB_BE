@@ -105,8 +105,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()//경로별접근권한설정
                 .antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
-                .antMatchers("/v1/auth/refresh", "/v1/auth/signup").permitAll()
-                .antMatchers("/v1/auth/logout","/v1/auth/signout","/v1/auth/password","/v1/auth/update").hasRole("MEMBER")
+                .antMatchers("/v1/auth/refresh", "/v1/auth/signup","/v1/auth/resetpassword").permitAll()
+                .antMatchers("/v1/auth/logout","/v1/auth/signout","/v1/auth/update").hasRole("MEMBER")
                 .antMatchers("/v1/account/**").hasRole("MEMBER")
                 .antMatchers("/v1/email/**").permitAll()
                 .antMatchers("/v1/subscriptions/**").hasRole("MEMBER")

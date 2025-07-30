@@ -352,9 +352,15 @@
         WHERE ot.pblanc_no = #{pblancNo}
     </select>
 
-
-
-
+    <select id="findAllAptLocations" resultType="org.scoula.dto.AptDTO">
+        SELECT
+            apt_idx AS aptIdx,
+            latitude,
+            longitude
+        FROM apt_table
+        WHERE latitude IS NOT NULL
+          AND longitude IS NOT NULL
+    </select>
 
 
 </mapper>
