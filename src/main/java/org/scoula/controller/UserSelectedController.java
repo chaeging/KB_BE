@@ -24,7 +24,7 @@ public class UserSelectedController {
 
     @PostMapping
     public ResponseEntity<Map<String, String>>  saveUserSelected(@RequestHeader("Authorization") String token,
-                                                   @RequestBody UserSelectedDTO userSelectedDTO) {
+                                                                 @RequestBody UserSelectedDTO userSelectedDTO) {
         String userId = extractUserIdFromToken(token);
         userSelectedService.saveAllPreferences(userId, userSelectedDTO);
         Map<String, String> response = new HashMap<>();
