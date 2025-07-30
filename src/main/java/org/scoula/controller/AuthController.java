@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.scoula.dto.swagger.Auth.SwaggerPasswordChangeRequestDTO;
 import org.scoula.dto.swagger.Auth.SwaggerRefreshTokenRequestDTO;
+import org.scoula.dto.swagger.Auth.SwaggerUpdate;
 import org.scoula.security.dto.MemberDTO;
 import org.scoula.security.util.JwtProcessor;
 import org.scoula.service.AuthService;
@@ -128,12 +129,14 @@ public class AuthController {
             @ApiResponse(code = 200, message = "회원정보 수정 완료"),
             @ApiResponse(code = 400, message = "해당 사용자를 찾을 수 없음")
     })
-    public ResponseEntity<?> updateUser( @ApiParam(hidden = true) @RequestHeader("Authorization") String bearerToken,
-                                        @RequestBody MemberDTO user) {
+    public ResponseEntity<?> updateUser(
+            @ApiParam(hidden = true) @RequestHeader("Authorization") String bearerToken,
+            @RequestBody SwaggerUpdate updateDto
+    ) {
         String accessToken = tokenUtils.extractAccessToken(bearerToken);
         String userId = jwtProcessor.getUsername(accessToken);
-
         Integer usersIdx = userService.findUserIdxByUserId(userId);
+
         if (usersIdx == null) {
             return ResponseEntity.badRequest()
                     .body(Map.of("error", "해당 사용자를 찾을 수 없습니다."));
@@ -141,12 +144,19 @@ public class AuthController {
 
         log.info("/v1/auth/update 엔드포인트 호출됨");
 
-        user.setUsersIdx(usersIdx);
-        user.setUserId(userId);
+        MemberDTO user = MemberDTO.builder()
+                .usersIdx(usersIdx)
+                .userId(userId)
+                .userName(updateDto.getUserName())
+                .address(updateDto.getAddress())
+                .birthdate(updateDto.getBirthdate())
+                .build();
 
         userService.updateUser(user);
+
         log.info("수정 요청 받은 userName: {}", user.getUserName());
-        System.out.println(">> PUT 요청 도착: " + user);
+
         return ResponseEntity.ok(Map.of("message", "회원정보 수정 완료"));
     }
+
 }
