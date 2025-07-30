@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.scoula.mapper.PlaceMapper">
+
+    <insert id="insertHospital" parameterType="org.scoula.dto.PlaceDTO">
+        INSERT INTO hospital (apt_idx, officetel_idx, place_name, distance, road_address_name)
+        VALUES (#{aptIdx}, #{officetelIdx}, #{placeName}, #{distance}, #{address})
+    </insert>
+
+    <insert id="insertSchool" parameterType="org.scoula.dto.PlaceDTO">
+        INSERT INTO school (apt_idx, officetel_idx, place_name, distance, road_address_name)
+        VALUES (#{aptIdx}, #{officetelIdx}, #{placeName}, #{distance}, #{address})
+    </insert>
+
+    <insert id="insertMart" parameterType="org.scoula.dto.PlaceDTO">
+        INSERT INTO mart (apt_idx, officetel_idx, place_name, distance, road_address_name)
+        VALUES (#{aptIdx}, #{officetelIdx}, #{placeName}, #{distance}, #{address})
+    </insert>
+
+    <insert id="insertSubway" parameterType="org.scoula.dto.PlaceDTO">
+        INSERT INTO subway (apt_idx, officetel_idx, place_name, distance, road_address_name)
+        VALUES (#{aptIdx}, #{officetelIdx}, #{placeName}, #{distance}, #{address})
+    </insert>
+
+</mapper>
