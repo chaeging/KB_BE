@@ -3,10 +3,7 @@ package org.scoula.controller;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.scoula.dto.swagger.Auth.SwaggerPasswordChangeRequestDTO;
-import org.scoula.dto.swagger.Auth.SwaggerPasswordResetRequestDTO;
-import org.scoula.dto.swagger.Auth.SwaggerRefreshTokenRequestDTO;
-import org.scoula.dto.swagger.Auth.SwaggerUpdate;
+import org.scoula.dto.swagger.Auth.*;
 import org.scoula.security.dto.MemberDTO;
 import org.scoula.security.util.JwtProcessor;
 import org.scoula.service.AuthService;
@@ -85,16 +82,30 @@ public class AuthController {
     }
 
     @DeleteMapping("/signout")
-    @ApiOperation(value = "회원 탈퇴", notes = "회원 탈퇴 처리 및 DB에서 사용자 삭제")
+    @ApiOperation(value = "회원 탈퇴", notes = "비밀번호 확인 후 회원 탈퇴를 수행합니다.")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "회원 탈퇴 완료")
+            @ApiResponse(code = 200, message = "회원 탈퇴 완료"),
+            @ApiResponse(code = 401, message = "비밀번호 불일치"),
+            @ApiResponse(code = 404, message = "사용자 정보 없음")
     })
-    public ResponseEntity<?> signOut(  @ApiParam(hidden = true) @RequestHeader("Authorization") String bearerToken) {
+    public ResponseEntity<?> signOut(
+            @ApiParam(hidden = true) @RequestHeader("Authorization") String bearerToken,
+            @RequestBody SwaggerSignOutRequestDTO request
+    ) {
         String accessToken = tokenUtils.extractAccessToken(bearerToken);
-        String username = jwtProcessor.getUsername(accessToken);
-        userService.deleteUser(username);
-        return ResponseEntity.ok(Map.of("message", "회원 탈퇴 완료!"));
+        String userId = jwtProcessor.getUsername(accessToken);
+
+        try {
+            userService.deleteUser(userId, request.getPassword());
+            return ResponseEntity.ok(Map.of("message", "회원 탈퇴 완료!"));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(401).body(Map.of("error", e.getMessage()));
+        } catch (Exception e) {
+            log.error("회원 탈퇴 중 오류 발생", e);
+            return ResponseEntity.internalServerError().body(Map.of("error", "회원 탈퇴 중 서버 오류"));
+        }
     }
+
 
     @PutMapping("/password")
     @ApiOperation(value = "비밀번호 초기화", notes = "user_id를 기반으로 비밀번호를 새 값으로 강제로 초기화합니다.")
